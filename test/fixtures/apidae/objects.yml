@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  address: MyString
+  apidae_id: 1
+  apidae_type: MyString
+  apidae_subtype: MyString
+  title: MyString
+  short_desc: MyText
+  contact: MyText
+  long_desc: MyText
+  type_data: MyText
+  latitude: 1.5
+  longitude: 1.5
+  openings: MyText
+  rates: MyText
+  reservation: MyText
+
+two:
+  address: MyString
+  apidae_id: 1
+  apidae_type: MyString
+  apidae_subtype: MyString
+  title: MyString
+  short_desc: MyText
+  contact: MyText
+  long_desc: MyText
+  type_data: MyText
+  latitude: 1.5
+  longitude: 1.5
+  openings: MyText
+  rates: MyText
+  reservation: MyText

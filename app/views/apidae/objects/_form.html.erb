@@ -1,0 +1,73 @@
+<%= form_for(@object) do |f| %>
+  <% if @object.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@object.errors.count, "error") %> prohibited this object from being saved:</h2>
+
+      <ul>
+      <% @object.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :address %><br>
+    <%= f.text_field :address %>
+  </div>
+  <div class="field">
+    <%= f.label :apidae_id %><br>
+    <%= f.number_field :apidae_id %>
+  </div>
+  <div class="field">
+    <%= f.label :apidae_type %><br>
+    <%= f.text_field :apidae_type %>
+  </div>
+  <div class="field">
+    <%= f.label :apidae_subtype %><br>
+    <%= f.text_field :apidae_subtype %>
+  </div>
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :short_desc %><br>
+    <%= f.text_area :short_desc %>
+  </div>
+  <div class="field">
+    <%= f.label :contact %><br>
+    <%= f.text_area :contact %>
+  </div>
+  <div class="field">
+    <%= f.label :long_desc %><br>
+    <%= f.text_area :long_desc %>
+  </div>
+  <div class="field">
+    <%= f.label :type_data %><br>
+    <%= f.text_area :type_data %>
+  </div>
+  <div class="field">
+    <%= f.label :latitude %><br>
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= f.label :longitude %><br>
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="field">
+    <%= f.label :openings %><br>
+    <%= f.text_area :openings %>
+  </div>
+  <div class="field">
+    <%= f.label :rates %><br>
+    <%= f.text_area :rates %>
+  </div>
+  <div class="field">
+    <%= f.label :reservation %><br>
+    <%= f.text_area :reservation %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
