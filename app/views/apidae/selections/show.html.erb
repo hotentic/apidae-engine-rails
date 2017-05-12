@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Label:</strong>
+  <%= @selection.label %>
+</p>
+
+<p>
+  <strong>Reference:</strong>
+  <%= @selection.reference %>
+</p>
+
+<p>
+  <strong>Apidae:</strong>
+  <%= @selection.apidae_id %>
+</p>
+
+<%= link_to 'Edit', edit_selection_path(@selection) %> |
+<%= link_to 'Back', selections_path %>

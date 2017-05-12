@@ -1,0 +1,20 @@
+pg: &pg
+  adapter: postgresql
+  encoding: unicode
+  pool: 10
+  timeout: 5000
+
+development:
+  <<: *pg
+  database: apidae_engine_dev
+  username: pg_local
+  password: pg_local
+
+test:
+  <<: *pg
+  database: apidae_engine_test
+  username: pg_local
+  password: pg_local
+
+production:
+  <<: *pg
