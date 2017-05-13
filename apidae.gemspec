@@ -18,6 +18,6 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 4.2.8"
-
-  s.add_development_dependency "pg"
+  s.add_dependency "paperclip", "~> 5.1"
+  s.add_dependency "pg", "~> 0.20"
 end

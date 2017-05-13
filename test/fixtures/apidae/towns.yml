@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  country: MyString
+  apidae_id: 1
+  insee_code: MyString
+  name: MyString
+  postal_code: MyString
+
+two:
+  country: MyString
+  apidae_id: 1
+  insee_code: MyString
+  name: MyString
+  postal_code: MyString

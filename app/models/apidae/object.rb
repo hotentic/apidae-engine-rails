@@ -1,7 +1,14 @@
 module Apidae
   class Object < ActiveRecord::Base
 
+    belongs_to :apidae_town, :class_name => 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
+    has_many :apidae_attached_files, :class_name => 'Apidae::AttachedFile'
     has_and_belongs_to_many :apidae_selections, :class_name => 'Apidae::Selection'
+
+    store :pictures_data, accessors: [:pictures], coder: JSON
+    store :contact, accessors: [:telephone, :email, :website], coder: JSON
+    store :address, accessors: [:address_fields], coder: JSON
+    store :openings, accessors: [:description, :opening_periods], coder: JSON
 
     TYPES_DATA = {
         'ACTIVITE' => {node: :informationsActivite, subtype: :activiteType},
@@ -51,7 +58,8 @@ module Apidae
                   openings: openings(object_data[:ouverture]),
                   rates: rates(object_data[:descriptionTarif]),
                   reservation: reservation(object_data[:reservation]),
-                  type_data: JSON.generate(object_data[type_fields[:node]])
+                  type_data: JSON.generate(object_data[type_fields[:node]]),
+                  pictures_data: pictures_urls(object_data[:illustrations])
               )
             end
           end
@@ -83,17 +91,48 @@ module Apidae
       end
     end
 
+    def self.load_pictures
+      Object.all.each do |obj|
+        if obj.apidae_attached_files.blank? && obj.pictures.any?
+          obj.pictures.each do |pic|
+            begin
+              attached = AttachedFile.new(apidae_object_id: id, name: pic[:name], picture: URI.parse(pic[:url]),
+                                          description: pic[:description], credits: pic[:credits])
+              attached.save
+            rescue OpenURI::HTTPError => e
+              puts "Could not retrieve attached picture for object #{title} - Error is #{e.message}"
+            end
+          end
+        end
+      end
+    end
+
+    def self.pictures_urls(pictures_array)
+      pics_data = []
+      unless pictures_array.blank?
+        pictures_array.select { |p| p.is_a?(Hash) && !p[:traductionFichiers].blank? }.each do |pic|
+          pics_data << {
+              name: node_value(pic, :nom),
+              url: pic[:traductionFichiers][0][:url],
+              description: node_value(pic, :legende),
+              credits: node_value(pic, :copyright)
+          }
+        end
+      end
+      JSON.generate({pictures: pics_data})
+    end
+
     def self.contact(information_hash)
       contact_details = {}
       contact_entries = information_hash[:moyensCommunication].nil? ? [] : information_hash[:moyensCommunication]
       contact_entries.each do |c|
         case c[:type][:id]
           when PHONE
-            contact_details['Téléphone'] = c[:coordonnees][:fr]
+            contact_details[:telephone] = c[:coordonnees][:fr]
           when EMAIL
-            contact_details['Email'] = c[:coordonnees][:fr]
+            contact_details[:email] = c[:coordonnees][:fr]
           when WEBSITE
-            contact_details['Site web'] = c[:coordonnees][:fr]
+            contact_details[:website] = c[:coordonnees][:fr]
           else
         end
       end
@@ -109,10 +148,11 @@ module Apidae
     end
 
     def self.address(address_hash)
-      computed_address = ''
-      computed_address += "#{address_hash[:adresse1]}, " unless address_hash[:adresse1].nil?
-      town = Town.find_by_external_id(address_hash[:commune][:id])
-      computed_address + town.name
+      computed_address = []
+      computed_address << address_hash[:adresse1] unless address_hash[:adresse1].blank?
+      computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
+      computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
+      JSON.generate({address_fields: computed_address})
     end
 
     def self.latitude(location_hash)
@@ -130,7 +170,7 @@ module Apidae
         JSON.generate(
             {
                 description: openings_hash[:periodeEnClair][:libelleFr],
-                openings: openings_hash[:periodesOuvertures]
+                opening_periods: openings_hash[:periodesOuvertures]
             }
         )
       end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170512221525) do
+ActiveRecord::Schema.define(version: 20170513114409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,8 +31,9 @@ ActiveRecord::Schema.define(version: 20170512221525) do
     t.text     "openings"
     t.text     "rates"
     t.text     "reservation"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "town_insee_code"
   end
 
   create_table "apidae_objects_apidae_selections", force: :cascade do |t|
@@ -47,5 +48,17 @@ ActiveRecord::Schema.define(version: 20170512221525) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "apidae_towns", force: :cascade do |t|
+    t.string   "country"
+    t.integer  "apidae_id"
+    t.string   "insee_code"
+    t.string   "name"
+    t.string   "postal_code"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "apidae_towns", ["insee_code"], name: "index_apidae_towns_on_insee_code", unique: true, using: :btree
 
 end
