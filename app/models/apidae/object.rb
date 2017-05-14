@@ -1,11 +1,12 @@
 module Apidae
   class Object < ActiveRecord::Base
 
-    belongs_to :apidae_town, :class_name => 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
-    has_many :apidae_attached_files, :class_name => 'Apidae::AttachedFile'
-    has_and_belongs_to_many :apidae_selections, :class_name => 'Apidae::Selection'
+    belongs_to :town, :class_name => 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
+    has_many :attached_files, :class_name => 'Apidae::AttachedFile'
+    has_and_belongs_to_many :selections, :class_name => 'Apidae::Selection'
 
     store :pictures_data, accessors: [:pictures], coder: JSON
+    store :type_data, accessors: [:categories, :themes], coder: JSON
     store :contact, accessors: [:telephone, :email, :website], coder: JSON
     store :address, accessors: [:address_fields], coder: JSON
     store :openings, accessors: [:description, :opening_periods], coder: JSON
@@ -44,23 +45,27 @@ module Apidae
             objects_hashes = JSON.parse(objects_json, symbolize_names: true)
             objects_hashes.each do |object_data|
               type_fields = TYPES_DATA[object_data[:type]]
-              Object.create!(
-                  apidae_id: object_data[:id],
-                  apidae_type: object_data[:type],
-                  apidae_subtype: node_value(object_data[type_fields[:node]], object_data[type_fields[:subtype]]),
-                  title: node_value(object_data, :nom),
-                  short_desc: node_value(object_data[:presentation], :descriptifCourt),
-                  long_desc: node_value(object_data[:presentation], :descriptifDetaille),
-                  contact: contact(object_data[:informations]),
-                  address: address(object_data[:localisation][:adresse]),
-                  latitude: latitude(object_data[:localisation]),
-                  longitude: longitude(object_data[:localisation]),
-                  openings: openings(object_data[:ouverture]),
-                  rates: rates(object_data[:descriptionTarif]),
-                  reservation: reservation(object_data[:reservation]),
-                  type_data: JSON.generate(object_data[type_fields[:node]]),
-                  pictures_data: pictures_urls(object_data[:illustrations])
-              )
+              existing_obj = Apidae::Object.find_by_apidae_id(object_data[:id])
+              unless existing_obj
+                Apidae::Object.create!(
+                    apidae_id: object_data[:id],
+                    apidae_type: object_data[:type],
+                    apidae_subtype: node_value(object_data[type_fields[:node]], object_data[type_fields[:subtype]]),
+                    title: node_value(object_data, :nom),
+                    short_desc: node_value(object_data[:presentation], :descriptifCourt),
+                    long_desc: node_value(object_data[:presentation], :descriptifDetaille),
+                    contact: contact(object_data[:informations]),
+                    address: address(object_data[:localisation][:adresse]),
+                    town: town(object_data[:localisation][:adresse]),
+                    latitude: latitude(object_data[:localisation]),
+                    longitude: longitude(object_data[:localisation]),
+                    openings: openings(object_data[:ouverture]),
+                    rates: rates(object_data[:descriptionTarif]),
+                    reservation: reservation(object_data[:reservation]),
+                    type_data: object_data[type_fields[:node]],
+                    pictures_data: pictures_urls(object_data[:illustrations])
+                )
+              end
             end
           end
           result = true
@@ -78,7 +83,7 @@ module Apidae
             objects_json = File.read(json_file)
             objects_hashes = JSON.parse(objects_json, symbolize_names: true)
             objects_hashes.each do |object_data|
-              obj = Object.find_by_apidae_id(object_data[:id])
+              obj = Apidae::Object.find_by_apidae_id(object_data[:id])
               if obj
                 yield(obj, object_data)
                 obj.save!
@@ -119,7 +124,7 @@ module Apidae
           }
         end
       end
-      JSON.generate({pictures: pics_data})
+      {pictures: pics_data}
     end
 
     def self.contact(information_hash)
@@ -136,15 +141,7 @@ module Apidae
           else
         end
       end
-      JSON.generate(contact_details)
-    end
-
-    def contact_text
-      entries = []
-      JSON.parse(contact).each_pair do |k, v|
-        entries << "#{k}: #{v}"
-      end
-      entries.join("\n")
+      contact_details
     end
 
     def self.address(address_hash)
@@ -152,27 +149,26 @@ module Apidae
       computed_address << address_hash[:adresse1] unless address_hash[:adresse1].blank?
       computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
       computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
-      JSON.generate({address_fields: computed_address})
+      {address_fields: computed_address}
+    end
+
+    def self.town(address_hash)
+      address_hash[:commune] ? Town.find_by_apidae_id(address_hash[:commune][:id]) : nil
     end
 
     def self.latitude(location_hash)
       geoloc_details = location_hash[:geolocalisation]
-      geoloc_details[:valide] ? geoloc_details[:geoJson][:coordinates][1] : nil
+      (geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]) ? geoloc_details[:geoJson][:coordinates][1] : nil
     end
 
     def self.longitude(location_hash)
       geoloc_details = location_hash[:geolocalisation]
-      geoloc_details[:valide] ? geoloc_details[:geoJson][:coordinates][0] : nil
+      (geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]) ? geoloc_details[:geoJson][:coordinates][0] : nil
     end
 
     def self.openings(openings_hash)
       if openings_hash && openings_hash[:periodeEnClair]
-        JSON.generate(
-            {
-                description: openings_hash[:periodeEnClair][:libelleFr],
-                opening_periods: openings_hash[:periodesOuvertures]
-            }
-        )
+        {description: openings_hash[:periodeEnClair][:libelleFr], opening_periods: openings_hash[:periodesOuvertures]}
       end
     end
 
@@ -194,6 +190,18 @@ module Apidae
           reservation_hash[:organismes]
         end
       end
+    end
+
+    def contact_text
+      entries = []
+      JSON.parse(contact).each_pair do |k, v|
+        entries << "#{k}: #{v}"
+      end
+      entries.join("\n")
+    end
+
+    def main_picture
+      pictures.any? ? pictures[0][:url] : "/#{Rails.application.config.apidae_pictures_path}/default/logo.png"
     end
 
     private

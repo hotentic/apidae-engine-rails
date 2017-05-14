@@ -1,6 +1,6 @@
 module Apidae
   class Selection < ActiveRecord::Base
-    has_and_belongs_to_many :apidae_objects, :class_name => 'Apidae::Object'
+    has_and_belongs_to_many :objects, :class_name => 'Apidae::Object'
 
     MAX_COUNT = 100
     MAX_LOOPS = 10
@@ -9,15 +9,18 @@ module Apidae
       selections_json = File.read(json_file)
       selections_hashes = JSON.parse(selections_json, symbolize_names: true)
       selections_hashes.each do |selection_data|
-        selection = Selection.create!(
-            name: selection_data[:nom],
-            apidae_id: selection_data[:id]
-        )
-        if selection_data[:objetsTouristiques]
-          selection_data[:objetsTouristiques].each do |o|
-            apidae_object = Object.find_by_apidae_id(o[:id])
-            selection.objects << apidae_object
-            selection.save!
+        existing_sel = Apidae::Selection.find_by_apidae_id(selection_data[:id])
+        unless existing_sel
+          selection = Apidae::Selection.create!(
+              label: selection_data[:nom],
+              apidae_id: selection_data[:id]
+          )
+          if selection_data[:objetsTouristiques]
+            selection_data[:objetsTouristiques].each do |o|
+              apidae_object = Apidae::Object.find_by_apidae_id(o[:id])
+              selection.objects << apidae_object
+              selection.save!
+            end
           end
         end
       end
