@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apidae-engine-rails (0.1.0)
+    apidae (0.1.0)
       paperclip (~> 5.1)
       pg (~> 0.20)
       rails (~> 4.2.8)
@@ -116,7 +116,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  apidae-engine-rails!
+  apidae!
 
 BUNDLED WITH
    1.12.4

@@ -5,7 +5,7 @@ require "apidae/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "apidae-engine-rails"
+  s.name        = "apidae"
   s.version     = Apidae::VERSION
   s.authors     = ["Jean-Baptiste Vilain"]
   s.email       = ["jbvilain@gmail.com"]
