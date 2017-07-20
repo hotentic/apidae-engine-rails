@@ -7,6 +7,7 @@ module Apidae
 
     store :pictures_data, accessors: [:pictures], coder: JSON
     store :type_data, accessors: [:categories, :themes], coder: JSON
+    store :entity_data, accessors: [:entity_id, :entity_name]
     store :contact, accessors: [:telephone, :email, :website], coder: JSON
     store :address, accessors: [:address_fields], coder: JSON
     store :openings, accessors: [:description, :opening_periods], coder: JSON
@@ -35,7 +36,7 @@ module Apidae
     WEBSITE = 205
 
 
-    def self.import(json_dir)
+    def self.import_updates(json_dir)
       result = false
       if Dir.exist?(json_dir)
         Dir.foreach(json_dir) do |f|
@@ -45,33 +46,43 @@ module Apidae
             objects_hashes = JSON.parse(objects_json, symbolize_names: true)
             objects_hashes.each do |object_data|
               type_fields = TYPES_DATA[object_data[:type]]
-              existing_obj = Apidae::Object.find_by_apidae_id(object_data[:id])
-              unless existing_obj
-                Apidae::Object.create!(
-                    apidae_id: object_data[:id],
-                    apidae_type: object_data[:type],
-                    apidae_subtype: node_value(object_data[type_fields[:node]], object_data[type_fields[:subtype]]),
-                    title: node_value(object_data, :nom),
-                    short_desc: node_value(object_data[:presentation], :descriptifCourt),
-                    long_desc: node_value(object_data[:presentation], :descriptifDetaille),
-                    contact: contact(object_data[:informations]),
-                    address: address(object_data[:localisation][:adresse]),
-                    town: town(object_data[:localisation][:adresse]),
-                    latitude: latitude(object_data[:localisation]),
-                    longitude: longitude(object_data[:localisation]),
-                    openings: openings(object_data[:ouverture]),
-                    rates: rates(object_data[:descriptionTarif]),
-                    reservation: reservation(object_data[:reservation]),
-                    type_data: object_data[type_fields[:node]],
-                    pictures_data: pictures_urls(object_data[:illustrations])
-                )
-              end
+              apidae_obj = Apidae::Object.first_or_initialize(apidae_id: object_data[:id])
+              apidae_obj.apidae_type = object_data[:type]
+              apidae_obj.apidae_subtype = node_value(object_data[type_fields[:node]], object_data[type_fields[:subtype]])
+              apidae_obj.title = node_value(object_data, :nom)
+              apidae_obj.short_desc = node_value(object_data[:presentation], :descriptifCourt)
+              apidae_obj.long_desc = node_value(object_data[:presentation], :descriptifDetaille)
+              apidae_obj.contact = contact(object_data[:informations])
+              apidae_obj.address = address(object_data[:localisation][:adresse])
+              apidae_obj.town = town(object_data[:localisation][:adresse])
+              apidae_obj.latitude = latitude(object_data[:localisation])
+              apidae_obj.longitude = longitude(object_data[:localisation])
+              apidae_obj.openings = openings(object_data[:ouverture])
+              apidae_obj.rates = rates(object_data[:descriptionTarif])
+              apidae_obj.reservation = reservation(object_data[:reservation])
+              apidae_obj.type_data = object_data[type_fields[:node]]
+              apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
+              apidae_obj.entity_data = entity_fields(object_data[:informations])
+              apidae_obj.save!
             end
           end
           result = true
         end
         result
       end
+    end
+
+    def self.import_deletions(json_file)
+      result = false
+      if File.exist?(json_file)
+        deleted_json = File.read(json_file)
+        deleted_ids = JSON.parse(deleted_json)
+        deleted_ids.each do |id|
+          Apidae::Object.find_by_apidae_id(id).destroy
+        end
+        result = true
+      end
+      result
     end
 
     def self.update_fields(json_dir)
@@ -189,6 +200,12 @@ module Apidae
         else
           reservation_hash[:organismes]
         end
+      end
+    end
+
+    def self.entity_fields(information_hash)
+      if information_hash && information_hash[:structureGestion]
+        {entity_id: information_hash[:structureGestion][:id]}
       end
     end
 
