@@ -12,115 +12,70 @@ module Apidae
     store :address, accessors: [:address_fields], coder: JSON
     store :openings, accessors: [:description, :opening_periods], coder: JSON
 
+    ACT = 'ACTIVITE'
+    COS = 'COMMERCE_ET_SERVICE'
+    DEG = 'DEGUSTATION'
+    DOS = 'DOMAINE_SKIABLE'
+    EQU = 'EQUIPEMENT'
+    FEM = 'FETE_ET_MANIFESTATION'
+    HCO = 'HEBERGEMENT_COLLECTIF'
+    HLO = 'HEBERGEMENT_LOCATIF'
+    HOT = 'HOTELLERIE'
+    HPA = 'HOTELLERIE_PLEIN_AIR'
+    PCU = 'PATRIMOINE_CULTUREL'
+    PNA = 'PATRIMOINE_NATUREL'
+    RES = 'RESTAURATION'
+    SPA = 'SEJOUR_PACKAGE'
+    STR = 'STRUCTURE'
+    TER = 'TERRITOIRE'
+
     TYPES_DATA = {
-        'ACTIVITE' => {node: :informationsActivite, subtype: :activiteType},
-        'COMMERCE_ET_SERVICE' => {node: :informationsCommerceEtService, subtype: :commerceEtServiceType},
-        'DEGUSTATION' => {node: :informationsDegustation, subtype: :degustationType},
-        'DOMAINE_SKIABLE' => {node: :informationsDomaineSkiable, subtype: :domaineSkiableType},
-        'EQUIPEMENT' => {node: :informationsEquipement, subtype: :equipementType},
-        'FETE_ET_MANIFESTATION' => {node: :informationsFeteEtManifestation, subtype: :feteEtManifestationType},
-        'HEBERGEMENT_COLLECTIF' => {node: :informationsHebergementCollectif, subtype: :hebergementCollectifType},
-        'HEBERGEMENT_LOCATIF' => {node: :informationsHebergementLocatif, subtype: :hebergementLocatifType},
-        'HOTELLERIE' => {node: :informationsHotellerie, subtype: :hotellerieType},
-        'HOTELLERIE_PLEIN_AIR' => {node: :informationsHotelleriePleinAir, subtype: :hotelleriePleinAirType},
-        'PATRIMOINE_CULTUREL' => {node: :informationsPatrimoineCulturel, subtype: :patrimoineCulturelType},
-        'PATRIMOINE_NATUREL' => {node: :informationsPatrimoineNaturel, subtype: :patrimoineNaturelType},
-        'RESTAURATION' => {node: :informationsRestauration, subtype: :restaurationType},
-        'SEJOUR_PACKAGE' => {node: :informationsSejourPackage, subtype: :sejourPackageType},
-        'STRUCTURE' => {node: :informationsStructure, subtype: :structureType},
-        'TERRITOIRE' => {node: :informationsTerritoire, subtype: :territoireType}
+        ACT => {node: :informationsActivite, subtype: :activiteType},
+        COS => {node: :informationsCommerceEtService, subtype: :commerceEtServiceType},
+        DEG => {node: :informationsDegustation, subtype: :degustationType},
+        DOS => {node: :informationsDomaineSkiable, subtype: :domaineSkiableType},
+        EQU => {node: :informationsEquipement, subtype: :equipementType},
+        FEM => {node: :informationsFeteEtManifestation, subtype: :feteEtManifestationType},
+        HCO => {node: :informationsHebergementCollectif, subtype: :hebergementCollectifType},
+        HLO => {node: :informationsHebergementLocatif, subtype: :hebergementLocatifType},
+        HOT => {node: :informationsHotellerie, subtype: :hotellerieType},
+        HPA => {node: :informationsHotelleriePleinAir, subtype: :hotelleriePleinAirType},
+        PCU => {node: :informationsPatrimoineCulturel, subtype: :patrimoineCulturelType},
+        PNA => {node: :informationsPatrimoineNaturel, subtype: :patrimoineNaturelType},
+        RES => {node: :informationsRestauration, subtype: :restaurationType},
+        SPA => {node: :informationsSejourPackage, subtype: :sejourPackageType},
+        STR => {node: :informationsStructure, subtype: :structureType},
+        TER => {node: :informationsTerritoire, subtype: :territoireType}
     }
 
     PHONE = 201
     EMAIL = 204
     WEBSITE = 205
 
-
-    def self.import_updates(json_dir)
-      result = false
-      if Dir.exist?(json_dir)
-        Dir.foreach(json_dir) do |f|
-          if f.end_with?('.json')
-            json_file = File.join(json_dir, f)
-            objects_json = File.read(json_file)
-            objects_hashes = JSON.parse(objects_json, symbolize_names: true)
-            objects_hashes.each do |object_data|
-              type_fields = TYPES_DATA[object_data[:type]]
-              apidae_obj = Apidae::Object.first_or_initialize(apidae_id: object_data[:id])
-              apidae_obj.apidae_type = object_data[:type]
-              apidae_obj.apidae_subtype = node_value(object_data[type_fields[:node]], object_data[type_fields[:subtype]])
-              apidae_obj.title = node_value(object_data, :nom)
-              apidae_obj.short_desc = node_value(object_data[:presentation], :descriptifCourt)
-              apidae_obj.long_desc = node_value(object_data[:presentation], :descriptifDetaille)
-              apidae_obj.contact = contact(object_data[:informations])
-              apidae_obj.address = address(object_data[:localisation][:adresse])
-              apidae_obj.town = town(object_data[:localisation][:adresse])
-              apidae_obj.latitude = latitude(object_data[:localisation])
-              apidae_obj.longitude = longitude(object_data[:localisation])
-              apidae_obj.openings = openings(object_data[:ouverture])
-              apidae_obj.rates = rates(object_data[:descriptionTarif])
-              apidae_obj.reservation = reservation(object_data[:reservation])
-              apidae_obj.type_data = object_data[type_fields[:node]]
-              apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
-              apidae_obj.entity_data = entity_fields(object_data[:informations])
-              apidae_obj.save!
-            end
-          end
-          result = true
-        end
-        result
-      end
+    def self.add_object(object_data)
+      apidae_obj = Apidae::Object.new(apidae_id: object_data[:id])
+      update_object(apidae_obj, object_data)
     end
 
-    def self.import_deletions(json_file)
-      result = false
-      if File.exist?(json_file)
-        deleted_json = File.read(json_file)
-        deleted_ids = JSON.parse(deleted_json)
-        deleted_ids.each do |id|
-          Apidae::Object.find_by_apidae_id(id).destroy
-        end
-        result = true
-      end
-      result
-    end
-
-    def self.update_fields(json_dir)
-      result = false
-      if Dir.exist?(json_dir)
-        Dir.foreach(json_dir) do |f|
-          if f.end_with?('.json')
-            json_file = File.join(json_dir, f)
-            objects_json = File.read(json_file)
-            objects_hashes = JSON.parse(objects_json, symbolize_names: true)
-            objects_hashes.each do |object_data|
-              obj = Apidae::Object.find_by_apidae_id(object_data[:id])
-              if obj
-                yield(obj, object_data)
-                obj.save!
-              end
-            end
-          end
-          result = true
-        end
-        result
-      end
-    end
-
-    def self.load_pictures
-      Object.all.each do |obj|
-        if obj.apidae_attached_files.blank? && obj.pictures.any?
-          obj.pictures.each do |pic|
-            begin
-              attached = AttachedFile.new(apidae_object_id: id, name: pic[:name], picture: URI.parse(pic[:url]),
-                                          description: pic[:description], credits: pic[:credits])
-              attached.save
-            rescue OpenURI::HTTPError => e
-              puts "Could not retrieve attached picture for object #{title} - Error is #{e.message}"
-            end
-          end
-        end
-      end
+    def self.update_object(apidae_obj, object_data)
+      type_fields = TYPES_DATA[object_data[:type]]
+      apidae_obj.apidae_type = object_data[:type]
+      apidae_obj.apidae_subtype = node_value(object_data[type_fields[:node]], object_data[type_fields[:subtype]])
+      apidae_obj.title = node_value(object_data, :nom)
+      apidae_obj.short_desc = node_value(object_data[:presentation], :descriptifCourt)
+      apidae_obj.long_desc = node_value(object_data[:presentation], :descriptifDetaille)
+      apidae_obj.contact = contact(object_data[:informations])
+      apidae_obj.address = address(object_data[:localisation][:adresse])
+      apidae_obj.town = town(object_data[:localisation][:adresse])
+      apidae_obj.latitude = latitude(object_data[:localisation])
+      apidae_obj.longitude = longitude(object_data[:localisation])
+      apidae_obj.openings = openings(object_data[:ouverture])
+      apidae_obj.rates = rates(object_data[:descriptionTarif])
+      apidae_obj.reservation = reservation(object_data[:reservation])
+      apidae_obj.type_data = object_data[type_fields[:node]]
+      apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
+      apidae_obj.entity_data = entity_fields(object_data[:informations])
+      apidae_obj.save!
     end
 
     def self.pictures_urls(pictures_array)

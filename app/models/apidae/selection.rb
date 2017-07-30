@@ -5,28 +5,24 @@ module Apidae
     MAX_COUNT = 100
     MAX_LOOPS = 10
 
-    def self.import(json_file)
-      selections_json = File.read(json_file)
-      selections_hashes = JSON.parse(selections_json, symbolize_names: true)
-      selections_hashes.each do |selection_data|
-        apidae_sel = Apidae::Selection.first_or_initialize(apidae_id: selection_data[:id])
-        apidae_sel.label = selection_data[:nom]
-        apidae_sel.save!
+    def self.add_or_update(selection_data)
+      apidae_sel = Apidae::Selection.where(apidae_id: selection_data[:id]).first_or_initialize
+      apidae_sel.label = selection_data[:nom]
+      apidae_sel.save!
 
-        current_objs = apidae_sel.objects.collect {|obj| obj.apidae_id}
-        imported_objs = selection_data[:objetsTouristiques] || []
-        added = imported_objs - current_objs
-        removed = current_objs - imported_objs
+      current_objs = apidae_sel.objects.collect {|obj| obj.apidae_id}
+      imported_objs = selection_data[:objetsTouristiques].blank? ? [] : selection_data[:objetsTouristiques].collect {|obj| obj[:id]}
+      added = imported_objs - current_objs
+      removed = current_objs - imported_objs
 
-        added.each do |o|
-          apidae_object = Apidae::Object.find_by_apidae_id(o[:id])
-          apidae_sel.objects << apidae_object
-        end
+      added.each do |o|
+        apidae_object = Apidae::Object.find_by_apidae_id(o)
+        apidae_sel.objects << apidae_object if apidae_object
+      end
 
-        removed.each do |o|
-          apidae_object = Apidae::Object.find_by_apidae_id(o[:id])
-          apidae_sel.objects.delete(apidae_object)
-        end
+      removed.each do |o|
+        apidae_object = Apidae::Object.find_by_apidae_id(o)
+        apidae_sel.objects.delete(apidae_object) if apidae_object
       end
     end
 
