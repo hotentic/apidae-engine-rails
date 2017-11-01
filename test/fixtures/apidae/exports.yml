@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  status: MyString
+  oneshot: false
+  reset: false
+  file_url: MyString
+  project_id: 1
+
+two:
+  status: MyString
+  oneshot: false
+  reset: false
+  file_url: MyString
+  project_id: 1

@@ -1,0 +1,19 @@
+[
+  {
+    "id": 49063,
+    "libelle": {
+      "libelleFr": "Sélection 2"
+    },
+    "nom": "Sélection 2",
+    "objetsTouristiques": [
+      {
+        "type": "STRUCTURE",
+        "id": 503
+      },
+      {
+        "type": "STRUCTURE",
+        "id": 504
+      }
+    ]
+  }
+]

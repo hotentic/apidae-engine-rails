@@ -1,0 +1,39 @@
+<%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
+    <div id="apidae_header" class="<%= styles[:header] %>">
+      <h1 class="<%= styles[:h1] %>">Apidae</h1>
+    </div>
+    <div id="apidae_dashboard" class="<%= styles[:wrapper] %>">
+      <div id="apidae_imports_panel" class="<%= styles[:body] %>">
+        <h2 class="<%= styles[:h2] %>">Derniers imports</h2>
+        <table id="apidae_imports" class="<%= styles[:table] %>">
+          <thead>
+          <tr>
+            <th>Date</th>
+            <th>Fichier</th>
+            <th>Statut</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <% @last_imports.each do |import| %>
+              <tr>
+                <td><%= import.updated_at.strftime('Le %d/%m/%Y à %H:%M') if import.updated_at %></td>
+                <td><%= import.remote_file %></td>
+                <td><%= import.status %></td>
+              </tr>
+          <% end %>
+          <% if @last_imports.empty? %>
+              <tr>
+                <td colspan="3">Aucun import pour le moment.</td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div id="apidae_navigation_panel" class="<%= styles[:body] %>">
+        <h2 class="<%= styles[:h2] %>">Données issues d'Apidae</h2>
+        <h3 class="<%= styles[:h3] %>"><%= link_to pluralize(@selections, 'sélection'), apidae.selections_path %></h3>
+        <h3 class="<%= styles[:h3] %>"><%= link_to pluralize(@objects, 'objet touristique', 'objets touristiques'), apidae.objects_path %></h3>
+      </div>
+    </div>
+<% end %>

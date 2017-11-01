@@ -1,0 +1,65 @@
+[{
+    "type": "STRUCTURE",
+    "id": 504,
+    "nom": {
+      "libelleFr": "Société des accordéonistes aixois"
+    },
+    "identifier": "73AXEVE100160_struct",
+    "state": "PUBLISHED",
+    "gestion": {
+      "dateCreation": "2005-05-03T22:00:00.000+0000",
+      "dateModification": "2013-10-04T09:37:10.803+0000",
+      "membreProprietaire": {
+        "type": {
+          "elementReferenceType": "MembreSitraType",
+          "id": 233
+        },
+        "nom": "Office de Tourisme intercommunal Aix-les-Bains Riviera des Alpes",
+        "dateCreation": "2005-06-30T13:03:53.903+0000",
+        "dateModification": "2017-10-03T15:26:47.009+0000",
+        "departement": "73",
+        "id": 80,
+        "siteWeb": "http://www.aixlesbains.com"
+      },
+      "signalerUnProblemeMails": []
+    },
+    "informations": {
+      "moyensCommunication": [],
+      "informationsLegales": {}
+    },
+    "localisation": {
+      "adresse": {
+        "adresse1": "Théâtre de Verdure",
+        "adresse2": "Rue Jean Monard",
+        "codePostal": "73100",
+        "commune": {
+          "id": 30248
+        }
+      },
+      "geolocalisation": {
+        "altitude": 417,
+        "valide": true,
+        "geoJson": {
+          "type": "Point",
+          "coordinates": [
+            5.916386,
+            45.686578
+          ]
+        }
+      },
+      "perimetreGeographique": [
+        {
+          "id": 30248
+        }
+      ]
+    },
+    "contacts": [],
+    "territoires": [],
+    "informationsStructure": {
+      "entiteType": {
+        "elementReferenceType": "StructureType",
+        "id": 4008
+      }
+    },
+    "formatVersion": "v002"
+}]

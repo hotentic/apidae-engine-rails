@@ -11,10 +11,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170513114409) do
+ActiveRecord::Schema.define(version: 20171025075304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "apidae_attached_files", force: :cascade do |t|
+    t.string   "name"
+    t.string   "credits"
+    t.text     "description"
+    t.integer  "apidae_object_id"
+    t.string   "picture_file_name"
+    t.string   "picture_content_type"
+    t.integer  "picture_file_size"
+    t.datetime "picture_updated_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  create_table "apidae_exports", force: :cascade do |t|
+    t.string   "status"
+    t.string   "remote_status"
+    t.boolean  "oneshot"
+    t.boolean  "reset"
+    t.string   "file_url"
+    t.string   "confirm_url"
+    t.integer  "project_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "apidae_file_imports", force: :cascade do |t|
+    t.string   "status"
+    t.string   "remote_file"
+    t.integer  "created"
+    t.integer  "updated"
+    t.integer  "deleted"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "apidae_objects", force: :cascade do |t|
     t.string   "address"
@@ -34,9 +69,11 @@ ActiveRecord::Schema.define(version: 20170513114409) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.string   "town_insee_code"
+    t.text     "pictures_data"
+    t.text     "entity_data"
   end
 
-  create_table "apidae_objects_apidae_selections", force: :cascade do |t|
+  create_table "apidae_objects_selections", force: :cascade do |t|
     t.integer "object_id"
     t.integer "selection_id"
   end

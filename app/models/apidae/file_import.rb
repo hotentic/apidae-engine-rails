@@ -1,3 +1,5 @@
+require 'zip'
+
 module Apidae
   class FileImport < ActiveRecord::Base
 
@@ -9,61 +11,78 @@ module Apidae
     DELETED_FILE = 'objets_supprimes.json'
     SELECTIONS_FILE = 'selections.json'
 
-    def self.import(dir)
-      puts 'Update results : '
-      puts import_updates(File.join(dir, MODIFIED_DIR))
-      puts '------'
-      puts 'Deletion results : '
-      puts import_deletions(File.join(dir, DELETED_FILE))
-      puts '------'
-      puts 'Selection results : '
-      puts import_selections(File.join(dir,SELECTIONS_FILE))
-      puts '------'
+    def self.import(zip_file)
+      Zip::File.open(zip_file) do |zfile|
+        result = {created: 0, updated: 0, deleted: 0, selections: []}
+        zfile.each do |file|
+          if file.file? && file.name.end_with?('.json')
+            if file.name.include?(MODIFIED_DIR)
+              add_or_update_objects(zfile.read(file.name), result)
+            elsif file.name.include?(DELETED_FILE)
+              delete_objects(zfile.read(file.name), result)
+            elsif file.name.include?(SELECTIONS_FILE)
+              add_or_update_selections(zfile.read(file.name), result)
+            end
+          end
+        end
+        puts "Import results : #{result}"
+        result
+      end
     end
 
-    def self.import_updates(json_dir)
-      result = {success: false, created: 0, updated: 0}
+    def self.import_dir(dir)
+      result = {created: 0, updated: 0, deleted: 0, selections: []}
+      import_updates(File.join(dir, MODIFIED_DIR), result)
+      import_deletions(File.join(dir, DELETED_FILE), result)
+      import_selections(File.join(dir,SELECTIONS_FILE), result)
+      puts "Import results : #{result}"
+      result
+    end
+
+    def self.import_updates(json_dir, result)
       if Dir.exist?(json_dir)
         Dir.foreach(json_dir) do |f|
           if f.end_with?('.json')
             json_file = File.join(json_dir, f)
             objects_json = File.read(json_file)
-            objects_hashes = JSON.parse(objects_json, symbolize_names: true)
-            objects_hashes.each do |object_data|
-              existing = Apidae::Object.find_by_apidae_id(object_data[:id])
-              if existing
-                Apidae::Object.update_object(existing, object_data)
-                result[:updated] += 1
-              else
-                Apidae::Object.add_object(object_data)
-                result[:created] += 1
-              end
-            end
+            add_or_update_objects(objects_json, result)
           end
-          result[:success] = true
         end
       end
-      result
     end
 
+    def self.add_or_update_objects(objects_json, result)
+      objects_hashes = JSON.parse(objects_json, symbolize_names: true)
+      objects_hashes.each do |object_data|
+        existing = Apidae::Object.find_by_apidae_id(object_data[:id])
+        if existing
+          Apidae::Object.update_object(existing, object_data)
+          result[:updated] += 1
+        else
+          Apidae::Object.add_object(object_data)
+          result[:created] += 1
+        end
+      end
+    end
 
-    def self.import_deletions(json_file)
-      result = {success: false, deleted: 0}
+    def self.import_deletions(json_file, result)
       if File.exist?(json_file)
         deleted_json = File.read(json_file)
-        deleted_ids = JSON.parse(deleted_json)
-        deleted_ids.each do |id|
-          obj = Apidae::Object.find_by_apidae_id(id)
-          if obj
-            obj.destroy!
-            result[:deleted] += 1
-          else
-            puts "skipping object deletion : #{id}"
-          end
-        end
-        result[:success] = true
+        delete_objects(deleted_json, result)
       end
-      result
+    end
+
+    def self.delete_objects(deleted_json, result)
+      deleted_ids = JSON.parse(deleted_json)
+      deleted_ids.each do |id|
+        obj = Apidae::Object.find_by_apidae_id(id)
+        if obj
+          obj.destroy!
+          result[:deleted] += 1
+        else
+          puts "skipping object deletion : #{id}"
+        end
+      end
     end
 
     def self.update_fields(json_dir)
@@ -104,13 +123,20 @@ module Apidae
       end
     end
 
-    def self.import_selections(json_file)
+    def self.import_selections(json_file, result)
       selections_json = File.read(json_file)
+      add_or_update_selections(selections_json, result)
+    end
+
+    def self.add_or_update_selections(selections_json, result)
       selections_hashes = JSON.parse(selections_json, symbolize_names: true)
+      deleted_ids = Apidae::Selection.all.collect {|sel| sel.apidae_id}.uniq - selections_hashes.collect {|sel| sel[:id]}
+      Apidae::Selection.where(apidae_id: deleted_ids).delete_all
       selections_hashes.each do |selection_data|
         Apidae::Selection.add_or_update(selection_data)
       end
-      Apidae::Selection.all.collect {|sel| {id: sel.id, apidae_id: sel.apidae_id, reference: sel.reference, objects: sel.objects.count}}
+      result[:selections] = Apidae::Selection.all
+                                .collect {|sel| {apidae_id: sel.apidae_id, reference: sel.reference, objects: sel.objects.count}}
     end
   end
 end

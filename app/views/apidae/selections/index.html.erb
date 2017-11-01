@@ -1,31 +1,30 @@
-<p id="notice"><%= notice %></p>
+<%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
+    <div id="apidae_header" class="<%= styles[:header] %>">
+      <h1 class="<%= styles[:h1] %>">Apidae - Sélections</h1>
+    </div>
+    <div id="apidae_dashboard" class="<%= styles[:wrapper] %>">
+      <div id="apidae_imports_panel" class="<%= styles[:body] %>">
+        <table id="apidae_selections" class="<%= styles[:table] %>">
+          <thead>
+          <tr>
+            <th>Label</th>
+            <th>Reference</th>
+            <th>Identifiant</th>
+            <th>Nombre d'objets</th>
+          </tr>
+          </thead>
 
-<h1>Listing Selections</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Label</th>
-      <th>Reference</th>
-      <th>Apidae</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @selections.each do |selection| %>
-      <tr>
-        <td><%= selection.label %></td>
-        <td><%= selection.reference %></td>
-        <td><%= selection.apidae_id %></td>
-        <td><%= link_to 'Show', selection %></td>
-        <td><%= link_to 'Edit', edit_selection_path(selection) %></td>
-        <td><%= link_to 'Destroy', selection, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Selection', new_selection_path %>
+          <tbody>
+          <% @selections.each do |selection| %>
+              <tr>
+                <td><%= selection.label %></td>
+                <td><%= selection.reference %></td>
+                <td><%= selection.apidae_id %></td>
+                <td><%= selection.objects.count %></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+<% end %>

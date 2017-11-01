@@ -5,6 +5,10 @@ module Apidae
     MAX_COUNT = 100
     MAX_LOOPS = 10
 
+    validates_presence_of :apidae_id, :reference
+
+    before_validation :generate_reference, on: :create
+
     def self.add_or_update(selection_data)
       apidae_sel = Apidae::Selection.where(apidae_id: selection_data[:id]).first_or_initialize
       apidae_sel.label = selection_data[:nom]
@@ -85,5 +89,8 @@ module Apidae
       end
     end
 
+    def generate_reference
+      self.reference ||= (self.label.parameterize || self.apidae_id)
+    end
   end
 end
