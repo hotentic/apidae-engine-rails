@@ -1,4 +1,5 @@
 require_dependency "apidae/application_controller"
+require 'uri'
 require 'net/http'
 
 module Apidae
@@ -16,7 +17,7 @@ module Apidae
     def callback
       project_id = params[:projetId]
       if project_id == Rails.application.config.apidae_project_id
-        export = Export.new(project_id: project_id, remote_status: params[:status], oneshot: params[:ponctuel] == 'true',
+        export = Export.new(project_id: project_id, remote_status: params[:statut], oneshot: params[:ponctuel] == 'true',
                             reset: params[:reinitialisation] == 'true', file_url: params[:urlRecuperation],
                             confirm_url: params[:urlConfirmation], status: Export::PENDING)
         if export.save
@@ -35,7 +36,11 @@ module Apidae
         open(e.file_url) do |f|
           begin
             FileImport.import(f)
-            Net::HTTP.post(e.confirm_url, '')
+            uri = URI(e.confirm_url)
+            req = Net::HTTP::Post.new(uri)
+            Net::HTTP.start(uri.hostname, uri.port) do |http|
+              http.request(req)
+            end
             e.update(status: Export::COMPLETE)
           rescue Exception => ex
             logger.error("Failed to retrieve export file : #{ex.file_url}")
