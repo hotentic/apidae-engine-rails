@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apidae (0.2.0)
+    apidae (0.2.1)
       paperclip (~> 5.1)
       pg (~> 0.20)
       rails (~> 5.1.4)
@@ -71,8 +71,8 @@ GEM
     mimemagic (0.3.2)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
-    minitest (5.10.3)
-    nio4r (2.1.0)
+    minitest (5.11.1)
+    nio4r (2.2.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     paperclip (5.1.0)
