@@ -1,5 +1,5 @@
 module Apidae
-  class Engine < ::Rails::Engine
+  class Engine < Rails::Engine
     isolate_namespace Apidae
   end
 end

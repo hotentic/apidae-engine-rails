@@ -6,7 +6,7 @@ module Apidae
 
     # GET /objects
     def index
-      @objects = Object.all
+      @objects = Object.all.select(:apidae_id, :title, :apidae_type, :updated_at)
     end
 
     # GET /objects/1
