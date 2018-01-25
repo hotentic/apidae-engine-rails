@@ -3,6 +3,7 @@ module Apidae
 
     PENDING = 'pending'
     COMPLETE = 'complete'
+    CANCELLED = 'cancelled'
 
     # Note : handle reset case
     def self.pending

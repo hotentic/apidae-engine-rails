@@ -33,20 +33,27 @@ module Apidae
     def run
       success = true
       Export.pending.each do |e|
-        open(e.file_url) do |f|
-          begin
-            FileImport.import(f)
-            uri = URI(e.confirm_url)
-            req = Net::HTTP::Post.new(uri)
-            Net::HTTP.start(uri.hostname, uri.port) do |http|
-              http.request(req)
+        begin
+          open(e.file_url) do |f|
+            begin
+              FileImport.import(f)
+              uri = URI(e.confirm_url)
+              req = Net::HTTP::Post.new(uri)
+              Net::HTTP.start(uri.hostname, uri.port) do |http|
+                http.request(req)
+              end
+              e.update(status: Export::COMPLETE)
+            rescue Exception => ex
+              logger.error("Failed to import export file : #{e.file_url}")
+              logger.error("Error is : #{ex}")
+              success = false
             end
-            e.update(status: Export::COMPLETE)
-          rescue Exception => ex
-            logger.error("Failed to retrieve export file : #{ex.file_url}")
-            logger.error("Error is : #{ex}")
-            success = false
           end
+        rescue OpenURI::HTTPError => err
+          logger.error("Failed to download export file : #{e.file_url}")
+          logger.error("Error is : #{err}")
+          success = false
+          e.update(status: Export::CANCELLED)
         end
       end
       render nothing: true, status: (success ? :ok : :internal_server_error)
