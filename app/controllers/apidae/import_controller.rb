@@ -45,7 +45,7 @@ module Apidae
               e.update(status: Export::COMPLETE)
             rescue Exception => ex
               logger.error("Failed to import export file : #{e.file_url}")
-              logger.error("Error is : #{ex}")
+              logger.error("Error is : #{ex} \n#{ex.backtrace.join("\n") unless ex.backtrace.blank?}")
               success = false
             end
           end
