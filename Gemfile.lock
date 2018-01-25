@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apidae (0.2.1)
+    apidae (0.2.3)
       paperclip (~> 5.1)
       pg (~> 0.20)
       rails (~> 5.1.4)
@@ -132,4 +132,4 @@ DEPENDENCIES
   apidae!
 
 BUNDLED WITH
-   1.15.1
+   1.16.0

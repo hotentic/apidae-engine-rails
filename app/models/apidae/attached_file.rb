@@ -1,7 +1,5 @@
 module Apidae
   class AttachedFile < ActiveRecord::Base
-    include Paperclip::Glue
-
     belongs_to :apidae_object, :class_name => 'Apidae::Object'
 
     has_attached_file :picture,
