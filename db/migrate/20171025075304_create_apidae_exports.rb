@@ -1,4 +1,4 @@
-class CreateApidaeExports < ActiveRecord::Migration
+class CreateApidaeExports < ActiveRecord::Migration[4.2]
   def change
     create_table :apidae_exports do |t|
       t.string :status

@@ -1,4 +1,4 @@
-class CreateApidaeSelections < ActiveRecord::Migration
+class CreateApidaeSelections < ActiveRecord::Migration[4.2]
   def change
     create_table :apidae_selections do |t|
       t.string :label

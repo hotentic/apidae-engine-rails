@@ -1,4 +1,4 @@
-class CreateApidaeFileImports < ActiveRecord::Migration
+class CreateApidaeFileImports < ActiveRecord::Migration[4.2]
   def change
     create_table :apidae_file_imports do |t|
       t.string :status

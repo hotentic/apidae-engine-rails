@@ -1,4 +1,4 @@
-class CreateApidaeTowns < ActiveRecord::Migration
+class CreateApidaeTowns < ActiveRecord::Migration[4.2]
   def change
     create_table :apidae_towns do |t|
       t.string :country

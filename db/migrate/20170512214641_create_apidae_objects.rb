@@ -1,4 +1,4 @@
-class CreateApidaeObjects < ActiveRecord::Migration
+class CreateApidaeObjects < ActiveRecord::Migration[4.2]
   def change
     create_table :apidae_objects do |t|
       t.string :address

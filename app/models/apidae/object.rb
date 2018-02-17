@@ -1,9 +1,10 @@
 module Apidae
   class Object < ActiveRecord::Base
 
-    belongs_to :town, :class_name => 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
-    has_many :attached_files, :class_name => 'Apidae::AttachedFile'
-    has_and_belongs_to_many :selections, :class_name => 'Apidae::Selection'
+    belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
+    has_many :attached_files, class_name: 'Apidae::AttachedFile'
+    has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
+    has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
     store :pictures_data, accessors: [:pictures], coder: JSON
     store :type_data, accessors: [:categories, :themes], coder: JSON
@@ -112,24 +113,30 @@ module Apidae
 
     def self.address(address_hash)
       computed_address = []
-      computed_address << address_hash[:adresse1] unless address_hash[:adresse1].blank?
-      computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
-      computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
+      unless address_hash.blank?
+        computed_address << address_hash[:adresse1] unless address_hash[:adresse1].blank?
+        computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
+        computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
+      end
       {address_fields: computed_address}
     end
 
-    def self.town(address_hash)
-      address_hash[:commune] ? Town.find_by_apidae_id(address_hash[:commune][:id]) : nil
+    def self.town(address_hash = {})
+      (!address_hash.blank? && address_hash[:commune]) ? Town.find_by_apidae_id(address_hash[:commune][:id]) : nil
     end
 
     def self.latitude(location_hash)
-      geoloc_details = location_hash[:geolocalisation]
-      (geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]) ? geoloc_details[:geoJson][:coordinates][1] : nil
+      unless location_hash.blank?
+        geoloc_details = location_hash[:geolocalisation]
+        (geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]) ? geoloc_details[:geoJson][:coordinates][1] : nil
+      end
     end
 
-    def self.longitude(location_hash)
-      geoloc_details = location_hash[:geolocalisation]
-      (geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]) ? geoloc_details[:geoJson][:coordinates][0] : nil
+    def self.longitude(location_hash = {})
+      unless location_hash.blank?
+        geoloc_details = location_hash[:geolocalisation]
+        (geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]) ? geoloc_details[:geoJson][:coordinates][0] : nil
+      end
     end
 
     def self.openings(openings_hash)

@@ -1,4 +1,4 @@
-class CreateApidaeAttachedFiles < ActiveRecord::Migration
+class CreateApidaeAttachedFiles < ActiveRecord::Migration[4.2]
   def change
     create_table :apidae_attached_files do |t|
       t.string :name

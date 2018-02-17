@@ -1,9 +1,11 @@
 module Apidae
   class Selection < ActiveRecord::Base
-    has_and_belongs_to_many :objects, :class_name => 'Apidae::Object'
+    has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_selection_id
+    has_many :objects, class_name: 'Apidae::Object', source: :apidae_object, through: :apidae_selection_objects
 
     MAX_COUNT = 100
     MAX_LOOPS = 10
+    MAX_RESULTS = 100
 
     validates_presence_of :apidae_id, :reference
 
@@ -14,19 +16,21 @@ module Apidae
       apidae_sel.label = selection_data[:nom]
       apidae_sel.save!
 
+      # Note : should be done with basic collection assignment, but can't make it work...
       current_objs = apidae_sel.objects.collect {|obj| obj.apidae_id}
       imported_objs = selection_data[:objetsTouristiques].blank? ? [] : selection_data[:objetsTouristiques].collect {|obj| obj[:id]}
+
       added = imported_objs - current_objs
       removed = current_objs - imported_objs
 
       added.each do |o|
-        apidae_object = Apidae::Object.find_by_apidae_id(o)
-        apidae_sel.objects << apidae_object if apidae_object
+        obj = Apidae::Object.find_by_apidae_id(o)
+        Apidae::SelectionObject.create(apidae_selection_id: apidae_sel.id, apidae_object_id: obj.id)
       end
 
       removed.each do |o|
-        apidae_object = Apidae::Object.find_by_apidae_id(o)
-        apidae_sel.objects.delete(apidae_object) if apidae_object
+        obj = Apidae::Object.find_by_apidae_id(o)
+        Apidae::SelectionObject.destroy(apidae_selection_id: apidae_sel.id, apidae_object_id: obj.id)
       end
     end
 
@@ -63,6 +67,20 @@ module Apidae
         Rails.cache.write("#{apidae_id}_#{from}_#{to}", query_result)
       end
       agenda_entries
+    end
+
+    def results(query)
+      if query
+        size = query[:batch_size] ? query[:batch_size].to_i : MAX_RESULTS
+        offset = (query[:batch_number] ? query[:batch_number].to_i : 0) * size
+        objects.includes(:town).limit(size).offset(offset)
+      else
+        []
+      end
+    end
+
+    def total(query = {})
+      objects.count
     end
 
     private
