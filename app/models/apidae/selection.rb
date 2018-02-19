@@ -5,7 +5,6 @@ module Apidae
 
     MAX_COUNT = 100
     MAX_LOOPS = 10
-    MAX_RESULTS = 100
 
     validates_presence_of :apidae_id, :reference
 
@@ -69,18 +68,12 @@ module Apidae
       agenda_entries
     end
 
-    def results(query)
-      if query
-        size = query[:batch_size] ? query[:batch_size].to_i : MAX_RESULTS
-        offset = (query[:batch_number] ? query[:batch_number].to_i : 0) * size
-        objects.includes(:town).limit(size).offset(offset)
-      else
-        []
-      end
+    def results(where_clause, offset, size)
+      objects.includes(:town).limit(size).offset(offset).where(where_clause)
     end
 
-    def total(query = {})
-      objects.count
+    def total(where_clause)
+      objects.where(where_clause).count
     end
 
     private

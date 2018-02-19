@@ -6,12 +6,12 @@ module Apidae
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
-    store :pictures_data, accessors: [:pictures], coder: JSON
-    store :type_data, accessors: [:categories, :themes], coder: JSON
-    store :entity_data, accessors: [:entity_id, :entity_name]
-    store :contact, accessors: [:telephone, :email, :website], coder: JSON
-    store :address, accessors: [:address_fields], coder: JSON
-    store :openings, accessors: [:description, :opening_periods], coder: JSON
+    store_accessor :pictures_data, :pictures
+    store_accessor :type_data, :categories, :themes, :capacite, :classement
+    store_accessor :entity_data, :entity_id, :entity_name
+    store_accessor :contact, :telephone, :email, :website
+    store_accessor :address, :address_fields
+    store_accessor :openings, :description, :opening_periods
 
     ACT = 'ACTIVITE'
     COS = 'COMMERCE_ET_SERVICE'
@@ -61,7 +61,7 @@ module Apidae
     def self.update_object(apidae_obj, object_data)
       type_fields = TYPES_DATA[object_data[:type]]
       apidae_obj.apidae_type = object_data[:type]
-      apidae_obj.apidae_subtype = node_value(object_data[type_fields[:node]], object_data[type_fields[:subtype]])
+      apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
       apidae_obj.title = node_value(object_data, :nom)
       apidae_obj.short_desc = node_value(object_data[:presentation], :descriptifCourt)
       apidae_obj.long_desc = node_value(object_data[:presentation], :descriptifDetaille)
@@ -76,6 +76,7 @@ module Apidae
       apidae_obj.type_data = object_data[type_fields[:node]]
       apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
       apidae_obj.entity_data = entity_fields(object_data[:informations])
+      apidae_obj.service_data = object_data[:prestations]
       apidae_obj.save!
     end
 
@@ -188,6 +189,14 @@ module Apidae
     def self.node_value(node, key)
       if node && node[key]
         node[key][:libelleFr]
+      else
+        ''
+      end
+    end
+
+    def self.node_id(node, key)
+      if node && node[key]
+        node[key][:id]
       else
         ''
       end
