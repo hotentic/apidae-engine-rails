@@ -11,7 +11,7 @@
             <th>Label</th>
             <th>Reference</th>
             <th>Identifiant</th>
-            <th>Nombre d'objets</th>
+            <th>Objets</th>
           </tr>
           </thead>
           <tbody class="<%= styles[:table_body] %>">
@@ -20,7 +20,7 @@
                 <td><%= selection.label %></td>
                 <td><%= selection.reference %></td>
                 <td><%= selection.apidae_id %></td>
-                <td><%= selection.objects.count %></td>
+                <td><%= link_to selection.objects.count, selection_objects_path(selection) %></td>
               </tr>
           <% end %>
           <% if @selections.empty? %>

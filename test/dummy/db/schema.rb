@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218231319) do
+ActiveRecord::Schema.define(version: 20180222105302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,8 +62,7 @@ ActiveRecord::Schema.define(version: 20180218231319) do
     t.jsonb "type_data"
     t.float "latitude"
     t.float "longitude"
-    t.jsonb "openings"
-    t.text "rates"
+    t.jsonb "openings_data"
     t.text "reservation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -71,6 +70,7 @@ ActiveRecord::Schema.define(version: 20180218231319) do
     t.jsonb "pictures_data"
     t.jsonb "entity_data"
     t.jsonb "service_data"
+    t.jsonb "rates_data"
   end
 
   create_table "apidae_objects_selections", id: :serial, force: :cascade do |t|

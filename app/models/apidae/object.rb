@@ -7,11 +7,12 @@ module Apidae
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
     store_accessor :pictures_data, :pictures
-    store_accessor :type_data, :categories, :themes, :capacite, :classement
+    store_accessor :type_data, :categories, :themes, :capacite, :classement, :labels
     store_accessor :entity_data, :entity_id, :entity_name
     store_accessor :contact, :telephone, :email, :website
     store_accessor :address, :address_fields
-    store_accessor :openings, :description, :opening_periods
+    store_accessor :openings_data, :openings_desc, :openings
+    store_accessor :rates_data, :rates_desc, :rates
 
     ACT = 'ACTIVITE'
     COS = 'COMMERCE_ET_SERVICE'
@@ -70,9 +71,9 @@ module Apidae
       apidae_obj.town = town(object_data[:localisation][:adresse])
       apidae_obj.latitude = latitude(object_data[:localisation])
       apidae_obj.longitude = longitude(object_data[:localisation])
-      apidae_obj.openings = openings(object_data[:ouverture])
-      apidae_obj.rates = rates(object_data[:descriptionTarif])
-      apidae_obj.reservation = reservation(object_data[:reservation])
+      apidae_obj.openings_data = parse_openings(object_data[:ouverture])
+      apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif])
+      apidae_obj.reservation = parse_reservation(object_data[:reservation])
       apidae_obj.type_data = object_data[type_fields[:node]]
       apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
       apidae_obj.entity_data = entity_fields(object_data[:informations])
@@ -140,23 +141,21 @@ module Apidae
       end
     end
 
-    def self.openings(openings_hash)
+    def self.parse_openings(openings_hash)
       if openings_hash && openings_hash[:periodeEnClair]
-        {description: openings_hash[:periodeEnClair][:libelleFr], opening_periods: openings_hash[:periodesOuvertures]}
+        {openings_desc: openings_hash[:periodeEnClair][:libelleFr], openings: openings_hash[:periodesOuvertures]}
       end
     end
 
-    def self.rates(rates_hash)
+    def self.parse_rates(rates_hash)
       if rates_hash
-        if rates_hash[:gratuit]
-          return 'gratuit'
-        elsif rates_hash[:tarifsEnClair]
-          rates_hash[:tarifsEnClair][:libelleFr]
-        end
+        desc = rates_hash[:gratuit] ? 'gratuit' : node_value(rates_hash, :tarifsEnClair)
+        values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p)}
+        {rates_desc: desc, rates: values}
       end
     end
 
-    def self.reservation(reservation_hash)
+    def self.parse_reservation(reservation_hash)
       if reservation_hash
         if reservation_hash[:complement]
           reservation_hash[:complement][:libelleFr]
@@ -181,7 +180,14 @@ module Apidae
     end
 
     def main_picture
-      pictures.any? ? pictures[0][:url] : "/#{Rails.application.config.apidae_pictures_path}/default/logo.png"
+      pictures.any? ? pictures[0]["url"] : "/#{Rails.application.config.apidae_pictures_path}/default/logo.png"
+    end
+
+    def self.build_rate(rate_period)
+      {
+          id: rate_period[:identifiant], from: rate_period[:dateDebut], to: rate_period[:dateFin],
+          values: rate_period[:tarifs].blank? ? [] : rate_period[:tarifs].map {|t| {min: t[:minimum], max: t[:maximum], type: t[:type][:id], details: node_value(t, :precisionTarif)}}
+      }
     end
 
     private
