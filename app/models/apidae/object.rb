@@ -7,7 +7,7 @@ module Apidae
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
     store_accessor :pictures_data, :pictures
-    store_accessor :type_data, :categories, :themes, :capacite, :classement, :labels
+    store_accessor :type_data, :categories, :themes, :capacite, :classement, :classementPrefectoral, :labels
     store_accessor :entity_data, :entity_id, :entity_name
     store_accessor :contact, :telephone, :email, :website
     store_accessor :address, :address_fields

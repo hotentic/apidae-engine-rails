@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apidae (0.2.6)
+    apidae (0.2.7)
       paperclip (~> 5.1)
       pg (~> 0.20)
       rails (~> 5.1.4)

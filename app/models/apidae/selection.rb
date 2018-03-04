@@ -3,11 +3,12 @@ module Apidae
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_selection_id
     has_many :objects, class_name: 'Apidae::Object', source: :apidae_object, through: :apidae_selection_objects
 
+    AGENDA_ENDPOINT = 'agenda/detaille/list-identifiants'
+    SELECTION_ENDPOINT = 'recherche/list-identifiants'
     MAX_COUNT = 100
     MAX_LOOPS = 10
 
     validates_presence_of :apidae_id, :reference
-
     before_validation :generate_reference, on: :create
 
     def self.add_or_update(selection_data)
@@ -33,41 +34,6 @@ module Apidae
       end
     end
 
-    def agenda(from, to)
-      agenda_entries = Rails.cache.read("#{apidae_id}_#{from}_#{to}")
-      if agenda_entries.nil?
-        query_result = {}
-        config = {
-            url: "#{Rails.application.config.apidae_api_url}/agenda/detaille/list-identifiants",
-            apiKey: Rails.application.config.apidae_api_key,
-            projetId: Rails.application.config.apidae_project_id,
-            first: 0,
-            count: MAX_COUNT,
-            selectionIds: [apidae_id],
-            dateDebut: from,
-            dateFin: to
-        }
-
-        loops = 0
-
-        response = JSON.parse get_response(config), symbolize_names: false
-        total = response['numFound']
-
-        query_result[:results] = response['objetTouristiqueIds'] || {}
-
-        while total > query_result[:results].values.flatten.length && loops < MAX_LOOPS
-          loops += 1
-          config[:first] += MAX_COUNT
-          response = JSON.parse get_response(config), symbolize_names: false
-          merge_results(response, query_result)
-        end
-        query_result[:count] = total
-        agenda_entries = query_result
-        Rails.cache.write("#{apidae_id}_#{from}_#{to}", query_result)
-      end
-      agenda_entries
-    end
-
     def results(where_clause, offset, size)
       objects.includes(:town).limit(size).offset(offset).where(where_clause)
     end
@@ -76,28 +42,93 @@ module Apidae
       objects.where(where_clause).count
     end
 
+    def api_results(opts = {})
+      query_args = build_args(SELECTION_ENDPOINT, opts.merge({selection_ids: [apidae_id]}))
+      query_api(query_args, true)
+    end
+
+    def api_agenda(from, to)
+      query_args = build_args(AGENDA_ENDPOINT, {selection_ids: [apidae_id], from: from, to: to})
+      query_api(query_args, true)
+    end
+
     private
 
-    def get_response(config)
+    def query_api(query_args, all_results = false)
+      query_result = {}
+
+      if all_results
+        loops = 0
+        query_args[:first] = 0
+        query_args[:count] = MAX_COUNT
+        response = JSON.parse get_response(query_args), symbolize_names: false
+        total = response['numFound']
+        query_result[:results] = response['objetTouristiqueIds'] || {}
+
+        while total > results_count(query_result) && loops < MAX_LOOPS
+          loops += 1
+          query_args[:first] += MAX_COUNT
+          response = JSON.parse get_response(query_args), symbolize_names: false
+          merge_results(response, query_result)
+        end
+        query_result[:count] = total
+      else
+        response = JSON.parse get_response(query_args), symbolize_names: false
+        query_result[:results] = response['objetTouristiqueIds'] || {}
+        query_result[:count] = response['numFound']
+      end
+      query_result
+    end
+
+    def results_count(result)
+      if result[:results] && result[:results].is_a?(Hash)
+        result[:results].values.flatten.length
+      else
+        result[:results].blank? ? 0 : result[:results].length
+      end
+    end
+
+    def get_response(args)
       response = ''
-      query = JSON.generate config.except(:url)
-      logger.info "Agenda query : #{config[:url]}?query=#{query}"
-      open("#{config[:url]}?query=#{CGI.escape query}") { |f|
+      query = JSON.generate args.except(:url)
+      logger.info "Apidae API query : #{args[:url]}?query=#{query}"
+      open("#{args[:url]}?query=#{CGI.escape query}") { |f|
         f.each_line {|line| response += line if line}
       }
       response
     end
 
-    def merge_results(response, query_results)
-      unless response['objetTouristiqueIds'].nil? || response['objetTouristiqueIds'].empty?
-        first_day = response['objetTouristiqueIds'].keys.first
-        if query_results[:results].has_key?(first_day)
-          query_results[:results][first_day] += response['objetTouristiqueIds'][first_day]
+    def merge_results(response, result)
+      ids = response['objetTouristiqueIds']
+      unless ids.nil? || ids.empty?
+        if result[:results] && result[:results].is_a?(Hash)
+          first_day = ids.keys.first
+          if result[:results].has_key?(first_day)
+            result[:results][first_day] += ids[first_day]
+          else
+            result[:results][first_day] = ids[first_day]
+          end
+          result[:results].merge!(ids.except(first_day))
         else
-          query_results[:results][first_day] = response['objetTouristiqueIds'][first_day]
+          result[:results] += ids
         end
-        query_results[:results].merge!(response['objetTouristiqueIds'].except(first_day))
       end
+    end
+
+    def build_args(endpoint, opts = {})
+      {
+          url: "#{Rails.application.config.apidae_api_url}/#{endpoint}",
+          apiKey: Rails.application.config.apidae_api_key,
+          projetId: Rails.application.config.apidae_project_id,
+          first: opts[:first] || 0,
+          count: opts[:count] || MAX_COUNT,
+          selectionIds: opts[:selection_ids],
+          dateDebut: opts[:from],
+          dateFin: opts[:to],
+          center: opts[:lat] && opts[:lng] ? {type: 'Point', coordinates: [opts[:lng], opts[:lat]]} : nil,
+          radius: opts[:radius] ? opts[:radius].to_i : nil,
+          responseFields: opts[:fields] || ['id']
+      }
     end
 
     def generate_reference
