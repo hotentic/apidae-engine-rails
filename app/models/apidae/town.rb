@@ -1,14 +1,23 @@
 module Apidae
   class Town < ActiveRecord::Base
-    def self.import(json_file)
-      result = true
-      towns_json = File.read(json_file)
+    def self.import(towns_json)
       towns_hashes = JSON.parse(towns_json, symbolize_names: true)
-      towns_hashes.each do |town_data|
-        Town.create!(name: town_data[:nom], postal_code: town_data[:codePostal], insee_code: town_data[:code],
-                     country: 'fr', apidae_id: town_data[:id])
+      if towns_hashes.length != count
+        countries = Hash[Reference.where(apidae_type: "Pays").map {|ref| [ref.id, ref.label(:fr)]}]
+        towns_hashes.each do |town_data|
+          town = Town.find_or_initialize_by(apidae_id: town_data[:id])
+          town.name = town_data[:nom]
+          town.postal_code = town_data[:codePostal]
+          town.insee_code = town_data[:code]
+          town.country = countries[town_data[:pays][:id]]
+          town.save!
+        end
       end
-      result
+    end
+
+    def self.import_file(json_file)
+      towns_json = File.read(json_file)
+      import(towns_json)
     end
 
     def label

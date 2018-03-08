@@ -7,12 +7,14 @@ module Apidae
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
     store_accessor :pictures_data, :pictures
+    store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacite, :classement, :classementPrefectoral, :labels
     store_accessor :entity_data, :entity_id, :entity_name
     store_accessor :contact, :telephone, :email, :website
     store_accessor :address, :address_fields
     store_accessor :openings_data, :openings_desc, :openings
-    store_accessor :rates_data, :rates_desc, :rates
+    store_accessor :rates_data, :rates_desc, :rates, :payment_methods
+    store_accessor :service_data, :services, :equipements, :labelsTourismeHandicap
 
     ACT = 'ACTIVITE'
     COS = 'COMMERCE_ET_SERVICE'
@@ -76,6 +78,7 @@ module Apidae
       apidae_obj.reservation = parse_reservation(object_data[:reservation])
       apidae_obj.type_data = object_data[type_fields[:node]]
       apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
+      apidae_obj.attachments_data = attachments_urls(object_data[:illustrations])
       apidae_obj.entity_data = entity_fields(object_data[:informations])
       apidae_obj.service_data = object_data[:prestations]
       apidae_obj.save!
@@ -94,6 +97,19 @@ module Apidae
         end
       end
       {pictures: pics_data}
+    end
+
+    def self.attachments_urls(attachments_array)
+      atts_data = []
+      unless attachments_array.blank?
+        attachments_array.select { |att| att.is_a?(Hash) && !att[:traductionFichiers].blank? }.each do |att|
+          atts_data << {
+              name: node_value(att, :nom),
+              url: att[:traductionFichiers][0][:url]
+          }
+        end
+      end
+      {attachments: atts_data}
     end
 
     def self.contact(information_hash)
@@ -151,7 +167,8 @@ module Apidae
       if rates_hash
         desc = rates_hash[:gratuit] ? 'gratuit' : node_value(rates_hash, :tarifsEnClair)
         values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p)}
-        {rates_desc: desc, rates: values}
+        methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
+        {rates_desc: desc, rates: values, payment_methods: methods}
       end
     end
 

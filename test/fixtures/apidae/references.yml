@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  apidae_id: 1
+  apidae_type: MyString
+  label_data: 
+
+two:
+  apidae_id: 1
+  apidae_type: MyString
+  label_data: 

@@ -7,6 +7,8 @@ module Apidae
     STATUS_COMPLETE = 'complete'
     STATUS_CANCELLED = 'cancelled'
 
+    TOWNS_FILE = 'communes.json'
+    REFERENCES_FILE = 'elements_reference.json'
     MODIFIED_DIR = 'objets_modifies'
     DELETED_FILE = 'objets_supprimes.json'
     SELECTIONS_FILE = 'selections.json'
@@ -14,8 +16,13 @@ module Apidae
     def self.import(zip_file)
       Zip::File.open(zip_file) do |zfile|
         result = {created: 0, updated: 0, deleted: 0, selections: []}
+        Reference.import(zfile.read(REFERENCES_FILE))
+        logger.info "Completed #{Reference.count} references update"
+        Town.import(zfile.read(TOWNS_FILE))
+        logger.info "Completed #{Town.count} towns update"
         zfile.each do |file|
           if file.file? && file.name.end_with?('.json')
+            logger.info "Processing file : #{file.name}"
             if file.name.include?(MODIFIED_DIR)
               add_or_update_objects(zfile.read(file.name), result)
             elsif file.name.include?(DELETED_FILE)
@@ -25,7 +32,7 @@ module Apidae
             end
           end
         end
-        puts "Import results : #{result}"
+        logger.info "Import results : #{result}"
         result
       end
     end
@@ -35,7 +42,7 @@ module Apidae
       import_updates(File.join(dir, MODIFIED_DIR), result)
       import_deletions(File.join(dir, DELETED_FILE), result)
       import_selections(File.join(dir,SELECTIONS_FILE), result)
-      puts "Import results : #{result}"
+      logger.info "Import results : #{result}"
       result
     end
 
@@ -80,7 +87,7 @@ module Apidae
           obj.destroy!
           result[:deleted] += 1
         else
-          puts "skipping object deletion : #{id}"
+          logger.info "skipping object deletion : #{id}"
         end
       end
     end
@@ -116,7 +123,7 @@ module Apidae
                                           description: pic[:description], credits: pic[:credits])
               attached.save
             rescue OpenURI::HTTPError => e
-              puts "Could not retrieve attached picture for object #{title} - Error is #{e.message}"
+              logger.error "Could not retrieve attached picture for object #{title} - Error is #{e.message}"
             end
           end
         end
@@ -133,6 +140,7 @@ module Apidae
       deleted_ids = Apidae::Selection.all.collect {|sel| sel.apidae_id}.uniq - selections_hashes.collect {|sel| sel[:id]}
       Apidae::Selection.where(apidae_id: deleted_ids).delete_all
       selections_hashes.each do |selection_data|
+        logger.info "Updating selection #{selection_data[:id]}"
         Apidae::Selection.add_or_update(selection_data)
       end
       result[:selections] = Apidae::Selection.all
