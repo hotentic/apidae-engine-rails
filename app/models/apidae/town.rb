@@ -3,7 +3,7 @@ module Apidae
     def self.import(towns_json)
       towns_hashes = JSON.parse(towns_json, symbolize_names: true)
       if towns_hashes.length != count
-        countries = Hash[Reference.where(apidae_type: "Pays").map {|ref| [ref.id, ref.label(:fr)]}]
+        countries = Hash[Reference.where(apidae_type: "Pays").map {|ref| [ref.apidae_id, ref.label(:fr)]}]
         towns_hashes.each do |town_data|
           town = Town.find_or_initialize_by(apidae_id: town_data[:id])
           town.name = town_data[:nom]

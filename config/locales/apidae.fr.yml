@@ -1,0 +1,7 @@
+fr:
+  apidae:
+    file_import:
+      status:
+        pending: En cours
+        complete: Terminé
+        cancelled: Annulé

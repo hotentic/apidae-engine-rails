@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180307170349) do
+ActiveRecord::Schema.define(version: 20180314093512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20180307170349) do
     t.jsonb "service_data"
     t.jsonb "rates_data"
     t.jsonb "attachments_data"
+    t.jsonb "tags_data"
   end
 
   create_table "apidae_objects_selections", id: :serial, force: :cascade do |t|

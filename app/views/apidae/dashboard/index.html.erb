@@ -10,7 +10,9 @@
           <thead class="<%= styles[:table_head] %>">
           <tr>
             <th>Date</th>
-            <th>Fichier</th>
+            <th>Créations</th>
+            <th>Mises à jour</th>
+            <th>Suppressions</th>
             <th>Statut</th>
           </tr>
           </thead>
@@ -18,8 +20,10 @@
           <% @last_imports.each do |import| %>
               <tr>
                 <td><%= import.updated_at.strftime('Le %d/%m/%Y à %H:%M') if import.updated_at %></td>
-                <td><%= import.remote_file %></td>
-                <td><%= import.status %></td>
+                <td><%= import.created %></td>
+                <td><%= import.updated %></td>
+                <td><%= import.deleted %></td>
+                <td><%= t "apidae.file_import.status.#{import.status}" %></td>
               </tr>
           <% end %>
           <% if @last_imports.empty? %>
