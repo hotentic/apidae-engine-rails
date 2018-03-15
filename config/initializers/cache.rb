@@ -1,0 +1,1 @@
+$apidae_cache = ActiveSupport::Cache::FileStore.new('cache/apidae', expires_in: 24.hours)

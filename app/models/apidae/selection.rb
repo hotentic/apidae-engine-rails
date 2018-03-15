@@ -40,13 +40,25 @@ module Apidae
     end
 
     def api_results(opts = {})
-      query_args = build_args(SELECTION_ENDPOINT, opts.merge({selection_ids: [apidae_id]}))
-      query_api(query_args, true)
+      key = cache_key(:results)
+      res = $apidae_cache.read(key)
+      unless res
+        query_args = build_args(SELECTION_ENDPOINT, opts.merge({selection_ids: [apidae_id]}))
+        res = query_api(query_args, true)
+        $apidae_cache.write(key, res)
+      end
+      res
     end
 
     def api_agenda(from, to)
-      query_args = build_args(AGENDA_ENDPOINT, {selection_ids: [apidae_id], from: from, to: to})
-      query_api(query_args, true)
+      key = cache_key(:agenda, from, to)
+      res = $apidae_cache.read(key)
+      unless res
+        query_args = build_args(AGENDA_ENDPOINT, {selection_ids: [apidae_id], from: from, to: to})
+        res = query_api(query_args, true)
+        $apidae_cache.write(key, res)
+      end
+      res
     end
 
     private
@@ -130,6 +142,10 @@ module Apidae
 
     def generate_reference
       self.reference ||= (self.label.parameterize || self.apidae_id)
+    end
+
+    def cache_key(*args)
+      "#{apidae_id}_#{args.map {|a| a.to_s.parameterize}.join('_')}"
     end
   end
 end
