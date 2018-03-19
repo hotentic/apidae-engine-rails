@@ -8,6 +8,7 @@ module Apidae
     STATUS_CANCELLED = 'cancelled'
 
     TOWNS_FILE = 'communes.json'
+    INTERNAL_FILE = 'criteres_internes.json'
     REFERENCES_FILE = 'elements_reference.json'
     MODIFIED_DIR = 'objets_modifies'
     DELETED_FILE = 'objets_supprimes.json'
@@ -17,6 +18,7 @@ module Apidae
       Zip::File.open(zip_file) do |zfile|
         result = {created: 0, updated: 0, deleted: 0, selections: []}
         Reference.import(zfile.read(REFERENCES_FILE))
+        Reference.import_internal(zfile.read(INTERNAL_FILE))
         logger.info "Completed #{Reference.count} references update"
         Town.import(zfile.read(TOWNS_FILE))
         logger.info "Completed #{Town.count} towns update"

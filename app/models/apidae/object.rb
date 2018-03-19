@@ -183,8 +183,7 @@ module Apidae
             capacity: data_hash[:capacite],
             classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral]),
             labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap]),
-            chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
-            activities: lists_ids(data_hash[:activites])
+            chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel])
         }
       end
     end
@@ -195,7 +194,7 @@ module Apidae
             services: lists_ids(data_hash[:services]),
             equipments: lists_ids(data_hash[:equipements]),
             comfort: lists_ids(data_hash[:conforts]),
-            activities: lists_ids(data_hash[:activites]) + lists_ids(data_hash[:activites])
+            activities: lists_ids(data_hash[:activites]) + lists_ids(type_data_hash[:activites])
         }
       end
     end
