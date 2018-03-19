@@ -56,7 +56,7 @@ module Apidae
           e.update(status: Export::CANCELLED)
         end
       end
-      render nothing: true, status: (success ? :ok : :internal_server_error)
+      success ? head(:ok) : head(:internal_server_error)
     end
   end
 end
