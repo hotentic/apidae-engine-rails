@@ -180,6 +180,7 @@ module Apidae
 
     def self.parse_type_data(apidae_obj, data_hash, prestations_hash)
       if data_hash
+        apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
         {
             categories: lists_ids(data_hash[:categories]),
             themes: lists_ids(data_hash[:themes]),
@@ -191,7 +192,6 @@ module Apidae
             area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : nil,
             track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil
         }
-        apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
       end
     end
 
