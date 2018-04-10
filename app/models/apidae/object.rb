@@ -8,14 +8,14 @@ module Apidae
 
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
-    store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains
+    store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track
     store_accessor :entity_data, :entity_id, :entity_name
     store_accessor :contact, :telephone, :email, :website
-    store_accessor :address, :address_fields
+    store_accessor :address, :address_fields, :place
     store_accessor :openings_data, :openings_desc, :openings
     store_accessor :rates_data, :rates_desc, :rates, :payment_methods
     store_accessor :service_data, :services, :equipments, :comfort, :activities
-    store_accessor :tags_data, :tags
+    store_accessor :tags_data, :promo, :internal
 
     ACT = 'ACTIVITE'
     COS = 'COMMERCE_ET_SERVICE'
@@ -70,14 +70,14 @@ module Apidae
       apidae_obj.short_desc = node_value(object_data[:presentation], :descriptifCourt)
       apidae_obj.long_desc = node_value(object_data[:presentation], :descriptifDetaille)
       apidae_obj.contact = contact(object_data[:informations])
-      apidae_obj.address = address(object_data[:localisation][:adresse])
+      apidae_obj.address = address(object_data[:localisation][:adresse], object_data[type_fields[:node]])
       apidae_obj.town = town(object_data[:localisation][:adresse])
       apidae_obj.latitude = latitude(object_data[:localisation])
       apidae_obj.longitude = longitude(object_data[:localisation])
       apidae_obj.openings_data = parse_openings(object_data[:ouverture])
       apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif])
       apidae_obj.reservation = parse_reservation(object_data[:reservation])
-      apidae_obj.type_data = parse_type_data(object_data[type_fields[:node]], object_data[:prestations])
+      apidae_obj.type_data = parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations])
       apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
       apidae_obj.attachments_data = attachments_urls(object_data[:multimedias])
       apidae_obj.entity_data = entity_fields(object_data[:informations])
@@ -121,25 +121,28 @@ module Apidae
       contact_entries.each do |c|
         case c[:type][:id]
           when PHONE
-            contact_details[:telephone] = c[:coordonnees][:fr]
+            contact_details[:telephone] ||= []
+            contact_details[:telephone] << c[:coordonnees][:fr]
           when EMAIL
-            contact_details[:email] = c[:coordonnees][:fr]
+            contact_details[:email] ||= []
+            contact_details[:email] << c[:coordonnees][:fr]
           when WEBSITE
-            contact_details[:website] = c[:coordonnees][:fr]
+            contact_details[:website] ||= []
+            contact_details[:website] << c[:coordonnees][:fr]
           else
         end
       end
       contact_details
     end
 
-    def self.address(address_hash)
+    def self.address(address_hash, type_data_hash)
       computed_address = []
       unless address_hash.blank?
         computed_address << address_hash[:adresse1] unless address_hash[:adresse1].blank?
         computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
         computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
       end
-      {address_fields: computed_address}
+      {address_fields: computed_address, place: type_data_hash[:nomLieu]}
     end
 
     def self.town(address_hash = {})
@@ -175,16 +178,20 @@ module Apidae
       end
     end
 
-    def self.parse_type_data(data_hash, prestations_hash)
+    def self.parse_type_data(apidae_obj, data_hash, prestations_hash)
       if data_hash
         {
             categories: lists_ids(data_hash[:categories]),
             themes: lists_ids(data_hash[:themes]),
             capacity: data_hash[:capacite],
-            classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral]),
+            classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
+                                      lists_ids(data_hash[:classementsGuides]) + lists_ids(data_hash[:classements]),
             labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap]),
-            chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel])
+            chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
+            area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : nil,
+            track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil
         }
+        apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
       end
     end
 
@@ -200,14 +207,14 @@ module Apidae
     end
 
     def self.parse_tags_data(pres_data_hash, crit_data_hash)
-      tags = []
+      tags = {}
       if pres_data_hash
-        tags += lists_ids(pres_data_hash[:typologiesPromoSitra])
+        tags[:promo] = lists_ids(pres_data_hash[:typologiesPromoSitra])
       end
       unless crit_data_hash.blank?
-        tags += crit_data_hash.map {|c| c[:id]}
+        tags[:internal] = crit_data_hash.map {|c| c[:id]}
       end
-      {tags: tags}
+      tags
     end
 
     def self.parse_reservation(reservation_hash)
