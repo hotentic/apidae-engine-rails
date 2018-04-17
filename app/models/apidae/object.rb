@@ -8,10 +8,10 @@ module Apidae
 
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
-    store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track
+    store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track, :products
     store_accessor :entity_data, :entity_id, :entity_name
     store_accessor :contact, :telephone, :email, :website
-    store_accessor :address, :address_fields, :place
+    store_accessor :location_data, :address, :place, :latitude, :longitude, :access
     store_accessor :openings_data, :openings_desc, :openings
     store_accessor :rates_data, :rates_desc, :rates, :payment_methods
     store_accessor :service_data, :services, :equipments, :comfort, :activities
@@ -70,10 +70,8 @@ module Apidae
       apidae_obj.short_desc = node_value(object_data[:presentation], :descriptifCourt)
       apidae_obj.long_desc = node_value(object_data[:presentation], :descriptifDetaille)
       apidae_obj.contact = contact(object_data[:informations])
-      apidae_obj.address = address(object_data[:localisation][:adresse], object_data[type_fields[:node]])
+      apidae_obj.location_data = parse_location_data(object_data[:localisation], object_data[type_fields[:node]])
       apidae_obj.town = town(object_data[:localisation][:adresse])
-      apidae_obj.latitude = latitude(object_data[:localisation])
-      apidae_obj.longitude = longitude(object_data[:localisation])
       apidae_obj.openings_data = parse_openings(object_data[:ouverture])
       apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif])
       apidae_obj.reservation = parse_reservation(object_data[:reservation])
@@ -135,32 +133,28 @@ module Apidae
       contact_details
     end
 
-    def self.address(address_hash, type_data_hash)
-      computed_address = []
-      unless address_hash.blank?
-        computed_address << address_hash[:adresse1] unless address_hash[:adresse1].blank?
-        computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
-        computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
+    def self.parse_location_data(location_hash, type_data_hash)
+      unless location_hash.blank?
+        address_hash = location_hash[:adresse]
+        computed_address = []
+        unless address_hash.blank?
+          computed_address << address_hash[:adresse1] unless address_hash[:adresse1].blank?
+          computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
+          computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
+        end
+        loc_data = {address: computed_address, place: type_data_hash[:nomLieu]}
+        geoloc_details = location_hash[:geolocalisation]
+        if geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]
+          loc_data[:latitude] = geoloc_details[:geoJson][:coordinates][1]
+          loc_data[:longitude] = geoloc_details[:geoJson][:coordinates][0]
+        end
+        loc_data[:access] = node_value(geoloc_details, :complement) if geoloc_details
+        loc_data
       end
-      {address_fields: computed_address, place: type_data_hash[:nomLieu]}
     end
 
     def self.town(address_hash = {})
       (!address_hash.blank? && address_hash[:commune]) ? Town.find_by_apidae_id(address_hash[:commune][:id]) : nil
-    end
-
-    def self.latitude(location_hash)
-      unless location_hash.blank?
-        geoloc_details = location_hash[:geolocalisation]
-        (geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]) ? geoloc_details[:geoJson][:coordinates][1] : nil
-      end
-    end
-
-    def self.longitude(location_hash = {})
-      unless location_hash.blank?
-        geoloc_details = location_hash[:geolocalisation]
-        (geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]) ? geoloc_details[:geoJson][:coordinates][0] : nil
-      end
     end
 
     def self.parse_openings(openings_hash)
@@ -181,6 +175,7 @@ module Apidae
     def self.parse_type_data(apidae_obj, data_hash, prestations_hash)
       if data_hash
         apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
+        apidae_obj.apidae_subtype = node_id(data_hash, :rubrique) if apidae_obj.apidae_type == EQU
         {
             categories: lists_ids(data_hash[:categories]),
             themes: lists_ids(data_hash[:themes]),
@@ -190,7 +185,8 @@ module Apidae
             labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap]),
             chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
             area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : nil,
-            track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil
+            track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil,
+            products: lists_ids(data_hash[:typesProduit])
         }
       end
     end
