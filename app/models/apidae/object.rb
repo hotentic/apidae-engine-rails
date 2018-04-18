@@ -6,13 +6,15 @@ module Apidae
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
+    store_accessor :description_data, :short_desc, :long_desc, :theme_desc
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
-    store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track, :products
+    store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
+                   :products, :audience, :animals, :extra, :duration
     store_accessor :entity_data, :entity_id, :entity_name
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access
-    store_accessor :openings_data, :openings_desc, :openings
+    store_accessor :openings_data, :openings_desc, :openings, :time_periods
     store_accessor :rates_data, :rates_desc, :rates, :payment_methods
     store_accessor :service_data, :services, :equipments, :comfort, :activities
     store_accessor :tags_data, :promo, :internal
@@ -67,8 +69,7 @@ module Apidae
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
       apidae_obj.title = node_value(object_data, :nom)
-      apidae_obj.short_desc = node_value(object_data[:presentation], :descriptifCourt)
-      apidae_obj.long_desc = node_value(object_data[:presentation], :descriptifDetaille)
+      apidae_obj.description_data = parse_desc_data(object_data[:presentation])
       apidae_obj.contact = contact(object_data[:informations])
       apidae_obj.location_data = parse_location_data(object_data[:localisation], object_data[type_fields[:node]])
       apidae_obj.town = town(object_data[:localisation][:adresse])
@@ -83,6 +84,16 @@ module Apidae
       apidae_obj.tags_data = parse_tags_data(object_data[:presentation], object_data[:criteresInternes])
       apidae_obj.meta_data = object_data[:metadonnees]
       apidae_obj.save!
+    end
+
+    def self.parse_desc_data(data_hash)
+      unless data_hash.blank?
+        {
+            short_desc: node_value(data_hash, :descriptifCourt),
+            long_desc: node_value(data_hash, :descriptifDetaille),
+            theme_desc: data_hash[:descriptifsThematises].blank? ? [] : Hash[data_hash[:descriptifsThematises].map {|th| [node_id(th, :theme), node_value(th, :description)]}]
+        }
+      end
     end
 
     def self.pictures_urls(pictures_array)
@@ -159,7 +170,11 @@ module Apidae
 
     def self.parse_openings(openings_hash)
       if openings_hash && openings_hash[:periodeEnClair]
-        {openings_desc: openings_hash[:periodeEnClair][:libelleFr], openings: openings_hash[:periodesOuvertures]}
+        {
+            openings_desc: openings_hash[:periodeEnClair][:libelleFr],
+            openings: openings_hash[:periodesOuvertures],
+            time_periods: lists_ids(openings_hash[:indicationsPeriode])
+        }
       end
     end
 
@@ -177,7 +192,7 @@ module Apidae
         apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
         apidae_obj.apidae_subtype = node_id(data_hash, :rubrique) if apidae_obj.apidae_type == EQU
         {
-            categories: lists_ids(data_hash[:categories]),
+            categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles]),
             themes: lists_ids(data_hash[:themes]),
             capacity: data_hash[:capacite],
             classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
@@ -186,7 +201,11 @@ module Apidae
             chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
             area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : nil,
             track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil,
-            products: lists_ids(data_hash[:typesProduit])
+            products: lists_ids(data_hash[:typesProduit]),
+            audience: lists_ids(prestations_hash[:typesClientele]),
+            animals: prestations_hash[:animauxAcceptes] == 'ACCEPTES',
+            extra: node_value(prestations_hash, :complementAccueil),
+            duration: data_hash[:dureeSeance]
         }
       end
     end
