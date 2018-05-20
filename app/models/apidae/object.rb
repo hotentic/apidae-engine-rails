@@ -197,7 +197,8 @@ module Apidae
             capacity: data_hash[:capacite],
             classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
                                       lists_ids(data_hash[:classementsGuides]) + lists_ids(data_hash[:classements]),
-            labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap]),
+            labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap], data_hash[:aopAocIgps]) +
+                (node_id(data_hash, :typeLabel) ? [node_id(data_hash, :typeLabel)] : []),
             chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
             area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : nil,
             track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil,
@@ -216,7 +217,8 @@ module Apidae
             services: lists_ids(data_hash[:services]),
             equipments: lists_ids(data_hash[:equipements]),
             comfort: lists_ids(data_hash[:conforts]),
-            activities: lists_ids(data_hash[:activites]) + lists_ids(type_data_hash[:activites])
+            activities: lists_ids(data_hash[:activites], type_data_hash[:activites],
+                                  type_data_hash[:activitesSportives], type_data_hash[:activitesCulturelles])
         }
       end
     end
