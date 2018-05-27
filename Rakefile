@@ -26,9 +26,6 @@ Bundler::GemHelper.install_tasks
 
 # Note : where should engine-related test dependencies go ?
 require 'rake/testtask'
-require 'paperclip/schema'
-
-include Paperclip::Schema
 
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'

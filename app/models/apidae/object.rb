@@ -2,7 +2,7 @@ module Apidae
   class Object < ActiveRecord::Base
 
     belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
-    has_many :attached_files, class_name: 'Apidae::AttachedFile'
+    # has_many :attached_files, class_name: 'Apidae::AttachedFile'
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
@@ -197,12 +197,12 @@ module Apidae
             capacity: data_hash[:capacite],
             classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
                                       lists_ids(data_hash[:classementsGuides]) + lists_ids(data_hash[:classements]),
-            labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap], data_hash[:aopAocIgps]) +
+            labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap]) +
                 (node_id(data_hash, :typeLabel) ? [node_id(data_hash, :typeLabel)] : []),
             chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
             area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : nil,
             track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil,
-            products: lists_ids(data_hash[:typesProduit]),
+            products: lists_ids(data_hash[:typesProduit], data_hash[:aopAocIgps]),
             audience: lists_ids(prestations_hash[:typesClientele]),
             animals: prestations_hash[:animauxAcceptes] == 'ACCEPTES',
             extra: node_value(prestations_hash, :complementAccueil),

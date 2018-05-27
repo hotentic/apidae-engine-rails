@@ -117,21 +117,21 @@ module Apidae
       end
     end
 
-    def self.load_pictures
-      Apidae::Object.all.each do |obj|
-        if obj.apidae_attached_files.blank? && obj.pictures.any?
-          obj.pictures.each do |pic|
-            begin
-              attached = Apidae::AttachedFile.new(apidae_object_id: id, name: pic[:name], picture: URI.parse(pic[:url]),
-                                          description: pic[:description], credits: pic[:credits])
-              attached.save
-            rescue OpenURI::HTTPError => e
-              logger.error "Could not retrieve attached picture for object #{title} - Error is #{e.message}"
-            end
-          end
-        end
-      end
-    end
+    # def self.load_pictures
+    #   Apidae::Object.all.each do |obj|
+    #     if obj.apidae_attached_files.blank? && obj.pictures.any?
+    #       obj.pictures.each do |pic|
+    #         begin
+    #           attached = Apidae::AttachedFile.new(apidae_object_id: id, name: pic[:name], picture: URI.parse(pic[:url]),
+    #                                       description: pic[:description], credits: pic[:credits])
+    #           attached.save
+    #         rescue OpenURI::HTTPError => e
+    #           logger.error "Could not retrieve attached picture for object #{title} - Error is #{e.message}"
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
 
     def self.import_selections(json_file, result)
       selections_json = File.read(json_file)
