@@ -28,7 +28,8 @@ module Apidae
         Apidae::SelectionObject.create(apidae_selection_id: apidae_sel.id, apidae_object_id: obj.id)
       end
 
-      Apidae::SelectionObject.where(apidae_selection_id: apidae_sel.id, apidae_object_id: removed).delete_all
+      removed_ids = Apidae::Object.where(apidae_id: removed).map {|o| o.id}
+      Apidae::SelectionObject.where(apidae_selection_id: apidae_sel.id, apidae_object_id: removed_ids).delete_all
     end
 
     def results(where_clause, offset, size)

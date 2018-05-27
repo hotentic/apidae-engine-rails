@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apidae (0.4.3)
+    apidae (0.4.5)
       pg (~> 0.20)
       rails (~> 5.1.4)
       rubyzip (~> 1.0.0)
