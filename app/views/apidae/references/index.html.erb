@@ -1,0 +1,35 @@
+<%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
+  <div id="apidae_header" class="<%= styles[:header] %>">
+    <%= link_to 'Retour', :back, class: styles[:back] %>
+    <h1 class="<%= styles[:h1] %>">Apidae - Eléments de référence</h1>
+  </div>
+  <div id="apidae_dashboard" class="<%= styles[:wrapper] %>">
+    <div id="apidae_imports_panel" class="<%= styles[:body] %>">
+      <table id="apidae_references" class="<%= styles[:table] %>">
+        <thead class="<%= styles[:table_head] %>">
+        <tr>
+          <th>Titre</th>
+          <th>Identifiant</th>
+          <th>Type</th>
+          <th>Mise à jour</th>
+        </tr>
+        </thead>
+        <tbody class="<%= styles[:table_body] %>">
+        <% @references.each do |ref| %>
+          <tr>
+            <td><%= ref.label(:fr) %></td>
+            <td><%= ref.apidae_id %></td>
+            <td><%= ref.apidae_type %></td>
+            <td><%= ref.updated_at.strftime('Le %d/%m/%Y à %H:%M') if ref.updated_at %></td>
+          </tr>
+        <% end %>
+        <% if @references.empty? %>
+          <tr>
+            <td colspan="4">Aucune référence importée pour le moment.</td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>

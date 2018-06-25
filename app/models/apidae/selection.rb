@@ -1,7 +1,7 @@
 module Apidae
   class Selection < ActiveRecord::Base
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_selection_id
-    has_many :objects, class_name: 'Apidae::Object', source: :apidae_object, through: :apidae_selection_objects
+    has_many :objects, class_name: 'Apidae::Obj', source: :apidae_object, through: :apidae_selection_objects
 
     AGENDA_ENDPOINT = 'agenda/detaille/list-identifiants'
     SELECTION_ENDPOINT = 'recherche/list-identifiants'
@@ -12,7 +12,7 @@ module Apidae
     before_validation :generate_reference, on: :create
 
     def self.add_or_update(selection_data)
-      apidae_sel = Apidae::Selection.where(apidae_id: selection_data[:id]).first_or_initialize
+      apidae_sel = Selection.where(apidae_id: selection_data[:id]).first_or_initialize
       apidae_sel.label = selection_data[:nom]
       apidae_sel.save!
 
@@ -24,12 +24,12 @@ module Apidae
       removed = current_objs - imported_objs
 
       added.each do |o|
-        obj = Apidae::Object.find_by_apidae_id(o)
-        Apidae::SelectionObject.create(apidae_selection_id: apidae_sel.id, apidae_object_id: obj.id)
+        obj = Obj.find_by_apidae_id(o)
+        SelectionObject.create(apidae_selection_id: apidae_sel.id, apidae_object_id: obj.id)
       end
 
-      removed_ids = Apidae::Object.where(apidae_id: removed).map {|o| o.id}
-      Apidae::SelectionObject.where(apidae_selection_id: apidae_sel.id, apidae_object_id: removed_ids).delete_all
+      removed_ids = Obj.where(apidae_id: removed).map {|o| o.id}
+      SelectionObject.where(apidae_selection_id: apidae_sel.id, apidae_object_id: removed_ids).delete_all
     end
 
     def results(where_clause, offset, size)
@@ -60,6 +60,10 @@ module Apidae
         $apidae_cache.write(key, res)
       end
       res
+    end
+
+    def as_text
+      "#{label} (#{apidae_id})"
     end
 
     private

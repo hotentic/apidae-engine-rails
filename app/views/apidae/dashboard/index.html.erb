@@ -1,5 +1,8 @@
 <%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
     <div id="apidae_header" class="<%= styles[:header] %>">
+      <%= link_to pluralize(@selections, 'sélection', 'sélections'), apidae.selections_path, class: styles[:selections] %>
+      <%= link_to pluralize(@objects, 'objet touristique', 'objets touristiques'), apidae.objects_path, class: styles[:objects] %>
+      <%= link_to (pluralize(@references, 'élément', 'éléments') + ' de référence'), apidae.references_path, class: styles[:references] %>
       <%= link_to 'Retour', :back, class: styles[:back] %>
       <h1 class="<%= styles[:h1] %>">Apidae</h1>
     </div>
@@ -28,16 +31,11 @@
           <% end %>
           <% if @last_imports.empty? %>
               <tr>
-                <td colspan="3">Aucun import pour le moment.</td>
+                <td colspan="5">Aucun import pour le moment.</td>
               </tr>
           <% end %>
           </tbody>
         </table>
-      </div>
-      <div id="apidae_navigation_panel" class="<%= styles[:body] %>">
-        <h2 class="<%= styles[:h2] %>">Données issues d'Apidae</h2>
-        <%= link_to pluralize(@selections, 'sélection', 'sélections'), apidae.selections_path, class: styles[:selections] %>
-        <%= link_to pluralize(@objects, 'objet touristique', 'objets touristiques'), apidae.objects_path, class: styles[:objects] %>
       </div>
     </div>
 <% end %>

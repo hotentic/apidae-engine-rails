@@ -3,9 +3,10 @@ require_dependency "apidae/application_controller"
 module Apidae
   class DashboardController < ApplicationController
     def index
-      @objects = Apidae::Object.count
-      @selections = Apidae::Selection.count
-      @last_imports = Apidae::FileImport.order(id: :desc).take(5)
+      @objects = Obj.count
+      @selections = Selection.count
+      @references = Reference.count
+      @last_imports = FileImport.order(id: :desc).take(5)
     end
   end
 end

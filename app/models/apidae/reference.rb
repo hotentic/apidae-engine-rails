@@ -39,7 +39,7 @@ module Apidae
     end
 
     def detailed_label(language)
-      category ? "#{Apidae::Reference.find_by_apidae_id(category).label(language)} - #{label(language)}" : label(language)
+      category ? "#{Reference.find_by_apidae_id(category).label(language)} - #{label(language)}" : label(language)
     end
   end
 end

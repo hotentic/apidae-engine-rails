@@ -10,23 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180314093512) do
+ActiveRecord::Schema.define(version: 20180625050400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "apidae_attached_files", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "credits"
-    t.text "description"
-    t.integer "apidae_object_id"
-    t.string "picture_file_name"
-    t.string "picture_content_type"
-    t.integer "picture_file_size"
-    t.datetime "picture_updated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "apidae_exports", id: :serial, force: :cascade do |t|
     t.string "status"
@@ -50,18 +37,18 @@ ActiveRecord::Schema.define(version: 20180314093512) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "apidae_objects", id: :serial, force: :cascade do |t|
-    t.jsonb "address"
+  create_table "apidae_objects_selections", id: :serial, force: :cascade do |t|
+    t.integer "object_id"
+    t.integer "selection_id"
+  end
+
+  create_table "apidae_objs", id: :serial, force: :cascade do |t|
     t.integer "apidae_id"
     t.string "apidae_type"
     t.string "apidae_subtype"
     t.string "title"
-    t.text "short_desc"
     t.jsonb "contact"
-    t.text "long_desc"
     t.jsonb "type_data"
-    t.float "latitude"
-    t.float "longitude"
     t.jsonb "openings_data"
     t.text "reservation"
     t.datetime "created_at", null: false
@@ -73,11 +60,9 @@ ActiveRecord::Schema.define(version: 20180314093512) do
     t.jsonb "rates_data"
     t.jsonb "attachments_data"
     t.jsonb "tags_data"
-  end
-
-  create_table "apidae_objects_selections", id: :serial, force: :cascade do |t|
-    t.integer "object_id"
-    t.integer "selection_id"
+    t.jsonb "meta_data"
+    t.jsonb "location_data"
+    t.jsonb "description_data"
   end
 
   create_table "apidae_references", force: :cascade do |t|
@@ -86,7 +71,8 @@ ActiveRecord::Schema.define(version: 20180314093512) do
     t.jsonb "label_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["apidae_id"], name: "index_apidae_references_on_apidae_id", unique: true
+    t.jsonb "meta_data"
+    t.index ["apidae_id"], name: "index_apidae_references_on_apidae_id"
   end
 
   create_table "apidae_selection_objects", force: :cascade do |t|
@@ -112,7 +98,7 @@ ActiveRecord::Schema.define(version: 20180314093512) do
     t.string "postal_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["insee_code"], name: "index_apidae_towns_on_insee_code", unique: true
+    t.index ["insee_code"], name: "index_apidae_towns_on_insee_code"
   end
 
 end

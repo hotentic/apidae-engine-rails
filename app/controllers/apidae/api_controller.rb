@@ -6,8 +6,8 @@ module Apidae
     def selection
       @objects = []
       unless params[:selection_id].blank?
-        objects_ids = Apidae::Selection.find(params[:selection_id]).api_results[:results]
-        @objects = Apidae::Object.where(id: objects_ids)
+        objects_ids = Selection.find(params[:selection_id]).api_results[:results]
+        @objects = Obj.where(id: objects_ids)
       end
     end
 
@@ -17,8 +17,8 @@ module Apidae
     def agenda
       @objects = []
       unless params[:selection_id].blank?
-        objects_ids = Apidae::Selection.find(params[:selection_id]).api_agenda(params[:from], params[:to])[:results]
-        @objects = Apidae::Object.where(id: objects_ids)
+        objects_ids = Selection.find(params[:selection_id]).api_agenda(params[:from], params[:to])[:results]
+        @objects = Obj.where(id: objects_ids)
       end
     end
   end

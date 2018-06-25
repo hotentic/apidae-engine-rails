@@ -1,5 +1,5 @@
 module Apidae
-  class Object < ActiveRecord::Base
+  class Obj < ActiveRecord::Base
 
     belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
     # has_many :attached_files, class_name: 'Apidae::AttachedFile'
@@ -16,7 +16,7 @@ module Apidae
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access
     store_accessor :openings_data, :openings_desc, :openings, :time_periods
     store_accessor :rates_data, :rates_desc, :rates, :payment_methods
-    store_accessor :service_data, :services, :equipments, :comfort, :activities
+    store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :tags_data, :promo, :internal
 
     ACT = 'ACTIVITE'
@@ -60,7 +60,7 @@ module Apidae
     WEBSITE = 205
 
     def self.add_object(object_data)
-      apidae_obj = Apidae::Object.new(apidae_id: object_data[:id])
+      apidae_obj = Obj.new(apidae_id: object_data[:id])
       update_object(apidae_obj, object_data)
     end
 
@@ -202,7 +202,7 @@ module Apidae
             chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
             area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : nil,
             track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil,
-            products: lists_ids(data_hash[:typesProduit], data_hash[:aopAocIgps]),
+            products: lists_ids(data_hash[:typesProduit], data_hash[:aopAocIgps], data_hash[:specialites]),
             audience: lists_ids(prestations_hash[:typesClientele]),
             animals: prestations_hash[:animauxAcceptes] == 'ACCEPTES',
             extra: node_value(prestations_hash, :complementAccueil),
@@ -218,7 +218,9 @@ module Apidae
             equipments: lists_ids(data_hash[:equipements]),
             comfort: lists_ids(data_hash[:conforts]),
             activities: lists_ids(data_hash[:activites], type_data_hash[:activites],
-                                  type_data_hash[:activitesSportives], type_data_hash[:activitesCulturelles])
+                                  type_data_hash[:activitesSportives], type_data_hash[:activitesCulturelles]),
+            challenged: lists_ids(data_hash[:tourismesAdaptes]),
+            languages: lists_ids(data_hash[:languesParlees])
         }
       end
     end

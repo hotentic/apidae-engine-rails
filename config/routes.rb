@@ -4,6 +4,7 @@ Apidae::Engine.routes.draw do
   resources :selections, only: [:index] do
     resources :objects, only: [:index]
   end
+  resources :references, only: [:index]
 
   match 'import/callback', via: :post, to: 'import#callback'
   match 'import/run', via: :post, to: 'import#run'
