@@ -261,7 +261,7 @@ module Apidae
     end
 
     def main_picture
-      pictures.any? ? pictures[0]["url"] : "/#{Rails.application.config.apidae_pictures_path}/default/logo.png"
+      pictures.any? ? pictures[0]["url"] : "#{Rails.application.config.apidae_pictures_path}/default/logo.png"
     end
 
     def self.build_rate(rate_period)

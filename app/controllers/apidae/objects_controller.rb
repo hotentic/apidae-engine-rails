@@ -9,7 +9,7 @@ module Apidae
         @selection = Selection.find(params[:selection_id])
         @objects = @selection.objects.select(:apidae_id, :title, :apidae_type, :updated_at)
       else
-        @objects = Object.all.select(:apidae_id, :title, :apidae_type, :updated_at)
+        @objects = Obj.all.select(:apidae_id, :title, :apidae_type, :updated_at)
       end
     end
 
@@ -17,14 +17,14 @@ module Apidae
     end
 
     def new
-      @object = Object.new
+      @object = Obj.new
     end
 
     def edit
     end
 
     def create
-      @object = Object.new(object_params)
+      @object = Obj.new(object_params)
 
       if @object.save
         redirect_to @object, notice: 'Object was successfully created.'
@@ -48,7 +48,7 @@ module Apidae
 
     private
       def set_object
-        @object = Object.find(params[:id])
+        @object = Obj.find(params[:id])
       end
 
       def object_params
