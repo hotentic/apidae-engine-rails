@@ -64,13 +64,20 @@ module Apidae
     def self.add_or_update_objects(objects_json, result)
       objects_hashes = JSON.parse(objects_json, symbolize_names: true)
       objects_hashes.each do |object_data|
-        existing = Obj.find_by_apidae_id(object_data[:id])
-        if existing
-          Obj.update_object(existing, object_data)
-          result[:updated] += 1
-        else
-          Obj.add_object(object_data)
-          result[:created] += 1
+        begin
+          existing = Obj.find_by_apidae_id(object_data[:id])
+          if existing
+            Obj.update_object(existing, object_data)
+            result[:updated] += 1
+          else
+            Obj.add_object(object_data)
+            result[:created] += 1
+          end
+        rescue Exception => e
+          puts "Failed to import object #{object_data[:id]}"
+          puts e.message
+          puts e.backtrace[0..5].join("\n")
+          raise e
         end
       end
     end

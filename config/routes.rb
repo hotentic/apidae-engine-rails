@@ -1,8 +1,8 @@
 Apidae::Engine.routes.draw do
 
-  resources :objects, only: [:index], path: 'objets'
+  resources :objects, only: [:index, :show], path: 'objets'
   resources :selections, only: [:index] do
-    resources :objects, only: [:index]
+    resources :objects, only: [:index], path: 'objets'
   end
   resources :references, only: [:index]
 

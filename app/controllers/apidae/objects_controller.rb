@@ -3,13 +3,14 @@ require_dependency "apidae/application_controller"
 module Apidae
   class ObjectsController < ApplicationController
     before_action :set_object, only: [:show, :edit, :update, :destroy]
+    skip_before_action Rails.application.config.apidae_auth, only: [:index, :show]
 
     def index
       if params[:selection_id]
         @selection = Selection.find(params[:selection_id])
-        @objects = @selection.objects.select(:apidae_id, :title, :apidae_type, :updated_at)
+        @objects = @selection.objects.select(:id, :apidae_id, :title, :apidae_type, :updated_at)
       else
-        @objects = Obj.all.select(:apidae_id, :title, :apidae_type, :updated_at)
+        @objects = Obj.all.select(:id, :apidae_id, :title, :apidae_type, :updated_at)
       end
     end
 

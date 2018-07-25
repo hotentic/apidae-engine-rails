@@ -1,6 +1,6 @@
 <%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
     <div id="apidae_header" class="<%= styles[:header] %>">
-      <%= link_to 'Retour', :back, class: styles[:back] %>
+      <%= link_to 'Retour', @selection ? selections_path : root_path, class: styles[:back] %>
       <h1 class="<%= styles[:h1] %>">Apidae - <%= @selection ? "Sélection \"#{@selection.label}\"" : "Tous les objets touristiques" %></h1>
     </div>
     <div id="apidae_dashboard" class="<%= styles[:wrapper] %>">

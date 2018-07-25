@@ -1,4 +1,4 @@
 module Apidae
-  module Apidae::ReferencesHelper
+  module ReferencesHelper
   end
 end

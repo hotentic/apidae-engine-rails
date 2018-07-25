@@ -187,8 +187,9 @@ module Apidae
       end
     end
 
-    def self.parse_type_data(apidae_obj, data_hash, prestations_hash)
+    def self.parse_type_data(apidae_obj, data_hash, presta_hash)
       if data_hash
+        prestations_hash = presta_hash || {}
         apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
         apidae_obj.apidae_subtype = node_id(data_hash, :rubrique) if apidae_obj.apidae_type == EQU
         {
