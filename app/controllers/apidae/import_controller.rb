@@ -5,6 +5,7 @@ require 'net/http'
 module Apidae
   class ImportController < ApplicationController
     skip_before_action :verify_authenticity_token
+    skip_before_action Rails.application.config.apidae_auth
 
     # Callback endpoint for Apidae exports
     #
