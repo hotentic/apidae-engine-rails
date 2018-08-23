@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 5.1"
-  s.add_dependency "pg", "~> 1.0"
+  s.add_dependency "pg", "~> 0.2"
   s.add_dependency "rubyzip", "~> 1.0"
   s.add_dependency "jbuilder"
 end
