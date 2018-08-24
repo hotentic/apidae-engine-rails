@@ -15,7 +15,7 @@ module Apidae
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access
     store_accessor :openings_data, :openings_desc, :openings, :time_periods
-    store_accessor :rates_data, :rates_desc, :rates, :payment_methods
+    store_accessor :rates_data, :rates_desc, :rates, :payment_methods, :included, :excluded
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :tags_data, :promo, :internal
 
@@ -183,7 +183,7 @@ module Apidae
         desc = rates_hash[:gratuit] ? 'gratuit' : node_value(rates_hash, :tarifsEnClair)
         values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p)}
         methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
-        {rates_desc: desc, rates: values, payment_methods: methods}
+        {rates_desc: desc, rates: values, payment_methods: methods, includes: rates_hash[:leTarifComprend], excludes: rates_hash[:leTarifNeComprendPas]}
       end
     end
 
@@ -192,8 +192,9 @@ module Apidae
         prestations_hash = presta_hash || {}
         apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
         apidae_obj.apidae_subtype = node_id(data_hash, :rubrique) if apidae_obj.apidae_type == EQU
+        apidae_obj.apidae_subtype = lists_ids(data_hash[:typesHebergement]).first if apidae_obj.apidae_type == SPA
         {
-            categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles]),
+            categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles], data_hash[:activiteCategories]),
             themes: lists_ids(data_hash[:themes]),
             capacity: data_hash[:capacite],
             classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
@@ -201,13 +202,13 @@ module Apidae
             labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap]) +
                 (node_id(data_hash, :typeLabel) ? [node_id(data_hash, :typeLabel)] : []),
             chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
-            area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : nil,
+            area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : node_value(data_hash, :lieuDePratique),
             track: apidae_obj.apidae_type == EQU ? data_hash[:itineraire] : nil,
             products: lists_ids(data_hash[:typesProduit], data_hash[:aopAocIgps], data_hash[:specialites]),
             audience: lists_ids(prestations_hash[:typesClientele]),
             animals: prestations_hash[:animauxAcceptes] == 'ACCEPTES',
-            extra: node_value(prestations_hash, :complementAccueil),
-            duration: data_hash[:dureeSeance]
+            extra: apidae_obj == SPA ? node_value(data_hash, :formuleHebergement) : node_value(prestations_hash, :complementAccueil),
+            duration: apidae_obj.apidae_type == SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance]
         }
       end
     end
