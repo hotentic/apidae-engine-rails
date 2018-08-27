@@ -10,14 +10,14 @@ module Apidae
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
-                   :products, :audience, :animals, :extra, :duration
-    store_accessor :entity_data, :entity_id, :entity_name
+                   :products, :audience, :animals, :extra, :duration, :certifications
+    store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
     store_accessor :contact, :telephone, :email, :website
-    store_accessor :location_data, :address, :place, :latitude, :longitude, :access
+    store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
     store_accessor :openings_data, :openings_desc, :openings, :time_periods
     store_accessor :rates_data, :rates_desc, :rates, :payment_methods, :included, :excluded
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
-    store_accessor :tags_data, :promo, :internal
+    store_accessor :tags_data, :promo, :internal, :linked
 
     ACT = 'ACTIVITE'
     COS = 'COMMERCE_ET_SERVICE'
@@ -71,7 +71,8 @@ module Apidae
       apidae_obj.title = node_value(object_data, :nom)
       apidae_obj.description_data = parse_desc_data(object_data[:presentation])
       apidae_obj.contact = contact(object_data[:informations])
-      apidae_obj.location_data = parse_location_data(object_data[:localisation], object_data[type_fields[:node]])
+      apidae_obj.location_data = parse_location_data(object_data[:localisation], object_data[type_fields[:node]],
+                                                     object_data[:territoires])
       apidae_obj.town = town(object_data[:localisation][:adresse])
       apidae_obj.openings_data = parse_openings(object_data[:ouverture])
       apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif])
@@ -79,9 +80,9 @@ module Apidae
       apidae_obj.type_data = parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations])
       apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
       apidae_obj.attachments_data = attachments_urls(object_data[:multimedias])
-      apidae_obj.entity_data = entity_fields(object_data[:informations])
+      apidae_obj.entity_data = entity_fields(object_data[:informations], object_data[type_fields[:node]])
       apidae_obj.service_data = parse_service_data(object_data[:prestations], object_data[type_fields[:node]])
-      apidae_obj.tags_data = parse_tags_data(object_data[:presentation], object_data[:criteresInternes])
+      apidae_obj.tags_data = parse_tags_data(object_data[:presentation], object_data[:criteresInternes], object_data[:liens])
       apidae_obj.meta_data = object_data[:metadonnees]
       apidae_obj.save!
     end
@@ -144,7 +145,8 @@ module Apidae
       contact_details
     end
 
-    def self.parse_location_data(location_hash, type_data_hash)
+    def self.parse_location_data(location_hash, type_data_hash, territories)
+      loc_data = {territories: territories.map {|t| t[:id]}, environments: (location_hash[:environnements] || []).map {|e| e[:id]}}
       unless location_hash.blank?
         address_hash = location_hash[:adresse]
         computed_address = []
@@ -153,15 +155,15 @@ module Apidae
           computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
           computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
         end
-        loc_data = {address: computed_address, place: type_data_hash[:nomLieu]}
+        loc_data.merge!({address: computed_address, place: type_data_hash[:nomLieu]})
         geoloc_details = location_hash[:geolocalisation]
         if geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]
           loc_data[:latitude] = geoloc_details[:geoJson][:coordinates][1]
           loc_data[:longitude] = geoloc_details[:geoJson][:coordinates][0]
         end
         loc_data[:access] = node_value(geoloc_details, :complement) if geoloc_details
-        loc_data
       end
+      loc_data
     end
 
     def self.town(address_hash = {})
@@ -196,7 +198,7 @@ module Apidae
         {
             categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles], data_hash[:activiteCategories]),
             themes: lists_ids(data_hash[:themes]),
-            capacity: data_hash[:capacite],
+            capacity: (data_hash[:capacite] || {}).merge({group_min: presta_hash[:tailleGroupeMin], group_max: presta_hash[:tailleGroupeMax]}),
             classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
                                       lists_ids(data_hash[:classementsGuides]) + lists_ids(data_hash[:classements]),
             labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap]) +
@@ -208,7 +210,8 @@ module Apidae
             audience: lists_ids(prestations_hash[:typesClientele]),
             animals: prestations_hash[:animauxAcceptes] == 'ACCEPTES',
             extra: apidae_obj == SPA ? node_value(data_hash, :formuleHebergement) : node_value(prestations_hash, :complementAccueil),
-            duration: apidae_obj.apidae_type == SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance]
+            duration: apidae_obj.apidae_type == SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance],
+            certifications: data_hash[:agrements].blank? ? [] : data_hash[:agrements].map {|a| {id: a[:type][:id], identifier: a[:numero]}}
         }
       end
     end
@@ -227,13 +230,17 @@ module Apidae
       end
     end
 
-    def self.parse_tags_data(pres_data_hash, crit_data_hash)
+    def self.parse_tags_data(pres_data_hash, crit_data_hash, linked_data_hash)
       tags = {}
       if pres_data_hash
         tags[:promo] = lists_ids(pres_data_hash[:typologiesPromoSitra])
       end
       unless crit_data_hash.blank?
         tags[:internal] = crit_data_hash.map {|c| c[:id]}
+      end
+      unless linked_data_hash.blank? || linked_data_hash[:liensObjetsTouristiquesTypes].blank?
+        tags[:linked] = linked_data_hash[:liensObjetsTouristiquesTypes]
+                            .map {|l| {apidae_id: l[:objetTouristique][:id], apidae_type: l[:objetTouristique][:type], category: l[:type]}}
       end
       tags
     end
@@ -248,9 +255,9 @@ module Apidae
       end
     end
 
-    def self.entity_fields(information_hash)
+    def self.entity_fields(information_hash, type_data_hash)
       if information_hash && information_hash[:structureGestion]
-        {entity_id: information_hash[:structureGestion][:id]}
+        {entity_id: information_hash[:structureGestion][:id], service_provider_id: node_id(type_data_hash, :prestataireActivites)}
       end
     end
 
