@@ -15,7 +15,7 @@ module Apidae
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
     store_accessor :openings_data, :openings_desc, :openings, :time_periods
-    store_accessor :rates_data, :rates_desc, :rates, :payment_methods, :included, :excluded
+    store_accessor :rates_data, :rates_desc, :rates, :payment_methods, :includes, :excludes
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :tags_data, :promo, :internal, :linked
 
