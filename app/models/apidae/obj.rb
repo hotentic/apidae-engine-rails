@@ -14,7 +14,7 @@ module Apidae
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
     store_accessor :openings_data, :openings_desc, :openings, :time_periods
-    store_accessor :rates_data, :rates_desc, :rates, :payment_methods, :included, :excluded
+    store_accessor :rates_data, :rates_desc, :rates, :payment_methods, :includes, :excludes
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :tags_data, :promo, :internal, :linked
 
@@ -228,7 +228,7 @@ module Apidae
         desc = rates_hash[:gratuit] ? 'gratuit' : node_value(rates_hash, :tarifsEnClair)
         values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p)}
         methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
-        {rates_desc: desc, rates: values, payment_methods: methods, includes: rates_hash[:leTarifComprend], excludes: rates_hash[:leTarifNeComprendPas]}
+        {rates_desc: desc, rates: values, payment_methods: methods, includes: node_value(rates_hash, :leTarifComprend), excludes: node_value(rates_hash, :leTarifNeComprendPas)}
       end
     end
 
