@@ -1,3 +1,5 @@
+require 'open-uri'
+
 module Apidae
   class Selection < ActiveRecord::Base
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_selection_id
