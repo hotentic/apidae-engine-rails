@@ -5,7 +5,7 @@ module Apidae
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
-    store_accessor :description_data, :short_desc, :long_desc, :theme_desc
+    store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
@@ -84,7 +84,7 @@ module Apidae
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
       apidae_obj.title = node_value(object_data, :nom)
-      apidae_obj.description_data = parse_desc_data(object_data[:presentation])
+      apidae_obj.description_data = parse_desc_data(object_data[:presentation], object_data[:donneesPrivees])
       apidae_obj.contact = contact(object_data[:informations])
       apidae_obj.location_data = parse_location_data(object_data[:localisation], object_data[type_fields[:node]],
                                                      object_data[:territoires])
@@ -120,12 +120,13 @@ module Apidae
       data_hash.keep_if {|k, v| !v.blank?}
     end
 
-    def self.parse_desc_data(data_hash)
+    def self.parse_desc_data(data_hash, private_data)
       unless data_hash.blank?
         {
             short_desc: node_value(data_hash, :descriptifCourt),
             long_desc: node_value(data_hash, :descriptifDetaille),
-            theme_desc: data_hash[:descriptifsThematises].blank? ? [] : Hash[data_hash[:descriptifsThematises].map {|th| [node_id(th, :theme), node_value(th, :description)]}]
+            theme_desc: data_hash[:descriptifsThematises].blank? ? [] : Hash[data_hash[:descriptifsThematises].map {|th| [node_id(th, :theme), node_value(th, :description)]}],
+            private_desc: private_data.blank? ? {} : Hash[private_data.map {|d| [d[:nomTechnique], node_value(d, :descriptif)]}]
         }
       end
     end

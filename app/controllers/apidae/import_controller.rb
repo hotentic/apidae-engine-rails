@@ -22,12 +22,19 @@ module Apidae
                             reset: params[:reinitialisation] == 'true', file_url: params[:urlRecuperation],
                             confirm_url: params[:urlConfirmation], status: Export::PENDING)
         if export.save
-          render nothing: true, status: :ok
+          if Rails.application.config.respond_to?(:apidae_propagate_callback)
+            uri = URI(Rails.application.config.apidae_propagate_callback)
+            req = Net::HTTP::Post.new(uri)
+            Net::HTTP.start(uri.hostname, uri.port) do |http|
+              http.request(req, params.to_unsafe_h.to_query)
+            end
+          end
+          head :ok
         else
-          render nothing: true, status: :internal_server_error
+          head :internal_server_error
         end
       else
-        render nothing: true, status: :not_found
+        head :not_found
       end
     end
 
