@@ -1,0 +1,33 @@
+<%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
+  <div id="apidae_header" class="<%= styles[:header] %>">
+    <%= link_to 'Retour', :back, class: styles[:back] %>
+    <h1 class="<%= styles[:h1] %>">Apidae - Modifier le projet</h1>
+  </div>
+  <div id="apidae_edit_project" class="<%= styles[:wrapper] %>">
+    <div id="apidae_form" class="<%= styles[:body] %>">
+      <%= form_for(@project, class: styles[:form]) do |f| %>
+        <% if @project.errors.any? %>
+          <div id="apidae_form_errors">
+            <ul>
+              <% @project.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="<%= styles[:form_field] %>">
+          <div><%= f.label :name %></div>
+          <div><%= f.text_field :name %></div>
+        </div>
+        <div class="<%= styles[:form_field] %>">
+          <div><%= f.label :api_key %></div>
+          <div><%= f.text_field :api_key %></div>
+        </div>
+        <div class="<%= styles[:form_actions] %>">
+          <%= f.submit 'Valider' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

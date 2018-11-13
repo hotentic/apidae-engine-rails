@@ -1,5 +1,6 @@
 <%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
     <div id="apidae_header" class="<%= styles[:header] %>">
+      <%= link_to pluralize(@projects, 'projet', 'projets'), apidae.projects_path, class: styles[:projects] %>
       <%= link_to pluralize(@selections, 'sélection', 'sélections'), apidae.selections_path, class: styles[:selections] %>
       <%= link_to pluralize(@objects, 'objet touristique', 'objets touristiques'), apidae.objects_path, class: styles[:objects] %>
       <%= link_to (pluralize(@references, 'élément', 'éléments') + ' de référence'), apidae.references_path, class: styles[:references] %>

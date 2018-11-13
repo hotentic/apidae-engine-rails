@@ -5,6 +5,7 @@ Apidae::Engine.routes.draw do
     resources :objects, only: [:index], path: 'objets'
   end
   resources :references, only: [:index]
+  resources :projects, only: [:index, :edit, :update], path: 'projets'
 
   match 'import/callback', via: :post, to: 'import#callback'
   match 'import/run', via: :post, to: 'import#run'

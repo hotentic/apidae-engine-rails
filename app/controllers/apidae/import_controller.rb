@@ -16,25 +16,20 @@ module Apidae
     # urlRecuperation : une chaine de caractères. L’URL de récupération du fichier d’export.
     # urlConfirmation : une chaine de caractères. L’URL de confirmation.
     def callback
-      project_id = params[:projetId]
-      if project_id == Rails.application.config.apidae_project_id
-        export = Export.new(project_id: project_id, remote_status: params[:statut], oneshot: params[:ponctuel] == 'true',
-                            reset: params[:reinitialisation] == 'true', file_url: params[:urlRecuperation],
-                            confirm_url: params[:urlConfirmation], status: Export::PENDING)
-        if export.save
-          if Rails.application.config.respond_to?(:apidae_propagate_callback)
-            uri = URI(Rails.application.config.apidae_propagate_callback)
-            req = Net::HTTP::Post.new(uri)
-            Net::HTTP.start(uri.hostname, uri.port) do |http|
-              http.request(req, params.to_unsafe_h.to_query)
-            end
+      export = Export.new(project_id: params[:projetId], remote_status: params[:statut], oneshot: params[:ponctuel] == 'true',
+                          reset: params[:reinitialisation] == 'true', file_url: params[:urlRecuperation],
+                          confirm_url: params[:urlConfirmation], status: Export::PENDING)
+      if export.save
+        if Rails.application.config.respond_to?(:apidae_propagate_callback)
+          uri = URI(Rails.application.config.apidae_propagate_callback)
+          req = Net::HTTP::Post.new(uri)
+          Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == "https")) do |http|
+            http.request(req, params.to_unsafe_h.to_query)
           end
-          head :ok
-        else
-          head :internal_server_error
         end
+        head :ok
       else
-        head :not_found
+        head :internal_server_error
       end
     end
 
@@ -44,7 +39,7 @@ module Apidae
         begin
           open(e.file_url) do |f|
             begin
-              FileImport.import(f)
+              FileImport.import(f, e.project_id)
               uri = URI(e.confirm_url)
               req = Net::HTTP::Post.new(uri)
               Net::HTTP.start(uri.hostname, uri.port) do |http|

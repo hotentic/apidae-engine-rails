@@ -14,7 +14,7 @@ module Apidae
     DELETED_FILE = 'objets_supprimes.json'
     SELECTIONS_FILE = 'selections.json'
 
-    def self.import(zip_file)
+    def self.import(zip_file, project_id)
       Zip::File.open(zip_file) do |zfile|
         result = {created: 0, updated: 0, deleted: 0, selections: []}
         Reference.import(zfile.read(REFERENCES_FILE))
@@ -30,21 +30,21 @@ module Apidae
             elsif file.name.include?(DELETED_FILE)
               delete_objects(zfile.read(file.name), result)
             elsif file.name.include?(SELECTIONS_FILE)
-              add_or_update_selections(zfile.read(file.name), result)
+              add_or_update_selections(project_id, zfile.read(file.name), result)
             end
           end
         end
-        create(result.except(:selections).merge({remote_file: zip_file, status: STATUS_COMPLETE}))
+        create(result.except(:selections).merge({remote_file: (zip_file.is_a?(File) ? zip_file.path : zip_file), status: STATUS_COMPLETE}))
         logger.info "Import results : #{result}"
         result
       end
     end
 
-    def self.import_dir(dir)
+    def self.import_dir(project_id, dir)
       result = {created: 0, updated: 0, deleted: 0, selections: []}
       import_updates(File.join(dir, MODIFIED_DIR), result)
       import_deletions(File.join(dir, DELETED_FILE), result)
-      import_selections(File.join(dir,SELECTIONS_FILE), result)
+      import_selections(project_id, File.join(dir, SELECTIONS_FILE), result)
       logger.info "Import results : #{result}"
       result
     end
@@ -140,20 +140,21 @@ module Apidae
     #   end
     # end
 
-    def self.import_selections(json_file, result)
+    def self.import_selections(project_id, json_file, result)
       selections_json = File.read(json_file)
-      add_or_update_selections(selections_json, result)
+      add_or_update_selections(project_id, selections_json, result)
     end
 
-    def self.add_or_update_selections(selections_json, result)
+    def self.add_or_update_selections(project_id, selections_json, result)
       selections_hashes = JSON.parse(selections_json, symbolize_names: true)
-      deleted_ids = Selection.all.collect {|sel| sel.apidae_id}.uniq - selections_hashes.collect {|sel| sel[:id]}
+      project = Project.find_or_create_by(apidae_id: project_id)
+      deleted_ids = Selection.where(apidae_project_id: project.id).collect {|sel| sel.apidae_id}.uniq - selections_hashes.collect {|sel| sel[:id]}
       Selection.where(apidae_id: deleted_ids).delete_all
       selections_hashes.each do |selection_data|
         logger.info "Updating selection #{selection_data[:id]}"
-        Selection.add_or_update(selection_data)
+        Selection.add_or_update(selection_data, project.id)
       end
-      result[:selections] = Selection.all
+      result[:selections] = Selection.where(apidae_project_id: project_id)
                                 .collect {|sel| {apidae_id: sel.apidae_id, reference: sel.reference, objects: sel.objects.count}}
     end
   end

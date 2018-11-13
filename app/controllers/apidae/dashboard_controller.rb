@@ -5,6 +5,7 @@ module Apidae
     def index
       @objects = Obj.count
       @selections = Selection.count
+      @projects = Project.count
       @references = Reference.count
       @last_imports = FileImport.order(id: :desc).take(5)
     end

@@ -4,6 +4,7 @@ module Apidae
   class Selection < ActiveRecord::Base
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_selection_id
     has_many :objects, class_name: 'Apidae::Obj', source: :apidae_object, through: :apidae_selection_objects
+    belongs_to :apidae_project, optional: true, class_name: 'Apidae::Project', foreign_key: :apidae_project_id
 
     AGENDA_ENDPOINT = 'agenda/detaille/list-identifiants'
     SELECTION_ENDPOINT = 'recherche/list-identifiants'
@@ -13,9 +14,10 @@ module Apidae
     validates_presence_of :apidae_id, :reference
     before_validation :generate_reference, on: :create
 
-    def self.add_or_update(selection_data)
+    def self.add_or_update(selection_data, apidae_proj_id)
       apidae_sel = Selection.where(apidae_id: selection_data[:id]).first_or_initialize
       apidae_sel.label = selection_data[:nom]
+      apidae_sel.apidae_project_id = apidae_proj_id
       apidae_sel.save!
 
       # Note : should be done with basic collection assignment, but can't make it work...
@@ -134,8 +136,8 @@ module Apidae
     def build_args(endpoint, opts = {})
       {
           url: "#{Rails.application.config.apidae_api_url}/#{endpoint}",
-          apiKey: Rails.application.config.apidae_api_key,
-          projetId: Rails.application.config.apidae_project_id,
+          apiKey: apidae_project ? apidae_project.api_key : '',
+          projetId: apidae_project.apidae_id,
           first: opts[:first] || 0,
           count: opts[:count] || MAX_COUNT,
           selectionIds: opts[:selection_ids],

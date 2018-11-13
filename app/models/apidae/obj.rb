@@ -125,7 +125,7 @@ module Apidae
         {
             short_desc: node_value(data_hash, :descriptifCourt),
             long_desc: node_value(data_hash, :descriptifDetaille),
-            theme_desc: data_hash[:descriptifsThematises].blank? ? [] : Hash[data_hash[:descriptifsThematises].map {|th| [node_id(th, :theme), node_value(th, :description)]}],
+            theme_desc: data_hash[:descriptifsThematises].blank? ? {} : Hash[data_hash[:descriptifsThematises].map {|th| [node_id(th, :theme), node_value(th, :description)]}],
             private_desc: private_data.blank? ? {} : Hash[private_data.map {|d| [d[:nomTechnique], node_value(d, :descriptif)]}]
         }
       end

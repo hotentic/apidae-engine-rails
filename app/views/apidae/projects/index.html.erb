@@ -1,31 +1,31 @@
 <%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
   <div id="apidae_header" class="<%= styles[:header] %>">
     <%= link_to 'Retour', root_path, class: styles[:back] %>
-    <h1 class="<%= styles[:h1] %>">Apidae - Eléments de référence</h1>
+    <h1 class="<%= styles[:h1] %>">Apidae - Projets</h1>
   </div>
   <div class="<%= styles[:wrapper] %>">
     <div class="<%= styles[:body] %>">
-      <table id="apidae_references" class="<%= styles[:table] %>">
+      <table id="apidae_projects" class="<%= styles[:table] %>">
         <thead class="<%= styles[:table_head] %>">
         <tr>
-          <th>Titre</th>
+          <th>Nom</th>
           <th>Identifiant</th>
-          <th>Type</th>
           <th>Mise à jour</th>
+          <th></th>
         </tr>
         </thead>
         <tbody class="<%= styles[:table_body] %>">
-        <% @references.each do |ref| %>
+        <% @projects.each do |proj| %>
           <tr>
-            <td><%= ref.label(:fr) %></td>
-            <td><%= ref.apidae_id %></td>
-            <td><%= ref.apidae_type %></td>
-            <td><%= ref.updated_at.strftime('Le %d/%m/%Y à %H:%M') if ref.updated_at %></td>
+            <td><%= proj.name %></td>
+            <td><%= proj.apidae_id %></td>
+            <td><%= proj.updated_at.strftime('Le %d/%m/%Y à %H:%M') if proj.updated_at %></td>
+            <td><%= link_to 'Modifier', edit_project_path(proj) %></td>
           </tr>
         <% end %>
-        <% if @references.empty? %>
+        <% if @projects.empty? %>
           <tr>
-            <td colspan="4">Aucune référence importée pour le moment.</td>
+            <td colspan="4">Aucun projet pour le moment.</td>
           </tr>
         <% end %>
         </tbody>
