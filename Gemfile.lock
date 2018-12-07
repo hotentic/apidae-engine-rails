@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apidae (0.6.3)
+    apidae (0.7.0)
       jbuilder
       pg (~> 0.20)
       rails (~> 5.1.6)
@@ -54,7 +54,7 @@ GEM
     erubi (1.7.1)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    i18n (1.1.0)
+    i18n (1.1.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)

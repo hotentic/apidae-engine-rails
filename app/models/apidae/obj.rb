@@ -66,12 +66,12 @@ module Apidae
     def self.update_object(apidae_obj, object_data)
       populate_fields(apidae_obj, object_data)
 
-      unless object_data[:aspects].blank?
-        groups_aspect = object_data[:aspects].find {|a| a[:aspect] == 'GROUPES'}
-        if groups_aspect
-          groups_aspect[:type] = apidae_obj.apidae_type
+      if Rails.application.config.respond_to?(:apidae_aspect) && !object_data[:aspects].blank?
+        apidae_aspect = object_data[:aspects].find {|a| a[:aspect] == Rails.application.config.apidae_aspect}
+        if apidae_aspect
+          apidae_aspect[:type] = apidae_obj.apidae_type
           aspect_obj = Obj.new
-          populate_fields(aspect_obj, groups_aspect)
+          populate_fields(aspect_obj, apidae_aspect)
           merge_fields(apidae_obj, aspect_obj)
         end
       end
