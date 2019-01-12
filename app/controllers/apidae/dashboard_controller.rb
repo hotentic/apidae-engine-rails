@@ -7,7 +7,7 @@ module Apidae
       @selections = Selection.count
       @projects = Project.count
       @references = Reference.count
-      @last_imports = FileImport.order(id: :desc).take(5)
+      @last_imports = FileImport.order(id: :desc).take(100)
     end
   end
 end

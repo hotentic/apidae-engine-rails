@@ -10,4 +10,11 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require_tree .
+//= require_self
+
+function apidaeEngineCallback(actionName, args) {
+    var callback = actionName + "ApidaeCallback";
+    if(typeof window[callback] === "function") {
+        window[callback](args);
+    }
+}

@@ -34,7 +34,8 @@ module Apidae
             end
           end
         end
-        create(result.except(:selections).merge({remote_file: (zip_file.is_a?(File) ? zip_file.path : zip_file), status: STATUS_COMPLETE}))
+        create(result.except(:selections)
+                   .merge({remote_file: (zip_file.is_a?(File) ? zip_file.path : zip_file), status: STATUS_COMPLETE, apidae_id: project_id}))
         logger.info "Import results : #{result}"
         result
       end
