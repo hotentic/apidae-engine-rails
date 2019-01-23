@@ -1,9 +1,9 @@
 <%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
   <div id="apidae_header" class="<%= styles[:header] %>">
     <%= link_to 'Retour', :back, class: styles[:back] %>
-    <h1 class="<%= styles[:h1] %>">Apidae - Modifier le projet</h1>
+    <h1 class="<%= styles[:h1] %>">Apidae - Créer un projet</h1>
   </div>
-  <div id="apidae_edit_project" class="<%= styles[:wrapper] %>">
+  <div id="apidae_project" class="<%= styles[:wrapper] %>">
     <div id="apidae_form" class="<%= styles[:body] %>">
       <%= render 'form', styles: styles %>
     </div>

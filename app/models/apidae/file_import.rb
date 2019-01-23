@@ -155,7 +155,7 @@ module Apidae
         logger.info "Updating selection #{selection_data[:id]}"
         Selection.add_or_update(selection_data, project.id)
       end
-      result[:selections] = Selection.where(apidae_project_id: project_id)
+      result[:selections] = Selection.where(apidae_project_id: project.id)
                                 .collect {|sel| {apidae_id: sel.apidae_id, reference: sel.reference, objects: sel.objects.count}}
     end
   end

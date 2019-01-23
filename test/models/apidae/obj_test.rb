@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Apidae
-  class ObjectTest < ActiveSupport::TestCase
+  class ObjTest < ActiveSupport::TestCase
     # test "the truth" do
     #   assert true
     # end

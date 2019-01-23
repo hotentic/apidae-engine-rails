@@ -1,0 +1,37 @@
+<%= form_for(@project, class: styles[:form]) do |f| %>
+  <% if @project.errors.any? %>
+    <div id="apidae_form_errors">
+      <ul>
+        <% @project.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="<%= styles[:form_field] %>">
+    <div><%= f.label :name %></div>
+    <div><%= f.text_field :name %></div>
+  </div>
+  <div class="<%= styles[:form_field] %>">
+    <div><%= f.label :apidae_id %></div>
+    <div><%= f.text_field :apidae_id %></div>
+  </div>
+  <div class="<%= styles[:form_field] %>">
+    <div><%= f.label :api_key %></div>
+    <div><%= f.text_field :api_key %></div>
+  </div>
+  <div class="<%= styles[:form_field] %>">
+    <div><%= f.label :locales %></div>
+    <div>
+      <% Apidae::ALL_LOCALES.each do |l| %>
+        <%= check_box_tag 'project[locales][]', l, f.object.locales.include?(l), {id: "locale_#{l}",
+                          class: styles[:checkbox]}.merge(l == Apidae::DEFAULT_LOCALE ? {onclick: 'return false;', readonly: 'readonly'} : {}) %>
+        <%= label_tag "locale_#{l}", l  %>
+      <% end %>
+    </div>
+  </div>
+  <div class="<%= styles[:form_actions] %>">
+    <%= link_to 'Retour', :back, class: styles[:back] %> | <%= f.submit 'Valider' %>
+  </div>
+<% end %>

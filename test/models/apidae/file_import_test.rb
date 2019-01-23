@@ -4,6 +4,7 @@ module Apidae
   class FileImportTest < ActiveSupport::TestCase
     setup do
       Obj.delete_all
+      Project.delete_all
       Selection.delete_all
       @result = {created: 0, updated: 0, deleted: 0, selections: []}
     end
@@ -39,12 +40,14 @@ module Apidae
     test "new selection insertion" do
       Obj.create(apidae_id: 504, title: 'Société des contrebassistes aixois')
       objects_json = File.read('test/data/selections.json')
-      FileImport.add_or_update_selections(objects_json, @result)
+      proj = Project.create(apidae_id: 123)
+      FileImport.add_or_update_selections(123, objects_json, @result)
       assert_equal 1, Selection.count
       new_sel = Selection.first
       assert_equal 49063, new_sel.apidae_id
       assert_equal 'Sélection 1', new_sel.label
       assert_equal 'selection-1', new_sel.reference
+      assert_equal proj.id, new_sel.apidae_project_id
       assert_equal({created: 0, updated: 0, deleted: 0,
                     selections: [{apidae_id: 49063, reference: 'selection-1', objects: 1}]}, @result)
     end
@@ -52,31 +55,35 @@ module Apidae
     test "existing selection update" do
       obj = Obj.create(apidae_id: 503, title: 'Société des contrebassistes aixois')
       Obj.create(apidae_id: 504, title: 'Société des contrebassistes aixois')
-      sel = Selection.create(apidae_id: 49063, label: 'Sélection 2', reference: 'selection-2')
+      proj = Project.create(apidae_id: 123)
+      sel = Selection.create(apidae_id: 49063, apidae_project_id: proj.id, label: 'Sélection 2', reference: 'selection-2')
       sel.objects << obj
       assert_equal 1, sel.objects.count
       objects_json = File.read('test/data/update_selections.json')
-      FileImport.add_or_update_selections(objects_json, @result)
+      FileImport.add_or_update_selections(123, objects_json, @result)
       assert_equal 1, Selection.count
       assert_equal 49063, sel.apidae_id
       assert_equal 'Sélection 2', sel.label
       assert_equal 'selection-2', sel.reference
+      assert_equal proj.id, sel.apidae_project_id
       assert_equal({created: 0, updated: 0, deleted: 0,
                     selections: [{apidae_id: 49063, reference: 'selection-2', objects: 2}]}, @result)
     end
 
     test "existing selection deletion" do
-      Selection.create(apidae_id: 49063, label: 'Sélection 3', reference: 'selection-3')
+      proj = Project.create(apidae_id: 123)
+      Selection.create(apidae_id: 49063, apidae_project_id: proj.id, label: 'Sélection 3', reference: 'selection-3')
       objects_json = File.read('test/data/delete_selections.json')
       assert_equal 1, Selection.count
-      FileImport.add_or_update_selections(objects_json, @result)
+      FileImport.add_or_update_selections(123, objects_json, @result)
       assert_equal 0, Selection.count
     end
 
     test "full import process" do
       Obj.create(apidae_id: 123, title: 'Objet à supprimer')
       Obj.create(apidae_id: 4826186, title: 'Objet à mettre à jour')
-      result = FileImport.import('test/data/json_export.zip')
+      result = FileImport.import('test/data/json_export.zip', 123)
+      assert_equal 1, Project.all.count
       assert_equal 2, Selection.all.count
       assert_equal 5, Obj.all.count
       assert_equal({created: 4, updated: 1, deleted: 1, selections: [

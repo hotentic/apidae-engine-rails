@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180625050400) do
+ActiveRecord::Schema.define(version: 2019_01_23_214635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20180625050400) do
     t.integer "deleted"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "apidae_id"
   end
 
   create_table "apidae_objects_selections", id: :serial, force: :cascade do |t|
@@ -46,11 +47,9 @@ ActiveRecord::Schema.define(version: 20180625050400) do
     t.integer "apidae_id"
     t.string "apidae_type"
     t.string "apidae_subtype"
-    t.string "title"
     t.jsonb "contact"
     t.jsonb "type_data"
     t.jsonb "openings_data"
-    t.text "reservation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "town_insee_code"
@@ -63,6 +62,17 @@ ActiveRecord::Schema.define(version: 20180625050400) do
     t.jsonb "meta_data"
     t.jsonb "location_data"
     t.jsonb "description_data"
+    t.jsonb "title_data"
+    t.jsonb "booking_data"
+  end
+
+  create_table "apidae_projects", force: :cascade do |t|
+    t.string "name"
+    t.integer "apidae_id"
+    t.string "api_key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "locales_data"
   end
 
   create_table "apidae_references", force: :cascade do |t|
@@ -88,6 +98,7 @@ ActiveRecord::Schema.define(version: 20180625050400) do
     t.integer "apidae_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "apidae_project_id"
   end
 
   create_table "apidae_towns", id: :serial, force: :cascade do |t|

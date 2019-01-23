@@ -1,5 +1,6 @@
 <%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
   <div id="apidae_header" class="<%= styles[:header] %>">
+    <%= link_to 'Ajouter un projet', apidae.new_project_path, class: styles[:projects] %>
     <%= link_to 'Retour', root_path, class: styles[:back] %>
     <h1 class="<%= styles[:h1] %>">Apidae - Projets</h1>
   </div>

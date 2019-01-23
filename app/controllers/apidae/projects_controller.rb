@@ -8,6 +8,22 @@ module Apidae
       @projects = Project.all
     end
 
+    def new
+      session[:referrer] = request.referrer
+      @project = Project.new(locales: [DEFAULT_LOCALE])
+    end
+
+    def create
+      @project = Project.new(project_params)
+      if @project.save
+        referrer = session.delete(:referrer)
+        redirect_to referrer, notice: 'Le projet a bien été créé'
+      else
+        flash.now[:alert] = "Une erreur s'est produite lors la création du projet"
+        render :new
+      end
+    end
+
     def edit
       session[:referrer] = request.referrer
     end
@@ -29,7 +45,7 @@ module Apidae
     end
 
     def project_params
-      params.require(:project).permit(:name, :api_key)
+      params.require(:project).permit(:name, :api_key, :apidae_id, :locales)
     end
   end
 end

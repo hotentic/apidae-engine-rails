@@ -1,10 +1,14 @@
 module Apidae
   class Obj < ActiveRecord::Base
+    prepend LocalizedFields
 
     belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
+    attr_accessor :locale
+
+    store_accessor :title_data, :title
     store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
@@ -16,6 +20,7 @@ module Apidae
     store_accessor :openings_data, :openings_desc, :openings, :time_periods
     store_accessor :rates_data, :rates_desc, :rates, :payment_methods, :includes, :excludes
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
+    store_accessor :booking_data, :booking_desc, :booking_entities
     store_accessor :tags_data, :promo, :internal, :linked
 
     ACT = 'ACTIVITE'
@@ -58,6 +63,10 @@ module Apidae
     EMAIL = 204
     WEBSITE = 205
 
+    after_initialize do
+      @locale = DEFAULT_LOCALE
+    end
+
     def self.add_object(object_data)
       apidae_obj = Obj.new(apidae_id: object_data[:id])
       update_object(apidae_obj, object_data)
@@ -91,7 +100,7 @@ module Apidae
       apidae_obj.town = town(object_data[:localisation])
       apidae_obj.openings_data = parse_openings(object_data[:ouverture])
       apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif])
-      apidae_obj.reservation = parse_reservation(object_data[:reservation])
+      apidae_obj.booking_data = parse_booking(object_data[:reservation])
       apidae_obj.type_data = parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations])
       apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
       apidae_obj.attachments_data = attachments_urls(object_data[:multimedias])
@@ -107,7 +116,7 @@ module Apidae
       apidae_obj.location_data.merge!(non_empty(aspect_obj.location_data)) if aspect_obj.location_data
       apidae_obj.openings_data.merge!(non_empty(aspect_obj.openings_data)) if aspect_obj.openings_data
       apidae_obj.rates_data.merge!(non_empty(aspect_obj.rates_data)) if aspect_obj.rates_data
-      apidae_obj.reservation = aspect_obj.reservation unless aspect_obj.reservation.blank?
+      apidae_obj.booking_data.merge!(non_empty(aspect_obj.booking_data)) if aspect_obj.booking_data
       apidae_obj.type_data.merge!(non_empty(aspect_obj.type_data)) if aspect_obj.type_data
       apidae_obj.pictures_data.merge!(non_empty(aspect_obj.pictures_data)) if aspect_obj.pictures_data
       apidae_obj.attachments_data.merge!(non_empty(aspect_obj.attachments_data)) if aspect_obj.attachments_data
@@ -120,40 +129,48 @@ module Apidae
       data_hash.keep_if {|k, v| !v.blank?}
     end
 
-    def self.parse_desc_data(data_hash, private_data)
+    def self.parse_desc_data(data_hash, private_data, *locales)
       unless data_hash.blank?
         {
-            short_desc: node_value(data_hash, :descriptifCourt),
-            long_desc: node_value(data_hash, :descriptifDetaille),
-            theme_desc: data_hash[:descriptifsThematises].blank? ? {} : Hash[data_hash[:descriptifsThematises].map {|th| [node_id(th, :theme), node_value(th, :description)]}],
-            private_desc: private_data.blank? ? {} : Hash[private_data.map {|d| [d[:nomTechnique], node_value(d, :descriptif)]}]
+            short_desc: node_value(data_hash, :descriptifCourt, *locales),
+            long_desc: node_value(data_hash, :descriptifDetaille, *locales),
+            theme_desc: data_hash[:descriptifsThematises].blank? ? {} : Hash[data_hash[:descriptifsThematises].map {|th| [node_id(th, :theme), node_value(th, :description, *locales)]}],
+            private_desc: private_data.blank? ? {} : Hash[private_data.map {|d| [d[:nomTechnique], node_value(d, :descriptif, *locales)]}]
         }
       end
     end
 
-    def self.pictures_urls(pictures_array)
-      pics_data = []
+    def self.pictures_urls(pictures_array, *locales)
+      pics_data = {}
       unless pictures_array.blank?
-        pictures_array.select { |p| p.is_a?(Hash) && !p[:traductionFichiers].blank? }.each do |pic|
-          pics_data << {
-              name: node_value(pic, :nom),
-              url: pic[:traductionFichiers][0][:url],
-              description: node_value(pic, :legende),
-              credits: node_value(pic, :copyright)
-          }
+        l = locales.blank? ? [DEFAULT_LOCALE] : locales
+        l.each do |locale|
+          pics_data[locale] = []
+          pictures_array.select { |p| p.is_a?(Hash) && !p[:traductionFichiers].blank? }.each do |pic|
+            pics_data[locale] << {
+                name: localized_value(pic, :nom, locale),
+                url: pic[:traductionFichiers][0][:url],
+                description: localized_value(pic, :legende, locale),
+                credits: localized_value(pic, :copyright, locale)
+            }
+          end
         end
       end
       {pictures: pics_data}
     end
 
-    def self.attachments_urls(attachments_array)
-      atts_data = []
+    def self.attachments_urls(attachments_array, *locales)
+      atts_data = {}
       unless attachments_array.blank?
-        attachments_array.select { |att| att.is_a?(Hash) && !att[:traductionFichiers].blank? }.each do |att|
-          atts_data << {
-              name: node_value(att, :nom),
-              url: att[:traductionFichiers][0][:url]
-          }
+        l = locales.blank? ? [DEFAULT_LOCALE] : locales
+        l.each do |locale|
+          atts_data[locale] = []
+          attachments_array.select { |att| att.is_a?(Hash) && !att[:traductionFichiers].blank? }.each do |att|
+            atts_data << {
+                name: localized_value(att, :nom, locale),
+                url: att[:traductionFichiers][0][:url]
+            }
+          end
         end
       end
       {attachments: atts_data}
@@ -214,26 +231,30 @@ module Apidae
       end
     end
 
-    def self.parse_openings(openings_hash)
+    def self.parse_openings(openings_hash, *locales)
       if openings_hash && openings_hash[:periodeEnClair]
         {
-            openings_desc: openings_hash[:periodeEnClair][:libelleFr],
+            openings_desc: node_value(openings_hash, :periodeEnClair, *locales),
             openings: openings_hash[:periodesOuvertures],
             time_periods: lists_ids(openings_hash[:indicationsPeriode])
         }
       end
     end
 
-    def self.parse_rates(rates_hash)
+    def self.parse_rates(rates_hash, *locales)
       if rates_hash
-        desc = rates_hash[:gratuit] ? 'gratuit' : node_value(rates_hash, :tarifsEnClair)
+        desc = rates_hash[:gratuit] ? 'gratuit' : node_value(rates_hash, :tarifsEnClair, *locales)
         values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p)}
         methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
-        {rates_desc: desc, rates: values, payment_methods: methods, includes: node_value(rates_hash, :leTarifComprend), excludes: node_value(rates_hash, :leTarifNeComprendPas)}
+        {
+            rates_desc: desc, rates: values, payment_methods: methods,
+            includes: node_value(rates_hash, :leTarifComprend, *locales),
+            excludes: node_value(rates_hash, :leTarifNeComprendPas, *locales)
+        }
       end
     end
 
-    def self.parse_type_data(apidae_obj, type_hash, presta_hash)
+    def self.parse_type_data(apidae_obj, type_hash, presta_hash, *locales)
       data_hash = type_hash || {}
       prestations_hash = presta_hash || {}
       apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
@@ -255,7 +276,7 @@ module Apidae
           products: lists_ids(data_hash[:typesProduit], data_hash[:aopAocIgps], data_hash[:specialites]),
           audience: lists_ids(prestations_hash[:typesClientele]),
           animals: prestations_hash[:animauxAcceptes] == 'ACCEPTES',
-          extra: apidae_obj.apidae_type == SPA ? node_value(data_hash, :formuleHebergement) : node_value(prestations_hash, :complementAccueil),
+          extra: apidae_obj.apidae_type == SPA ? node_value(data_hash, :formuleHebergement, *locales) : node_value(prestations_hash, :complementAccueil, *locales),
           duration: apidae_obj.apidae_type == SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance],
           certifications: data_hash[:agrements].blank? ? [] : data_hash[:agrements].map {|a| {id: a[:type][:id], identifier: a[:numero]}}
       }
@@ -291,13 +312,12 @@ module Apidae
       tags
     end
 
-    def self.parse_reservation(reservation_hash)
+    def self.parse_booking(reservation_hash, *locales)
       if reservation_hash
-        if reservation_hash[:complement]
-          reservation_hash[:complement][:libelleFr]
-        else
-          reservation_hash[:organismes]
-        end
+        {
+            booking_desc: node_value(reservation_hash, :complement, *locales),
+            booking_entities: reservation_hash[:organismes]
+        }
       end
     end
 
@@ -328,9 +348,19 @@ module Apidae
 
     private
 
-    def self.node_value(node, key)
+    def self.node_value(node, key, *locales)
+      l = locales.blank? ? [DEFAULT_LOCALE] : locales
+      locales_map = Hash[l.map {|loc| ["libelle#{loc.camelize.gsub('-', '')}".to_sym, loc]}]
       if node && node[key]
-        node[key][:libelleFr]
+        node[key].slice(*locales_map.keys).transform_keys {|k| locales_map[k]}
+      else
+        ''
+      end
+    end
+
+    def self.localized_value(node, key, locale)
+      if node && node[key]
+        node[key]["libelle#{locale.camelize.gsub('-', '')}".to_sym]
       else
         ''
       end
