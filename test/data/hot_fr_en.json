@@ -1,0 +1,594 @@
+[{
+  "type" : "HOTELLERIE",
+  "id" : 898922,
+  "nom" : {
+    "libelleFr" : "La Châtelleraie",
+    "libelleEn" : "La Châtelleraie"
+  },
+  "identifier" : "SITRA2_HOT_898922",
+  "state" : "PUBLISHED",
+  "gestion" : {
+    "dateCreation" : "2016-09-27T07:12:24.039+0000",
+    "dateModification" : "2018-11-06T11:03:21.304+0000",
+    "dateExportModification" : "2018-11-06T11:03:21.406+0000",
+    "membreProprietaire" : {
+      "type" : {
+        "elementReferenceType" : "MembreSitraType",
+        "id" : 233
+      },
+      "nom" : "Office de Tourisme de la Châtaigneraie Cantalienne",
+      "dateCreation" : "2016-07-19T13:30:36.933+0000",
+      "dateModification" : "2018-10-19T10:11:46.807+0000",
+      "id" : 1333
+    },
+    "signalerUnProblemeMails" : [ "ldemaison@chataigneraie-cantal.com", "mdelbort@chataigneraie-cantal.com" ]
+  },
+  "informations" : {
+    "moyensCommunication" : [ {
+      "identifiant" : 36504392,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 201
+      },
+      "coordonnees" : {
+        "fr" : "04 71 49 09 09"
+      }
+    }, {
+      "identifiant" : 36504393,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 202
+      },
+      "coordonnees" : {
+        "fr" : "04 71 49 07 07"
+      }
+    }, {
+      "identifiant" : 36504394,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 204
+      },
+      "coordonnees" : {
+        "fr" : "chatelleraie@wanadoo.fr"
+      }
+    }, {
+      "identifiant" : 36504395,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 205
+      },
+      "coordonnees" : {
+        "fr" : "http://chatelleraie.co.uk/fr/"
+      }
+    } ]
+  },
+  "presentation" : {
+    "descriptifCourt" : {
+      "libelleFr" : "short desc fr",
+      "libelleEn" : "short desc en"
+    },
+    "descriptifDetaille" : {
+      "libelleFr" : "long desc fr",
+      "libelleEn" : "long desc en"
+    }
+  },
+  "localisation" : {
+    "adresse" : {
+      "adresse2" : "Château de La Devèze",
+      "codePostal" : "15600",
+      "commune" : {
+        "id" : 5430
+      }
+    },
+    "geolocalisation" : {
+      "valide" : true,
+      "geoJson" : {
+        "type" : "Point",
+        "coordinates" : [ 2.207737, 44.715026 ]
+      }
+    },
+    "perimetreGeographique" : [ {
+      "id" : 5430
+    } ],
+    "environnements" : [ {
+      "elementReferenceType" : "Environnement",
+      "id" : 135
+    } ]
+  },
+  "liens" : { },
+  "prestations" : {
+    "equipements" : [ {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 655
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 723
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 821
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 972
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 1058
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 1064
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 1089
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 1093
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 1106
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 1323
+    } ],
+    "services" : [ {
+      "elementReferenceType" : "PrestationService",
+      "id" : 687
+    }, {
+      "elementReferenceType" : "PrestationService",
+      "id" : 1115
+    }, {
+      "elementReferenceType" : "PrestationService",
+      "id" : 1172
+    } ],
+    "animauxAcceptes" : "ACCEPTES",
+    "animauxAcceptesSupplement" : "NON_DISPONIBLE",
+    "activites" : [ {
+      "elementReferenceType" : "PrestationActivite",
+      "id" : 680
+    }, {
+      "elementReferenceType" : "PrestationActivite",
+      "id" : 3927
+    } ],
+    "conforts" : [ {
+      "elementReferenceType" : "PrestationConfort",
+      "id" : 838
+    }, {
+      "elementReferenceType" : "PrestationConfort",
+      "id" : 842
+    }, {
+      "elementReferenceType" : "PrestationConfort",
+      "id" : 963
+    }, {
+      "elementReferenceType" : "PrestationConfort",
+      "id" : 1014
+    }, {
+      "elementReferenceType" : "PrestationConfort",
+      "id" : 1015
+    } ],
+    "languesParlees" : [ {
+      "elementReferenceType" : "Langue",
+      "id" : 1192
+    }, {
+      "elementReferenceType" : "Langue",
+      "id" : 1197
+    } ]
+  },
+  "ouverture" : {
+    "periodeEnClair" : {
+      "libelleFr" : "Du 01/04 au 14/10/2018.",
+      "libelleEn" : "From 01/04 to 14/10/2018.",
+      "libelleEs" : "Del 01/04 al 14/10/2018.",
+      "libelleIt" : "Dal 01/04 al 14/10/2018.",
+      "libelleDe" : "Vom 01/04 bis 14/10/2018.",
+      "libelleNl" : "Van 01/04 tot 14/10/2018.",
+      "libelleRu" : "С 01/04 до 14/10/2018.",
+      "libelleZh" : "从 4月1日 到 2018年10月14日.",
+      "libellePtBR" : "De 01/04 a 14/10/2018."
+    },
+    "periodeEnClairGenerationMode" : "AUTOMATIQUE",
+    "indicationsPeriode" : [ {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 416
+    }, {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 418
+    }, {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 436
+    } ],
+    "periodesOuvertures" : [ {
+      "identifiant" : 14375379,
+      "dateDebut" : "2018-04-01",
+      "dateFin" : "2018-10-14",
+      "type" : "OUVERTURE_TOUS_LES_JOURS",
+      "tousLesAns" : false,
+      "identifiantTechnique" : 15927193
+    } ]
+  },
+  "descriptionTarif" : {
+    "indicationTarif" : "PAYANT",
+    "gratuit" : false,
+    "tarifsEnClair" : {
+      "libelleFr" : "Chambre double : de 55 à 80 €\nChambre quadruple : de 80 à 125 € (chambre familiale)\nDemi-pension (/ pers.) : à partir de 50 € (A partir de 50€)\nPetit déjeuner : à partir de 7,50 €\nAnimaux : à partir de 5 €.\n",
+      "libelleEn" : "Double room: 55 to 80 €\nRoom sleeping 4: 80 to 125 €\nHalf-board: from 50 €\nBreakfast: from 7.50 €\nSupplementary payment for pets: from 5 €.\n",
+      "libelleEs" : "Habitación doble: de 55 a 80 €\nHabitación cuádruple: de 80 a 125 €\nMedia pensión: a partir de 50 €\nDesayuno: a partir de 7,50 €\nSuplemento para animales: a partir de 5 €.\n",
+      "libelleIt" : "Camera doppia: da 55 a 80 €\nCamera quadrupla: da 80 a 125 €\nMezza pensione: a partire da 50 €\nPrima colazione: a partire da 7,50 €\nSupplemento per animali: a partire da 5 €.\n",
+      "libelleDe" : "Doppelzimmer: von 55 bis 80 €\nViererzimmer: von 80 bis 125 €\nHalbpension: ab 50 €\nFrühstück: ab 7,50 €\nAufpreis für Haustiere: ab 5 €.\n",
+      "libelleNl" : "Tweepersoonskamer: € 55 tot € 80\n4-persoonskamer: € 80 tot € 125\nHalf pension: vanaf 50 €\nOntbijt: vanaf 7,50 €\nSupplement voor dieren: vanaf 5 €.\n",
+      "libelleRu" : "Двухместный номер : с 55 до  80 €\nЧетырехместный номер : с 80 до  125 €\nПолупансион : с 50 €\nЗавтрак : с 7,50 €\nДополнительная оплата при  наличии животных : с 5 €.\n",
+      "libelleZh" : "双人间 : 从 55 到  80 €\n四人间 : 从 80 到  125 €\n部分膳食供应 : 从 50 €\n早餐 : 从 7.50 €\n携带宠物额外收费 : 从 5 €.\n",
+      "libellePtBR" : "Quarto duplo: de 55 a 80 €\nQuatro quádruplo: de 80 a 125 €\nMeia-pensão: a partir de 50 €\nCafé da manhã: a partir de 7,50 €\nAnimais: a partir de 5 €.\n"
+    },
+    "tarifsEnClairGenerationMode" : "AUTOMATIQUE",
+    "periodes" : [ {
+      "identifiant" : 8605788,
+      "dateDebut" : "2018-04-01",
+      "dateFin" : "2018-10-14",
+      "tarifs" : [ {
+        "devise" : "EUR",
+        "minimum" : 55.00,
+        "maximum" : 80.00,
+        "type" : {
+          "elementReferenceType" : "TarifType",
+          "id" : 1466
+        }
+      }, {
+        "devise" : "EUR",
+        "minimum" : 80.00,
+        "maximum" : 125.00,
+        "precisionTarif" : {
+          "libelleFr" : "chambre familiale"
+        },
+        "type" : {
+          "elementReferenceType" : "TarifType",
+          "id" : 3877
+        }
+      }, {
+        "devise" : "EUR",
+        "minimum" : 50.00,
+        "precisionTarif" : {
+          "libelleFr" : "A partir de 50€"
+        },
+        "type" : {
+          "elementReferenceType" : "TarifType",
+          "id" : 1465
+        }
+      }, {
+        "devise" : "EUR",
+        "minimum" : 7.50,
+        "type" : {
+          "elementReferenceType" : "TarifType",
+          "id" : 1461
+        }
+      }, {
+        "devise" : "EUR",
+        "minimum" : 5.00,
+        "type" : {
+          "elementReferenceType" : "TarifType",
+          "id" : 4080
+        }
+      } ],
+      "type" : {
+        "elementReferenceType" : "TarifTypePeriode",
+        "id" : 1304
+      }
+    } ],
+    "modesPaiement" : [ {
+      "elementReferenceType" : "ModePaiement",
+      "id" : 1268
+    }, {
+      "elementReferenceType" : "ModePaiement",
+      "id" : 1271
+    } ],
+    "devise" : "EUR",
+    "taxeDeSejourIncluse" : "NON_COMMUNIQUE",
+    "conditions" : { }
+  },
+  "reservation" : { },
+  "contacts" : [ {
+    "identifiant" : 12954222,
+    "referent" : true,
+    "nom" : "HORGAN",
+    "prenom" : "Carrie",
+    "fonction" : {
+      "elementReferenceType" : "ContactFonction",
+      "id" : 464
+    },
+    "moyensCommunication" : [ {
+      "identifiant" : 36504396,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 204
+      },
+      "coordonnees" : {
+        "fr" : "chatelleraie@wanadoo.fr"
+      }
+    }, {
+      "identifiant" : 36504397,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 201
+      },
+      "coordonnees" : {
+        "fr" : "04 71 49 09 09"
+      }
+    } ]
+  } ],
+  "illustrations" : [ {
+    "identifiant" : 1890696,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : {
+      "libelleFr" : "La Chatelleraie st etienne de Maurs 2"
+    },
+    "copyright" : {
+      "libelleFr" : "otchataigneraie"
+    },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/56/163/1811256.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/56/163/1811256-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/56/163/1811256-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/56/163/1811256-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "0-La-Chatelleraie-st-etienne-de-Maurs-2",
+      "taille" : 116147,
+      "hauteur" : 803,
+      "largeur" : 1024,
+      "lastModifiedDate" : "2016-09-27T07:12:28.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890697,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/57/163/1811257.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/57/163/1811257-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/57/163/1811257-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/57/163/1811257-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "1-La-Chatelleraie---Chateau",
+      "taille" : 370880,
+      "hauteur" : 904,
+      "largeur" : 668,
+      "lastModifiedDate" : "2016-09-27T07:12:28.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890698,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/58/163/1811258.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/58/163/1811258-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/58/163/1811258-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/58/163/1811258-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "2-La-Chatelleraie-2",
+      "taille" : 135520,
+      "hauteur" : 811,
+      "largeur" : 1024,
+      "lastModifiedDate" : "2016-09-27T07:12:28.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890699,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/59/163/1811259.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/59/163/1811259-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/59/163/1811259-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/59/163/1811259-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "3-La-Chatelleraie-Chb-double",
+      "taille" : 88900,
+      "hauteur" : 480,
+      "largeur" : 640,
+      "lastModifiedDate" : "2016-09-27T07:12:29.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890700,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/60/163/1811260.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/60/163/1811260-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/60/163/1811260-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/60/163/1811260-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "4-La-Chatelleraie---Suite--1-",
+      "taille" : 52094,
+      "hauteur" : 480,
+      "largeur" : 640,
+      "lastModifiedDate" : "2016-09-27T07:12:29.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890701,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/61/163/1811261.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/61/163/1811261-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/61/163/1811261-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/61/163/1811261-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "5-La-Chatelleraie---Salon",
+      "taille" : 51020,
+      "hauteur" : 480,
+      "largeur" : 640,
+      "lastModifiedDate" : "2016-09-27T07:12:30.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890702,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/62/163/1811262.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/62/163/1811262-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/62/163/1811262-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/62/163/1811262-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "6-La-Chatelleraie---Suite",
+      "taille" : 59687,
+      "hauteur" : 480,
+      "largeur" : 640,
+      "lastModifiedDate" : "2016-09-27T07:12:30.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890703,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/63/163/1811263.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/63/163/1811263-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/63/163/1811263-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/63/163/1811263-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "7-La-Chatelleraie---Piscine",
+      "taille" : 434098,
+      "hauteur" : 979,
+      "largeur" : 734,
+      "lastModifiedDate" : "2016-09-27T07:12:31.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890704,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/64/163/1811264.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/64/163/1811264-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/64/163/1811264-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/64/163/1811264-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "8-La-Chatelleraie---Pavillon-1",
+      "taille" : 90474,
+      "hauteur" : 480,
+      "largeur" : 640,
+      "lastModifiedDate" : "2016-09-27T07:12:31.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890705,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/65/163/1811265.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/65/163/1811265-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/65/163/1811265-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/65/163/1811265-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "9-La-Chatelleraie--Pavillon",
+      "taille" : 74200,
+      "hauteur" : 481,
+      "largeur" : 640,
+      "lastModifiedDate" : "2016-09-27T07:12:33.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 1890706,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : { },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/66/163/1811266.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/66/163/1811266-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/66/163/1811266-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/66/163/1811266-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "10-La-Chatelleraie-Batiment-principal",
+      "taille" : 391856,
+      "hauteur" : 909,
+      "largeur" : 774,
+      "lastModifiedDate" : "2016-09-27T07:12:32.000+0000"
+    } ],
+    "locked" : false
+  } ],
+  "tourismeAffaires" : {
+    "tourismeAffairesEnabled" : true,
+    "nombreSallesModulables" : 1
+  },
+  "territoires" : [ {
+    "type" : "TERRITOIRE",
+    "id" : 711392
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 742848
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 896166
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 908439
+  } ],
+  "informationsHotellerie" : {
+    "hotellerieType" : {
+      "elementReferenceType" : "HotellerieType",
+      "id" : 2734
+    },
+    "classement" : {
+      "elementReferenceType" : "HotellerieClassement",
+      "id" : 2756
+    },
+    "capacite" : {
+      "nombreChambresDeclareesHotelier" : 26,
+      "nombreTotalPersonnes" : 70,
+      "nombreTotalPersonnesReel" : 70,
+      "nombreChambresFamiliales" : 1,
+      "nombreSuites" : 1
+    },
+    "typesHabitation" : [ {
+      "elementReferenceType" : "TypeHabitation",
+      "id" : 1610
+    }, {
+      "elementReferenceType" : "TypeHabitation",
+      "id" : 1619
+    } ]
+  },
+  "formatVersion" : "v002",
+  "informationsPrestataireActivites" : {
+    "prestataireActivites" : false
+  },
+  "metadonnees" : [ {
+    "noeudId" : "tourinsoft",
+    "contenus" : [ {
+      "cible" : "general",
+      "metadonnee" : {
+        "id" : "HOTAUV015V5022D5"
+      }
+    } ]
+  } ]
+}]

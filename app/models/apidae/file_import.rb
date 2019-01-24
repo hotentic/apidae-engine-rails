@@ -17,6 +17,7 @@ module Apidae
     def self.import(zip_file, project_id)
       Zip::File.open(zip_file) do |zfile|
         result = {created: 0, updated: 0, deleted: 0, selections: []}
+        project = Project.find_or_create_by(apidae_id: project_id)
         Reference.import(zfile.read(REFERENCES_FILE))
         Reference.import_internal(zfile.read(INTERNAL_FILE))
         logger.info "Completed #{Reference.count} references update"
@@ -26,11 +27,11 @@ module Apidae
           if file.file? && file.name.end_with?('.json')
             logger.info "Processing file : #{file.name}"
             if file.name.include?(MODIFIED_DIR)
-              add_or_update_objects(zfile.read(file.name), result)
+              add_or_update_objects(zfile.read(file.name), result, *project.locales)
             elsif file.name.include?(DELETED_FILE)
               delete_objects(zfile.read(file.name), result)
             elsif file.name.include?(SELECTIONS_FILE)
-              add_or_update_selections(project_id, zfile.read(file.name), result)
+              add_or_update_selections(project, zfile.read(file.name), result)
             end
           end
         end
@@ -43,35 +44,36 @@ module Apidae
 
     def self.import_dir(project_id, dir)
       result = {created: 0, updated: 0, deleted: 0, selections: []}
-      import_updates(File.join(dir, MODIFIED_DIR), result)
+      project = Project.find_or_create_by(apidae_id: project_id)
+      import_updates(File.join(dir, MODIFIED_DIR), result, *project.locales)
       import_deletions(File.join(dir, DELETED_FILE), result)
-      import_selections(project_id, File.join(dir, SELECTIONS_FILE), result)
+      import_selections(project, File.join(dir, SELECTIONS_FILE), result)
       logger.info "Import results : #{result}"
       result
     end
 
-    def self.import_updates(json_dir, result)
+    def self.import_updates(json_dir, result, *locales)
       if Dir.exist?(json_dir)
         Dir.foreach(json_dir) do |f|
           if f.end_with?('.json')
             json_file = File.join(json_dir, f)
             objects_json = File.read(json_file)
-            add_or_update_objects(objects_json, result)
+            add_or_update_objects(objects_json, result, *locales)
           end
         end
       end
     end
 
-    def self.add_or_update_objects(objects_json, result)
+    def self.add_or_update_objects(objects_json, result, *locales)
       objects_hashes = JSON.parse(objects_json, symbolize_names: true)
       objects_hashes.each do |object_data|
         begin
           existing = Obj.find_by_apidae_id(object_data[:id])
           if existing
-            Obj.update_object(existing, object_data)
+            Obj.update_object(existing, object_data, *locales)
             result[:updated] += 1
           else
-            Obj.add_object(object_data)
+            Obj.add_object(object_data, *locales)
             result[:created] += 1
           end
         rescue Exception => e
@@ -141,14 +143,13 @@ module Apidae
     #   end
     # end
 
-    def self.import_selections(project_id, json_file, result)
+    def self.import_selections(project, json_file, result)
       selections_json = File.read(json_file)
-      add_or_update_selections(project_id, selections_json, result)
+      add_or_update_selections(project, selections_json, result)
     end
 
-    def self.add_or_update_selections(project_id, selections_json, result)
+    def self.add_or_update_selections(project, selections_json, result)
       selections_hashes = JSON.parse(selections_json, symbolize_names: true)
-      project = Project.find_or_create_by(apidae_id: project_id)
       deleted_ids = Selection.where(apidae_project_id: project.id).collect {|sel| sel.apidae_id}.uniq - selections_hashes.collect {|sel| sel[:id]}
       Selection.where(apidae_id: deleted_ids).delete_all
       selections_hashes.each do |selection_data|

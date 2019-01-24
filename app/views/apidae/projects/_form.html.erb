@@ -25,13 +25,12 @@
     <div><%= f.label :locales %></div>
     <div>
       <% Apidae::ALL_LOCALES.each do |l| %>
-        <%= check_box_tag 'project[locales][]', l, f.object.locales.include?(l), {id: "locale_#{l}",
-                          class: styles[:checkbox]}.merge(l == Apidae::DEFAULT_LOCALE ? {onclick: 'return false;', readonly: 'readonly'} : {}) %>
+        <%= check_box_tag 'project[locales][]', l, f.object.locales.include?(l), id: "locale_#{l}", class: styles[:checkbox] %>
         <%= label_tag "locale_#{l}", l  %>
       <% end %>
     </div>
   </div>
   <div class="<%= styles[:form_actions] %>">
-    <%= link_to 'Retour', :back, class: styles[:back] %> | <%= f.submit 'Valider' %>
+    <%= f.submit 'Valider' %> | <%= link_to 'Retour', :back, class: styles[:back] %>
   </div>
 <% end %>

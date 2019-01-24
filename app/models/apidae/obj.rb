@@ -67,13 +67,13 @@ module Apidae
       @locale = DEFAULT_LOCALE
     end
 
-    def self.add_object(object_data)
+    def self.add_object(object_data, *locales)
       apidae_obj = Obj.new(apidae_id: object_data[:id])
-      update_object(apidae_obj, object_data)
+      update_object(apidae_obj, object_data, *locales)
     end
 
-    def self.update_object(apidae_obj, object_data)
-      populate_fields(apidae_obj, object_data)
+    def self.update_object(apidae_obj, object_data, *locales)
+      populate_fields(apidae_obj, object_data, *locales)
 
       if Rails.application.config.respond_to?(:apidae_aspect) && !object_data[:aspects].blank?
         apidae_aspect = object_data[:aspects].find {|a| a[:aspect] == Rails.application.config.apidae_aspect}
@@ -88,22 +88,22 @@ module Apidae
       apidae_obj.save!
     end
 
-    def self.populate_fields(apidae_obj, object_data)
+    def self.populate_fields(apidae_obj, object_data, *locales)
       type_fields = TYPES_DATA[object_data[:type]]
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
-      apidae_obj.title = node_value(object_data, :nom)
-      apidae_obj.description_data = parse_desc_data(object_data[:presentation], object_data[:donneesPrivees])
+      apidae_obj.title = node_value(object_data, :nom, *locales)
+      apidae_obj.description_data = parse_desc_data(object_data[:presentation], object_data[:donneesPrivees], *locales)
       apidae_obj.contact = contact(object_data[:informations])
       apidae_obj.location_data = parse_location_data(object_data[:localisation], object_data[type_fields[:node]],
                                                      object_data[:territoires])
       apidae_obj.town = town(object_data[:localisation])
-      apidae_obj.openings_data = parse_openings(object_data[:ouverture])
-      apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif])
-      apidae_obj.booking_data = parse_booking(object_data[:reservation])
-      apidae_obj.type_data = parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations])
-      apidae_obj.pictures_data = pictures_urls(object_data[:illustrations])
-      apidae_obj.attachments_data = attachments_urls(object_data[:multimedias])
+      apidae_obj.openings_data = parse_openings(object_data[:ouverture], *locales)
+      apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif], *locales)
+      apidae_obj.booking_data = parse_booking(object_data[:reservation], *locales)
+      apidae_obj.type_data = parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations], *locales)
+      apidae_obj.pictures_data = pictures_urls(object_data[:illustrations], *locales)
+      apidae_obj.attachments_data = attachments_urls(object_data[:multimedias], *locales)
       apidae_obj.entity_data = entity_fields(object_data[:informations], object_data[type_fields[:node]])
       apidae_obj.service_data = parse_service_data(object_data[:prestations], object_data[type_fields[:node]])
       apidae_obj.tags_data = parse_tags_data(object_data[:presentation], object_data[:criteresInternes], object_data[:liens])
