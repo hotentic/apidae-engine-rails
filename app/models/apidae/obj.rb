@@ -1,12 +1,14 @@
 module Apidae
   class Obj < ActiveRecord::Base
-    prepend LocalizedFields
+    prepend OverriddenFields
 
     belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
+    has_many :versions, class_name: 'Apidae::Obj', foreign_key: :root_obj_id
 
     attr_accessor :locale
+    attr_accessor :obj_version
 
     store_accessor :title_data, :title
     store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc
@@ -65,30 +67,61 @@ module Apidae
 
     after_initialize do
       @locale = DEFAULT_LOCALE
+      @obj_version = DEFAULT_VERSION
     end
 
-    def self.add_object(object_data, *locales)
-      apidae_obj = Obj.new(apidae_id: object_data[:id])
-      update_object(apidae_obj, object_data, *locales)
+    def in_version(v)
+      versions.unscoped.where(version: v).first
     end
 
-    def self.update_object(apidae_obj, object_data, *locales)
-      populate_fields(apidae_obj, object_data, *locales)
+    def in_locale(l)
+      @locale = l
+      self
+    end
 
-      if Rails.application.config.respond_to?(:apidae_aspect) && !object_data[:aspects].blank?
-        apidae_aspect = object_data[:aspects].find {|a| a[:aspect] == Rails.application.config.apidae_aspect}
-        if apidae_aspect
-          apidae_aspect[:type] = apidae_obj.apidae_type
-          aspect_obj = Obj.new
-          populate_fields(aspect_obj, apidae_aspect)
-          merge_fields(apidae_obj, aspect_obj)
+    def root_obj
+      Obj.unscoped.where(id: root_obj_id).first
+    end
+
+    def self.default_scope
+      where(root_obj_id: nil)
+    end
+
+    def self.add_object(object_data, locales, versions)
+      apidae_obj = Obj.new(apidae_id: object_data[:id], version: DEFAULT_VERSION)
+      update_object(apidae_obj, object_data, locales, versions)
+    end
+
+    def self.update_object(apidae_obj, object_data, locales, versions)
+      populate_fields(apidae_obj, object_data, locales)
+      apidae_obj.save!
+
+      unless versions.blank?
+        versions.select {|v| v != DEFAULT_VERSION }.each do |version|
+          version_data = object_data[:aspects].find {|a| a[:aspect] == version}
+          if version_data
+            version_data[:type] = apidae_obj.apidae_type
+            version_obj = apidae_obj.in_version(version) || Obj.new(apidae_id: apidae_obj.apidae_id,
+                                                                    root_obj_id: apidae_obj.id, version: version)
+            populate_fields(version_obj, version_data, locales)
+            version_obj.save!
+          end
         end
       end
 
-      apidae_obj.save!
+      # if Rails.application.config.respond_to?(:apidae_aspect) && !object_data[:aspects].blank?
+      #   apidae_aspect = object_data[:aspects].find {|a| a[:aspect] == Rails.application.config.apidae_aspect}
+      #   if apidae_aspect
+      #     apidae_aspect[:type] = apidae_obj.apidae_type
+      #     aspect_obj = Obj.new
+      #     populate_fields(aspect_obj, apidae_aspect)
+      #     merge_fields(apidae_obj, aspect_obj)
+      #   end
+      # end
+      # apidae_obj.save!
     end
 
-    def self.populate_fields(apidae_obj, object_data, *locales)
+    def self.populate_fields(apidae_obj, object_data, locales)
       type_fields = TYPES_DATA[object_data[:type]]
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
@@ -166,7 +199,7 @@ module Apidae
         l.each do |locale|
           atts_data[locale] = []
           attachments_array.select { |att| att.is_a?(Hash) && !att[:traductionFichiers].blank? }.each do |att|
-            atts_data << {
+            atts_data[locale] << {
                 name: localized_value(att, :nom, locale),
                 url: att[:traductionFichiers][0][:url]
             }
@@ -354,7 +387,7 @@ module Apidae
       if node && node[key]
         node[key].slice(*locales_map.keys).transform_keys {|k| locales_map[k]}
       else
-        ''
+        {}
       end
     end
 

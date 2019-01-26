@@ -27,7 +27,7 @@ module Apidae
           if file.file? && file.name.end_with?('.json')
             logger.info "Processing file : #{file.name}"
             if file.name.include?(MODIFIED_DIR)
-              add_or_update_objects(zfile.read(file.name), result, *project.locales)
+              add_or_update_objects(zfile.read(file.name), result, project.locales, project.versions)
             elsif file.name.include?(DELETED_FILE)
               delete_objects(zfile.read(file.name), result)
             elsif file.name.include?(SELECTIONS_FILE)
@@ -45,35 +45,35 @@ module Apidae
     def self.import_dir(project_id, dir)
       result = {created: 0, updated: 0, deleted: 0, selections: []}
       project = Project.find_or_create_by(apidae_id: project_id)
-      import_updates(File.join(dir, MODIFIED_DIR), result, *project.locales)
+      import_updates(File.join(dir, MODIFIED_DIR), result, project.locales, project.versions)
       import_deletions(File.join(dir, DELETED_FILE), result)
       import_selections(project, File.join(dir, SELECTIONS_FILE), result)
       logger.info "Import results : #{result}"
       result
     end
 
-    def self.import_updates(json_dir, result, *locales)
+    def self.import_updates(json_dir, result, locales, versions)
       if Dir.exist?(json_dir)
         Dir.foreach(json_dir) do |f|
           if f.end_with?('.json')
             json_file = File.join(json_dir, f)
             objects_json = File.read(json_file)
-            add_or_update_objects(objects_json, result, *locales)
+            add_or_update_objects(objects_json, result, locales, versions)
           end
         end
       end
     end
 
-    def self.add_or_update_objects(objects_json, result, *locales)
+    def self.add_or_update_objects(objects_json, result, locales, versions)
       objects_hashes = JSON.parse(objects_json, symbolize_names: true)
       objects_hashes.each do |object_data|
         begin
           existing = Obj.find_by_apidae_id(object_data[:id])
           if existing
-            Obj.update_object(existing, object_data, *locales)
+            Obj.update_object(existing, object_data, locales, versions)
             result[:updated] += 1
           else
-            Obj.add_object(object_data, *locales)
+            Obj.add_object(object_data, locales, versions)
             result[:created] += 1
           end
         rescue Exception => e

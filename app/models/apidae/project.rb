@@ -12,5 +12,13 @@ module Apidae
     def locales=(values)
       self.locales_data = values.blank? ? nil : values.join('|')
     end
+
+    def versions
+      versions_data.blank? ? [] : versions_data.split('|')
+    end
+
+    def versions=(values)
+      self.versions_data = values.blank? ? nil : values.join('|')
+    end
   end
 end

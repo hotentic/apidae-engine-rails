@@ -11,7 +11,7 @@ module Apidae
 
     test "new object insertion" do
       objects_json = File.read('test/data/structure.json')
-      FileImport.add_or_update_objects(objects_json, @result)
+      FileImport.add_or_update_objects(objects_json, @result, [], [])
       assert_equal 1, Obj.count
       new_obj = Obj.first
       assert_equal 504, new_obj.apidae_id
@@ -20,7 +20,7 @@ module Apidae
 
     test "new object insertion with locales" do
       objects_json = File.read('test/data/hot_fr_en.json')
-      FileImport.add_or_update_objects(objects_json, @result, 'fr', 'en')
+      FileImport.add_or_update_objects(objects_json, @result, [LOCALE_FR, LOCALE_EN], [])
       assert_equal 1, Obj.count
       new_obj = Obj.first
       assert_equal 898922, new_obj.apidae_id
@@ -32,10 +32,46 @@ module Apidae
       assert_equal 'long desc en', new_obj.long_desc
     end
 
+    test "new object insertion with versions" do
+      objects_json = File.read('test/data/cos_winter.json')
+      FileImport.add_or_update_objects(objects_json, @result, [], [WINTER_VERSION])
+      assert_equal 1, Obj.count
+      assert_equal 2, Obj.unscoped.count
+      root_obj = Obj.find_by_apidae_id(4838849)
+      assert_equal 4838849, root_obj.apidae_id
+      winter_obj = root_obj.in_version(WINTER_VERSION)
+      assert_equal 4838849, winter_obj.apidae_id
+      assert_equal root_obj.id, winter_obj.root_obj.id
+      assert_equal({created: 1, updated: 0, deleted: 0, selections: []}, @result)
+      assert_equal 'short desc standard fr', root_obj.short_desc
+      root_obj.obj_version = WINTER_VERSION
+      assert_equal 'short desc winter fr', root_obj.short_desc
+    end
+
+    test "new object insertion with versions and locales" do
+      objects_json = File.read('test/data/cos_winter.json')
+      FileImport.add_or_update_objects(objects_json, @result, [LOCALE_FR, LOCALE_EN, LOCALE_DE], [WINTER_VERSION])
+      assert_equal 1, Obj.count
+      assert_equal 2, Obj.unscoped.count
+      root_obj = Obj.find_by_apidae_id(4838849)
+      assert_equal 4838849, root_obj.apidae_id
+      winter_obj = root_obj.in_version(WINTER_VERSION)
+      assert_equal 4838849, winter_obj.apidae_id
+      assert_equal root_obj.id, winter_obj.root_obj.id
+      assert_equal({created: 1, updated: 0, deleted: 0, selections: []}, @result)
+      assert_equal 'short desc standard fr', root_obj.short_desc
+      assert_equal 'short desc standard en', root_obj.in_locale(LOCALE_EN).short_desc
+      assert_equal 'short desc standard de', root_obj.in_locale(LOCALE_DE).short_desc
+      root_obj.obj_version = WINTER_VERSION
+      assert_equal 'short desc winter fr', root_obj.in_locale(LOCALE_FR).short_desc
+      assert_equal 'short desc standard en', root_obj.in_locale(LOCALE_EN).short_desc
+      assert_equal 'short desc standard de', root_obj.in_locale(LOCALE_DE).short_desc
+    end
+
     test "existing object update" do
       Obj.create(apidae_id: 504, title: 'Société des contrebassistes aixois')
       objects_json = File.read('test/data/structure.json')
-      FileImport.add_or_update_objects(objects_json, @result)
+      FileImport.add_or_update_objects(objects_json, @result, [], [])
       assert_equal 1, Obj.count
       updated_obj = Obj.first
       assert_equal 504, updated_obj.apidae_id

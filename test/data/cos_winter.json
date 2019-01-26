@@ -1,0 +1,508 @@
+[{
+  "type" : "COMMERCE_ET_SERVICE",
+  "id" : 4838849,
+  "nom" : {
+    "libelleFr" : "La Grange des huskies",
+    "libelleEn" : "La Grange des Huskies",
+    "libelleDe" : "Huskytouren Grange des Huskies"
+  },
+  "identifier" : "SITRA2_COS_4838849",
+  "state" : "PUBLISHED",
+  "gestion" : {
+    "dateCreation" : "2017-09-27T14:03:12.717+0000",
+    "dateModification" : "2018-03-13T08:47:27.168+0000",
+    "dateExportModification" : "2018-03-31T03:13:57.005+0000",
+    "membreProprietaire" : {
+      "type" : {
+        "elementReferenceType" : "MembreSitraType",
+        "id" : 233
+      },
+      "nom" : "Hautes Terres Tourisme",
+      "dateCreation" : "2017-02-02T08:27:48.595+0000",
+      "dateModification" : "2018-09-17T13:17:20.852+0000",
+      "id" : 1480
+    },
+    "signalerUnProblemeMails" : [ "ajloubradou@hautesterrestourisme.fr" ]
+  },
+  "informations" : {
+    "moyensCommunication" : [ {
+      "identifiant" : 56883572,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 201
+      },
+      "coordonnees" : {
+        "fr" : "06 16 51 83 85"
+      }
+    }, {
+      "identifiant" : 54331824,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 204
+      },
+      "coordonnees" : {
+        "fr" : "traineauxetchiens@orange.fr"
+      }
+    } ]
+  },
+  "presentation" : {
+    "descriptifCourt" : {
+      "libelleFr" : "short desc standard fr",
+      "libelleEn" : "short desc standard en",
+      "libelleDe" : "short desc standard de"
+    },
+    "descriptifDetaille" : {
+      "libelleFr" : "long desc standard fr"
+    }
+  },
+  "localisation" : {
+    "adresse" : {
+      "adresse1" : "Le bourg de Chavagnac",
+      "codePostal" : "15170",
+      "commune" : {
+        "id" : 5388
+      }
+    },
+    "geolocalisation" : {
+      "altitude" : 1100,
+      "valide" : true,
+      "geoJson" : {
+        "type" : "Point",
+        "coordinates" : [ 2.881851, 45.154246 ]
+      }
+    },
+    "perimetreGeographique" : [ {
+      "id" : 5388
+    } ],
+    "environnements" : [ {
+      "elementReferenceType" : "Environnement",
+      "id" : 153
+    } ]
+  },
+  "liens" : { },
+  "prestations" : {
+    "equipements" : [ {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 972
+    } ],
+    "animauxAcceptes" : "NON_ACCEPTES",
+    "languesParlees" : [ {
+      "elementReferenceType" : "Langue",
+      "id" : 1192
+    }, {
+      "elementReferenceType" : "Langue",
+      "id" : 1197
+    } ]
+  },
+  "ouverture" : {
+    "periodeEnClair" : {
+      "libelleFr" : "Toute l'année.\nSur réservation.",
+      "libelleEn" : "All year round.",
+      "libelleEs" : "Todo el año.",
+      "libelleIt" : "Tutto l'anno.",
+      "libelleDe" : "Ganzjährig.",
+      "libelleNl" : "Het hele jaar.",
+      "libelleRu" : "В течение всего года.",
+      "libelleZh" : "全年.",
+      "libellePtBR" : "Todo o ano."
+    },
+    "periodeEnClairGenerationMode" : "AUTOMATIQUE",
+    "indicationsPeriode" : [ {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 416
+    }, {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 418
+    }, {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 435
+    }, {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 436
+    } ],
+    "periodesOuvertures" : [ {
+      "identifiant" : 14321586,
+      "dateDebut" : "2017-01-01",
+      "dateFin" : "2017-12-31",
+      "complementHoraire" : {
+        "libelleFr" : "Sur réservation."
+      },
+      "type" : "OUVERTURE_TOUS_LES_JOURS",
+      "tousLesAns" : true,
+      "identifiantTechnique" : 14800708
+    } ],
+    "ouvertTouteLAnnee" : "OUVERT_TOUTE_L_ANNEE"
+  },
+  "descriptionTarif" : {
+    "indicationTarif" : "PAYANT",
+    "gratuit" : false,
+    "tarifsEnClair" : {
+      "libelleFr" : "Adulte : de 25 à 80€. Enfants 5-10 ans : de 25 à 50€.\r\nGroupe : 1/2 journée : 350€. Journée : 650€."
+    },
+    "tarifsEnClairGenerationMode" : "MANUEL",
+    "modesPaiement" : [ {
+      "elementReferenceType" : "ModePaiement",
+      "id" : 1271
+    }, {
+      "elementReferenceType" : "ModePaiement",
+      "id" : 1277
+    } ],
+    "devise" : "EUR",
+    "conditions" : { }
+  },
+  "reservation" : {
+    "organismes" : [ {
+      "identifiant" : 3282862,
+      "nom" : "Stéphane Belletier",
+      "type" : {
+        "elementReferenceType" : "ReservationType",
+        "id" : 475
+      },
+      "moyensCommunication" : [ {
+        "identifiant" : 56883572,
+        "type" : {
+          "elementReferenceType" : "MoyenCommunicationType",
+          "id" : 201
+        },
+        "coordonnees" : {
+          "fr" : "06 16 51 83 85"
+        }
+      } ],
+      "locked" : false
+    } ]
+  },
+  "contacts" : [ {
+    "identifiant" : 14069540,
+    "referent" : true,
+    "civilite" : {
+      "elementReferenceType" : "ContactCivilite",
+      "id" : 443
+    },
+    "nom" : "Belletier",
+    "prenom" : "Stéphane",
+    "fonction" : {
+      "elementReferenceType" : "ContactFonction",
+      "id" : 464
+    },
+    "moyensCommunication" : [ {
+      "identifiant" : 54331825,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 204
+      },
+      "coordonnees" : {
+        "fr" : "traineauxetchiens@orange.fr"
+      }
+    } ]
+  } ],
+  "illustrations" : [ {
+    "identifiant" : 3937236,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : {
+      "libelleFr" : "Grange des huskies_ete (3)"
+    },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/45/17/3805485.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/45/17/3805485-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/45/17/3805485-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/45/17/3805485-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "0-Grange-des-huskies-ete--3-",
+      "taille" : 226813,
+      "hauteur" : 768,
+      "largeur" : 1024,
+      "lastModifiedDate" : "2018-03-13T08:47:28.000+0000"
+    }, {
+      "locale" : "de",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805489.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805489-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805489-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805489-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "grange huskies",
+      "taille" : 161646,
+      "hauteur" : 600,
+      "largeur" : 800,
+      "lastModifiedDate" : "2018-03-13T08:47:27.000+0000"
+    }, {
+      "locale" : "en",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805488.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805488-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805488-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805488-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "grange huskies",
+      "taille" : 161646,
+      "hauteur" : 600,
+      "largeur" : 800,
+      "lastModifiedDate" : "2018-03-13T08:47:27.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 3937239,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : {
+      "libelleFr" : "Grange des huskies_ete (2)"
+    },
+    "copyright" : { },
+    "traductionFichiers" : [ {
+      "locale" : "en",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805491.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805491-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805491-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805491-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "grange huskies2",
+      "taille" : 89332,
+      "hauteur" : 600,
+      "largeur" : 450,
+      "lastModifiedDate" : "2018-03-13T08:47:29.000+0000"
+    }, {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/50/17/3805490.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/50/17/3805490-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/50/17/3805490-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/50/17/3805490-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "1-Grange-des-huskies-ete--2-",
+      "taille" : 371068,
+      "hauteur" : 1365,
+      "largeur" : 1024,
+      "lastModifiedDate" : "2018-03-13T08:47:29.000+0000"
+    }, {
+      "locale" : "de",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805492.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805492-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805492-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/3805492-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "grange huskies2",
+      "taille" : 89332,
+      "hauteur" : 600,
+      "largeur" : 450,
+      "lastModifiedDate" : "2018-03-13T08:47:28.000+0000"
+    } ],
+    "locked" : false
+  } ],
+  "multimedias" : [ {
+    "identifiant" : 3577735,
+    "link" : true,
+    "type" : "VIDEO",
+    "nom" : {
+      "libelleFr" : "vidéo test"
+    },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "https://youtu.be/jqDeMNe9zIs"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 3584290,
+    "link" : false,
+    "type" : "VIDEO",
+    "nom" : {
+      "libelleFr" : "Vidéo fichier test"
+    },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/videos/37/7/3475237.mov",
+      "extension" : "mov",
+      "fileName" : "video test ok",
+      "taille" : 10083177,
+      "lastModifiedDate" : "2018-01-18T13:32:05.000+0000"
+    } ],
+    "locked" : false
+  } ],
+  "territoires" : [ {
+    "type" : "TERRITOIRE",
+    "id" : 711392
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 742848
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 908439
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 4648712
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 4924241
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 4924678
+  } ],
+  "informationsCommerceEtService" : {
+    "commerceEtServiceType" : {
+      "elementReferenceType" : "CommerceEtServiceType",
+      "id" : 4015
+    },
+    "typesDetailles" : [ {
+      "elementReferenceType" : "CommerceEtServiceTypeDetaille",
+      "id" : 4039
+    }, {
+      "elementReferenceType" : "CommerceEtServiceTypeDetaille",
+      "id" : 4041
+    } ],
+    "activitesSportives" : [ {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 1832
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 1834
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 1872
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 1911
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 2001
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 2027
+    } ]
+  },
+  "formatVersion" : "v002",
+  "informationsPrestataireActivites" : {
+    "prestataireActivites" : true,
+    "activitesSportives" : [ {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 1832
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 1834
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 1872
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 1911
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 2001
+    }, {
+      "elementReferenceType" : "ActiviteSportivePrestation",
+      "id" : 2027
+    } ]
+  },
+  "aspects" : [ {
+    "aspect" : "HIVER",
+    "champsAspect" : [ "illustrations", "presentation.descriptifCourt", "informationsPrestataireActivites.activitesSportives", "presentation.descriptifDetaille" ],
+    "presentation" : {
+      "descriptifCourt" : {
+        "libelleFr" : "short desc winter fr"
+      },
+      "descriptifDetaille" : {
+        "libelleFr" : "long desc winter fr"
+      }
+    },
+    "illustrations" : [ {
+      "identifiant" : 3512712,
+      "link" : false,
+      "type" : "IMAGE",
+      "nom" : {
+        "libelleFr" : "Grange des huskies"
+      },
+      "legende" : {
+        "libelleFr" : "Grange des huskies"
+      },
+      "traductionFichiers" : [ {
+        "locale" : "fr",
+        "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/70/252/3406918.jpg",
+        "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/70/252/3406918-liste.jpg",
+        "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/70/252/3406918-fiche.jpg",
+        "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/70/252/3406918-diaporama.jpg",
+        "extension" : "jpg",
+        "fileName" : "GRANGE DES HUSKIES 2",
+        "taille" : 793702,
+        "hauteur" : 1536,
+        "largeur" : 2048,
+        "lastModifiedDate" : "2017-12-02T10:27:59.000+0000"
+      } ],
+      "locked" : false
+    }, {
+      "identifiant" : 3512713,
+      "link" : false,
+      "type" : "IMAGE",
+      "nom" : {
+        "libelleFr" : "Grange des huskies"
+      },
+      "legende" : {
+        "libelleFr" : "Grange des huskies"
+      },
+      "traductionFichiers" : [ {
+        "locale" : "fr",
+        "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/71/252/3406919.jpg",
+        "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/71/252/3406919-liste.jpg",
+        "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/71/252/3406919-fiche.jpg",
+        "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/71/252/3406919-diaporama.jpg",
+        "extension" : "jpg",
+        "fileName" : "GRANGE DES HUSKIES 3",
+        "taille" : 467872,
+        "hauteur" : 1200,
+        "largeur" : 1600,
+        "lastModifiedDate" : "2017-12-02T10:28:01.000+0000"
+      } ],
+      "locked" : false
+    }, {
+      "identifiant" : 3512714,
+      "link" : false,
+      "type" : "IMAGE",
+      "nom" : {
+        "libelleFr" : "Grange des huskies"
+      },
+      "legende" : {
+        "libelleFr" : "Grange des huskies"
+      },
+      "traductionFichiers" : [ {
+        "locale" : "fr",
+        "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/72/252/3406920.jpg",
+        "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/72/252/3406920-liste.jpg",
+        "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/72/252/3406920-fiche.jpg",
+        "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/72/252/3406920-diaporama.jpg",
+        "extension" : "jpg",
+        "fileName" : "GRANGE DES HUSKIES",
+        "taille" : 687547,
+        "hauteur" : 1728,
+        "largeur" : 2304,
+        "lastModifiedDate" : "2017-12-02T10:28:00.000+0000"
+      } ],
+      "locked" : false
+    } ],
+    "informationsPrestataireActivites" : {
+      "prestataireActivites" : false,
+      "activitesSportives" : [ {
+        "elementReferenceType" : "ActiviteSportivePrestation",
+        "id" : 1834
+      }, {
+        "elementReferenceType" : "ActiviteSportivePrestation",
+        "id" : 1872
+      }, {
+        "elementReferenceType" : "ActiviteSportivePrestation",
+        "id" : 1911
+      }, {
+        "elementReferenceType" : "ActiviteSportivePrestation",
+        "id" : 2027
+      } ],
+      "activitesSportivesRemove" : [ {
+        "elementReferenceType" : "ActiviteSportivePrestation",
+        "id" : 2001
+      } ]
+    }
+  } ],
+  "metadonnees" : [ {
+    "noeudId" : "tourinsoft",
+    "contenus" : [ {
+      "cible" : "general",
+      "metadonnee" : {
+        "id" : "ASCAUV0150000226"
+      }
+    } ]
+  } ]
+}]

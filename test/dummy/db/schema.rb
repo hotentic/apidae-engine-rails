@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_23_214635) do
+ActiveRecord::Schema.define(version: 2019_01_24_162543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,8 @@ ActiveRecord::Schema.define(version: 2019_01_23_214635) do
     t.jsonb "description_data"
     t.jsonb "title_data"
     t.jsonb "booking_data"
+    t.string "version"
+    t.integer "root_obj_id"
   end
 
   create_table "apidae_projects", force: :cascade do |t|
@@ -73,6 +75,7 @@ ActiveRecord::Schema.define(version: 2019_01_23_214635) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "locales_data"
+    t.string "versions_data"
   end
 
   create_table "apidae_references", force: :cascade do |t|
