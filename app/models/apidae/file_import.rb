@@ -79,7 +79,7 @@ module Apidae
         rescue Exception => e
           puts "Failed to import object #{object_data[:id]}"
           puts e.message
-          puts e.backtrace[0..5].join("\n")
+          puts e.backtrace.join("\n")
           raise e
         end
       end

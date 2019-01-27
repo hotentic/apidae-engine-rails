@@ -5,3 +5,20 @@ fr:
         pending: En cours
         complete: Terminé
         cancelled: Annulé
+    locales:
+      fr: fr
+      en: en
+      de: de
+      it: it
+      nl: nl
+      ru: ru
+      zh: zh
+      pt-BR: pt-BR
+    versions:
+      STANDARD: standard
+      HIVER: hiver
+      ETE: été
+      HANDICAP: handicap
+      TOURISME_AFFAIRES: affaires
+      GROUPES: groupes
+      PRESTATAIRE_ACTIVITES: activités

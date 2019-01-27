@@ -26,7 +26,16 @@
     <div>
       <% Apidae::ALL_LOCALES.each do |l| %>
         <%= check_box_tag 'project[locales][]', l, f.object.locales.include?(l), id: "locale_#{l}", class: styles[:checkbox] %>
-        <%= label_tag "locale_#{l}", l  %>
+        <%= label_tag "locale_#{l}", I18n.t("apidae.locales.#{l}")  %>
+      <% end %>
+    </div>
+  </div>
+  <div class="<%= styles[:form_field] %>">
+    <div><%= f.label :versions %></div>
+    <div>
+      <% Apidae::ALL_VERSIONS.each do |v| %>
+        <%= check_box_tag 'project[versions][]', v, f.object.versions.include?(v), id: "version_#{v}", class: styles[:checkbox] %>
+        <%= label_tag "version_#{v}", I18n.t("apidae.versions.#{v}")  %>
       <% end %>
     </div>
   </div>

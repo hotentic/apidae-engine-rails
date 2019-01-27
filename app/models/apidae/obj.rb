@@ -2,10 +2,9 @@ module Apidae
   class Obj < ActiveRecord::Base
     prepend OverriddenFields
 
-    belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code
+    belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code, optional: true
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
-    has_many :versions, class_name: 'Apidae::Obj', foreign_key: :root_obj_id
 
     attr_accessor :locale
     attr_accessor :obj_version
@@ -70,17 +69,21 @@ module Apidae
       @obj_version = DEFAULT_VERSION
     end
 
+    def root_obj
+      Obj.unscoped.where(id: root_obj_id).first
+    end
+
+    def versions
+      Obj.unscoped.where(root_obj_id: id)
+    end
+
     def in_version(v)
-      versions.unscoped.where(version: v).first
+      versions.where(version: v).first
     end
 
     def in_locale(l)
       @locale = l
       self
-    end
-
-    def root_obj
-      Obj.unscoped.where(id: root_obj_id).first
     end
 
     def self.default_scope
@@ -96,8 +99,8 @@ module Apidae
       populate_fields(apidae_obj, object_data, locales)
       apidae_obj.save!
 
-      unless versions.blank?
-        versions.select {|v| v != DEFAULT_VERSION }.each do |version|
+      unless versions.blank? || object_data[:aspects].blank?
+        versions.select {|v| v != STANDARD_VERSION }.each do |version|
           version_data = object_data[:aspects].find {|a| a[:aspect] == version}
           if version_data
             version_data[:type] = apidae_obj.apidae_type
@@ -369,7 +372,7 @@ module Apidae
     end
 
     def main_picture
-      pictures.any? ? pictures[0]["url"] : "#{Rails.application.config.apidae_pictures_path}/default/logo.png"
+      pictures.blank? ? "/#{Rails.application.config.apidae_pictures_path}/default/logo.png" : pictures[0]["url"]
     end
 
     def self.build_rate(rate_period)

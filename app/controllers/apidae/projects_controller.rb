@@ -2,7 +2,7 @@ require_dependency "apidae/application_controller"
 
 module Apidae
   class ProjectsController < ApplicationController
-    before_action :set_project, only: [:edit, :update]
+    before_action :set_project, only: [:edit, :update, :destroy]
 
     def index
       @projects = Project.all
@@ -10,7 +10,7 @@ module Apidae
 
     def new
       session[:referrer] = request.referrer.split('?').first
-      @project = Project.new(locales: [DEFAULT_LOCALE])
+      @project = Project.new(locales: [DEFAULT_LOCALE], versions: [DEFAULT_VERSION])
     end
 
     def create
@@ -38,6 +38,11 @@ module Apidae
       end
     end
 
+    def destroy
+      @project.destroy
+      redirect_to request.referrer, notice: 'Le projet a bien été supprimé.'
+    end
+
     private
 
     def set_project
@@ -45,7 +50,7 @@ module Apidae
     end
 
     def project_params
-      params.require(:project).permit(:name, :api_key, :apidae_id, locales: [])
+      params.require(:project).permit(:name, :api_key, :apidae_id, locales: [], versions: [])
     end
   end
 end

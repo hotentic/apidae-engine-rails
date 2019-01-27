@@ -37,7 +37,7 @@ module Apidae
     end
 
     def label(language)
-      label_data["libelle#{language.to_s.upcase_first}"]
+      label_data[language.to_s]
     end
 
     def detailed_label(language)
