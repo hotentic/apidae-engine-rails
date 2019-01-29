@@ -6,7 +6,9 @@ module Apidae
      :includes, :excludes, :extra, :booking_desc].each do |f|
       define_method f do
         if @obj_version == DEFAULT_VERSION
-          (super() || {})[@locale]
+          val = (super() || {})[@locale]
+          val ||= (super() || {})[DEFAULT_LOCALE] if root_obj_id.nil?
+          val
         else
           v = in_version(@obj_version)
           v ? (v.in_locale(@locale).send(f) || super()[@locale]) : super()[@locale]

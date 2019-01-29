@@ -1,7 +1,7 @@
 class AddBookingDataToApidaeObjs < ActiveRecord::Migration[5.2]
   def change
     add_column :apidae_objs, :booking_data, :jsonb
-    Apidae::Obj.all.each do |o|
+    Apidae::Obj.all.unscoped.each do |o|
       val = o.read_attribute(:reservation)
       unless val.blank?
         if val.start_with?('[')

@@ -5,7 +5,9 @@ class CreateApidaeAttachedFiles < ActiveRecord::Migration[4.2]
       t.string :credits
       t.text :description
       t.integer :apidae_object_id
-      t.attachment :picture
+      if t.respond_to?(:attachment)
+        t.attachment :picture
+      end
 
       t.timestamps null: false
     end
