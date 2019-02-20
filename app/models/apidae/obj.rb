@@ -372,7 +372,7 @@ module Apidae
     end
 
     def main_picture
-      pictures.blank? ? "/#{Rails.application.config.apidae_pictures_path}/default/logo.png" : pictures[0]["url"]
+      pictures.blank? ? "/#{Rails.application.config.apidae_pictures_path}/default/logo.png" : pictures[0]["url"].gsub('http', 'https')
     end
 
     def self.build_rate(rate_period)

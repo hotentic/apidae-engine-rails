@@ -22,4 +22,7 @@ module Apidae
   DEFAULT_VERSION = STANDARD_VERSION
   ALL_VERSIONS = [STANDARD_VERSION, WINTER_VERSION, SUMMER_VERSION, CHALLENGED_VERSION, BUSINESS_VERSION,
                   GROUPS_VERSION, ACTIVITIES_VERSION]
+
+  LOCALIZED_FIELDS = [:title, :short_desc, :long_desc, :pictures, :attachments, :openings_desc, :rates_desc,
+                      :includes, :excludes, :extra, :booking_desc]
 end

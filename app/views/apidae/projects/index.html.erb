@@ -12,6 +12,7 @@
           <th>Nom</th>
           <th>Identifiant</th>
           <th>Locales</th>
+          <th>Versions</th>
           <th>Mise à jour</th>
           <th></th>
         </tr>
@@ -22,13 +23,14 @@
             <td><%= proj.name %></td>
             <td><%= proj.apidae_id %></td>
             <td><%= proj.locales.join(', ') %></td>
+            <td><%= proj.versions.join(', ') %></td>
             <td><%= proj.updated_at.strftime('Le %d/%m/%Y à %H:%M') if proj.updated_at %></td>
             <td><%= link_to 'Modifier', edit_project_path(proj) %></td>
           </tr>
         <% end %>
         <% if @projects.empty? %>
           <tr>
-            <td colspan="4">Aucun projet pour le moment.</td>
+            <td colspan="6">Aucun projet pour le moment.</td>
           </tr>
         <% end %>
         </tbody>

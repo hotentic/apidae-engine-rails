@@ -14,13 +14,18 @@ module Apidae
     end
 
     def create
-      @project = Project.new(project_params)
-      if @project.save
-        referrer = session.delete(:referrer)
-        redirect_to (referrer + "?apidae_project_id=#{@project.id}"), notice: 'Le projet a bien été créé'
+      if Project.find_by_apidae_id(project_params[:apidae_id])
+        @project = Project.find_by_apidae_id(project_params[:apidae_id])
+        update_project
       else
-        flash.now[:alert] = "Une erreur s'est produite lors la création du projet"
-        render :new
+        @project = Project.new(project_params)
+        if @project.save
+          referrer = session.delete(:referrer)
+          redirect_to (referrer + "?apidae_project_id=#{@project.id}"), notice: 'Le projet a bien été créé'
+        else
+          flash.now[:alert] = "Une erreur s'est produite lors la création du projet"
+          render :new
+        end
       end
     end
 
@@ -29,13 +34,7 @@ module Apidae
     end
 
     def update
-      if @project.update(project_params)
-        referrer = session.delete(:referrer)
-        redirect_to (referrer + "?apidae_project_id=#{@project.id}"), notice: 'Le projet a bien été mis à jour'
-      else
-        flash.now[:alert] = "Une erreur s'est produite lors la mise à jour du projet"
-        render :edit
-      end
+      update_project
     end
 
     def destroy
@@ -47,6 +46,16 @@ module Apidae
 
     def set_project
       @project = Project.find(params[:id])
+    end
+
+    def update_project
+      if @project.update(project_params)
+        referrer = session.delete(:referrer)
+        redirect_to (referrer + "?apidae_project_id=#{@project.id}"), notice: 'Le projet a bien été mis à jour'
+      else
+        flash.now[:alert] = "Une erreur s'est produite lors la mise à jour du projet"
+        render :edit
+      end
     end
 
     def project_params
