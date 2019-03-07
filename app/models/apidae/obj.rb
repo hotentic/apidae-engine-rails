@@ -204,7 +204,9 @@ module Apidae
           attachments_array.select { |att| att.is_a?(Hash) && !att[:traductionFichiers].blank? }.each do |att|
             atts_data[locale] << {
                 name: localized_value(att, :nom, locale),
-                url: att[:traductionFichiers][0][:url]
+                url: att[:traductionFichiers][0][:url],
+                type: att[:type],
+                description: localized_value(att, :legende, locale)
             }
           end
         end
@@ -279,7 +281,7 @@ module Apidae
 
     def self.parse_rates(rates_hash, *locales)
       if rates_hash
-        desc = rates_hash[:gratuit] ? 'gratuit' : node_value(rates_hash, :tarifsEnClair, *locales)
+        desc = rates_hash[:gratuit] ? {DEFAULT_LOCALE => 'gratuit'} : node_value(rates_hash, :tarifsEnClair, *locales)
         values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p)}
         methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
         {
