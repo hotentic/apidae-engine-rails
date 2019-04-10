@@ -29,7 +29,11 @@ module Apidae
 
       added.each do |o|
         obj = Obj.find_by_apidae_id(o)
-        SelectionObject.create(apidae_selection_id: apidae_sel.id, apidae_object_id: obj.id)
+        if obj
+          SelectionObject.create(apidae_selection_id: apidae_sel.id, apidae_object_id: obj.id)
+        else
+          logger.error "Object #{o} referenced in selection #{apidae_sel.apidae_id} and project #{apidae_sel.apidae_project.apidae_id} is unknown"
+        end
       end
 
       removed_ids = Obj.where(apidae_id: removed).map {|o| o.id}
