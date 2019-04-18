@@ -66,22 +66,27 @@ module Apidae
 
     def self.add_or_update_objects(objects_json, result, locales, versions)
       objects_hashes = JSON.parse(objects_json, symbolize_names: true)
-      objects_hashes.each do |object_data|
-        begin
-          existing = Obj.find_by_apidae_id(object_data[:id])
-          if existing
-            Obj.update_object(existing, object_data, locales, versions)
-            result[:updated] += 1
-          else
-            Obj.add_object(object_data, locales, versions)
-            result[:created] += 1
+      if objects_hashes.is_a?(Array)
+        objects_hashes.each do |object_data|
+          begin
+            existing = Obj.find_by_apidae_id(object_data[:id])
+            if existing
+              Obj.update_object(existing, object_data, locales, versions)
+              result[:updated] += 1
+            else
+              Obj.add_object(object_data, locales, versions)
+              result[:created] += 1
+            end
+          rescue Exception => e
+            puts "Failed to import object #{object_data[:id]}"
+            puts e.message
+            puts e.backtrace.join("\n")
+            raise e
           end
-        rescue Exception => e
-          puts "Failed to import object #{object_data[:id]}"
-          puts e.message
-          puts e.backtrace.join("\n")
-          raise e
         end
+      else
+        puts "Unsupported file format - Exported objects should be grouped"
+        raise Exception.new('Unsupported objects format - Exported objects should be grouped')
       end
     end
 

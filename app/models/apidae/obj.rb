@@ -185,7 +185,7 @@ module Apidae
           pictures_array.select { |p| p.is_a?(Hash) && !p[:traductionFichiers].blank? }.each do |pic|
             pics_data[locale] << {
                 name: localized_value(pic, :nom, locale),
-                url: pic[:traductionFichiers][0][:url],
+                url: pic[:traductionFichiers][0][:url].gsub('http:', 'https:'),
                 description: localized_value(pic, :legende, locale),
                 credits: localized_value(pic, :copyright, locale)
             }
@@ -204,7 +204,7 @@ module Apidae
           attachments_array.select { |att| att.is_a?(Hash) && !att[:traductionFichiers].blank? }.each do |att|
             atts_data[locale] << {
                 name: localized_value(att, :nom, locale),
-                url: att[:traductionFichiers][0][:url],
+                url: att[:traductionFichiers][0][:url].gsub('http:', 'https:'),
                 type: att[:type],
                 description: localized_value(att, :legende, locale)
             }
