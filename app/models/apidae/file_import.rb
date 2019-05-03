@@ -18,11 +18,18 @@ module Apidae
       Zip::File.open(zip_file) do |zfile|
         result = {created: 0, updated: 0, deleted: 0, selections: []}
         project = Project.find_or_create_by(apidae_id: project_id)
-        Reference.import(zfile.read(REFERENCES_FILE))
-        Reference.import_internal(zfile.read(INTERNAL_FILE))
-        logger.info "Completed #{Reference.count} references update"
-        Town.import(zfile.read(TOWNS_FILE))
-        logger.info "Completed #{Town.count} towns update"
+        entries = zfile.entries.map {|e| e.name}
+        if entries.include?(REFERENCES_FILE)
+          Reference.import(zfile.read(REFERENCES_FILE))
+        end
+        if entries.include?(INTERNAL_FILE)
+          Reference.import_internal(zfile.read(INTERNAL_FILE))
+        end
+        logger.info "Completed #{Reference.count} references update" if entries.include?(REFERENCES_FILE) || entries.include?(INTERNAL_FILE)
+        if entries.include?(TOWNS_FILE)
+          Town.import(zfile.read(TOWNS_FILE))
+          logger.info "Completed #{Town.count} towns update"
+        end
         zfile.each do |file|
           if file.file? && file.name.end_with?('.json')
             logger.info "Processing file : #{file.name}"

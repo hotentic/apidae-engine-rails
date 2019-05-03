@@ -53,6 +53,7 @@ module Apidae
               logger.error("Failed to import export file : #{e.file_url}")
               logger.error("Error is : #{ex} \n#{ex.backtrace.join("\n") unless ex.backtrace.blank?}")
               success = false
+              e.update(status: Export::CANCELLED)
             end
           end
         rescue OpenURI::HTTPError => err
