@@ -10,6 +10,7 @@ module Apidae
           town.postal_code = town_data[:codePostal]
           town.insee_code = town_data[:code]
           town.country = countries[town_data[:pays][:id]]
+          town.description = town_data[:complement]
           town.save!
         end
         Town.first.touch
