@@ -306,7 +306,7 @@ module Apidae
                                               age_min: presta_hash[:ageMin], age_max: presta_hash[:ageMax]} : {}),
           classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
                                     lists_ids(data_hash[:classementsGuides]) + lists_ids(data_hash[:classements]),
-          labels: lists_ids(data_hash[:labels], prestations_hash[:labelsTourismeHandicap]) +
+          labels: lists_ids(data_hash[:labels], data_hash[:labelsChartesQualite], prestations_hash[:labelsTourismeHandicap]) +
               (node_id(data_hash, :typeLabel) ? [node_id(data_hash, :typeLabel)] : []),
           chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
           area: apidae_obj.apidae_type == DOS ? data_hash.except(:classification) : node_value(data_hash, :lieuDePratique),
