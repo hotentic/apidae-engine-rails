@@ -138,8 +138,8 @@ module Apidae
       apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif], *locales)
       apidae_obj.booking_data = parse_booking(object_data[:reservation], *locales)
       apidae_obj.type_data = parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations], *locales)
-      apidae_obj.pictures_data = pictures_urls(object_data[:illustrations], *locales)
-      apidae_obj.attachments_data = attachments_urls(object_data[:multimedias], *locales)
+      apidae_obj.pictures_data = parse_pictures_data(object_data[:illustrations], *locales)
+      apidae_obj.attachments_data = parse_attachments_data(object_data[:multimedias], *locales)
       apidae_obj.entity_data = entity_fields(object_data[:informations], object_data[type_fields[:node]])
       apidae_obj.service_data = parse_service_data(object_data[:prestations], object_data[type_fields[:node]])
       apidae_obj.tags_data = parse_tags_data(object_data[:presentation], object_data[:criteresInternes], object_data[:liens])
@@ -176,7 +176,7 @@ module Apidae
       end
     end
 
-    def self.pictures_urls(pictures_array, *locales)
+    def self.parse_pictures_data(pictures_array, *locales)
       pics_data = {}
       unless pictures_array.blank?
         l = locales.blank? ? [DEFAULT_LOCALE] : locales
@@ -184,6 +184,7 @@ module Apidae
           pics_data[locale] = []
           pictures_array.select { |p| p.is_a?(Hash) && !p[:traductionFichiers].blank? }.each do |pic|
             pics_data[locale] << {
+                id: pic[:identifiant],
                 name: localized_value(pic, :nom, locale),
                 url: pic[:traductionFichiers][0][:url].gsub('http:', 'https:'),
                 description: localized_value(pic, :legende, locale),
@@ -195,7 +196,7 @@ module Apidae
       {pictures: pics_data}
     end
 
-    def self.attachments_urls(attachments_array, *locales)
+    def self.parse_attachments_data(attachments_array, *locales)
       atts_data = {}
       unless attachments_array.blank?
         l = locales.blank? ? [DEFAULT_LOCALE] : locales
@@ -203,6 +204,7 @@ module Apidae
           atts_data[locale] = []
           attachments_array.select { |att| att.is_a?(Hash) && !att[:traductionFichiers].blank? }.each do |att|
             atts_data[locale] << {
+                id: att[:identifiant],
                 name: localized_value(att, :nom, locale),
                 url: att[:traductionFichiers][0][:url].gsub('http:', 'https:'),
                 type: att[:type],
