@@ -18,8 +18,8 @@ module Apidae
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
-    store_accessor :openings_data, :openings_desc, :openings, :time_periods
-    store_accessor :rates_data, :rates_desc, :rates, :payment_methods, :includes, :excludes
+    store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods
+    store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :booking_data, :booking_desc, :booking_entities
     store_accessor :tags_data, :promo, :internal, :linked
@@ -63,6 +63,9 @@ module Apidae
     PHONE = 201
     EMAIL = 204
     WEBSITE = 205
+
+    MODE_AUTO = 'auto'
+    MODE_MANUAL = 'manual'
 
     after_initialize do
       @locale = DEFAULT_LOCALE
@@ -275,6 +278,7 @@ module Apidae
       if openings_hash && openings_hash[:periodeEnClair]
         {
             openings_desc: node_value(openings_hash, :periodeEnClair, *locales),
+            openings_desc_mode: openings_hash[:periodeEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             openings: openings_hash[:periodesOuvertures],
             time_periods: lists_ids(openings_hash[:indicationsPeriode])
         }
@@ -288,6 +292,7 @@ module Apidae
         methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
         {
             rates_desc: desc, rates: values, payment_methods: methods,
+            rates_desc_mode: rates_hash[:tarifsEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             includes: node_value(rates_hash, :leTarifComprend, *locales),
             excludes: node_value(rates_hash, :leTarifNeComprendPas, *locales)
         }
@@ -390,7 +395,7 @@ module Apidae
 
     def self.node_value(node, key, *locales)
       l = locales.blank? ? [DEFAULT_LOCALE] : locales
-      locales_map = Hash[l.map {|loc| ["libelle#{loc.camelize.gsub('-', '')}".to_sym, loc]}]
+      locales_map = Hash[l.map {|loc| [localized_key(loc), loc]}]
       if node && node[key]
         node[key].slice(*locales_map.keys).transform_keys {|k| locales_map[k]}
       else
@@ -398,9 +403,9 @@ module Apidae
       end
     end
 
-    def self.localized_value(node, key, locale)
+    def self.localized_value(node, key, loc)
       if node && node[key]
-        node[key]["libelle#{locale.camelize.gsub('-', '')}".to_sym]
+        node[key][localized_key(loc)]
       else
         ''
       end
@@ -416,6 +421,10 @@ module Apidae
 
     def self.nodes_ids(*nodes)
       nodes.blank? ? [] : nodes.select {|n| !n.blank?}.map {|n| n[:id]}
+    end
+
+    def self.localized_key(loc = locale)
+      "libelle#{loc.camelize.gsub('-', '')}".to_sym
     end
   end
 end
