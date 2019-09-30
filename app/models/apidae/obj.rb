@@ -423,7 +423,7 @@ module Apidae
       nodes.blank? ? [] : nodes.select {|n| !n.blank?}.map {|n| n[:id]}
     end
 
-    def self.localized_key(loc = locale)
+    def self.localized_key(loc = DEFAULT_LOCALE)
       "libelle#{loc.camelize.gsub('-', '')}".to_sym
     end
   end
