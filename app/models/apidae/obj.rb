@@ -1,6 +1,5 @@
 module Apidae
   class Obj < ActiveRecord::Base
-    prepend OverriddenFields
 
     belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code, optional: true
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
@@ -23,6 +22,23 @@ module Apidae
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :booking_data, :booking_desc, :booking_entities
     store_accessor :tags_data, :promo, :internal, :linked
+
+    LOCALIZED_FIELDS.each do |f|
+      alias_method :"#{f}_hash", :"#{f}"
+      alias_method :"#{f}_hash=", :"#{f}="
+
+      define_method "#{f}=" do |val|
+        ref_obj = @obj_version == DEFAULT_VERSION ? self : in_version(@obj_version)
+        field_hash = ref_obj.send(:"#{f}_hash")
+        ref_obj.send(:"#{f}_hash=", field_hash.merge(@locale => val))
+      end
+
+      define_method f do
+        ref_obj = @obj_version == DEFAULT_VERSION ? self : in_version(@obj_version)
+        field_hash = ref_obj.send(:"#{f}_hash") || {}
+        field_hash[@locale] || field_hash[DEFAULT_LOCALE]
+      end
+    end
 
     ACT = 'ACTIVITE'
     COS = 'COMMERCE_ET_SERVICE'
@@ -131,7 +147,7 @@ module Apidae
       type_fields = TYPES_DATA[object_data[:type]]
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
-      apidae_obj.title = node_value(object_data, :nom, *locales)
+      apidae_obj.title_data = parse_title(object_data, *locales)
       apidae_obj.description_data = parse_desc_data(object_data[:presentation], object_data[:donneesPrivees], *locales)
       apidae_obj.contact = contact(object_data[:informations])
       apidae_obj.location_data = parse_location_data(object_data[:localisation], object_data[type_fields[:node]],
@@ -166,6 +182,10 @@ module Apidae
 
     def self.non_empty(data_hash)
       data_hash.keep_if {|k, v| !v.blank?}
+    end
+
+    def self.parse_title(data_hash, *locales)
+      {title: node_value(data_hash, :nom, *locales)}
     end
 
     def self.parse_desc_data(data_hash, private_data, *locales)
