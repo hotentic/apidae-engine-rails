@@ -89,16 +89,18 @@ module Apidae
     end
 
     def refresh_obj(apidae_obj_id)
-      res = api_object(apidae_obj_id)
-      if res[:results] && res[:results].length == 1
-        obj_data = res[:results].first.deep_symbolize_keys
-        obj = Obj.find_by_apidae_id(apidae_obj_id)
-        if obj
-          refreshed = Obj.update_object(obj, obj_data)
-          if refreshed && Rails.application.config.respond_to?(:apidae_obj_refresh_callback)
-            Rails.application.config.apidae_obj_refresh_callback.call(apidae_obj_id)
+      if apidae_project
+        res = api_object(apidae_obj_id)
+        if res[:results] && res[:results].length == 1
+          obj_data = res[:results].first.deep_symbolize_keys
+          obj = Obj.find_by_apidae_id(apidae_obj_id)
+          if obj
+            refreshed = Obj.update_object(obj, obj_data, apidae_project.locales, apidae_project.versions)
+            if refreshed && Rails.application.config.respond_to?(:apidae_obj_refresh_callback)
+              Rails.application.config.apidae_obj_refresh_callback.call(apidae_obj_id)
+            end
+            refreshed
           end
-          refreshed
         end
       end
     end
