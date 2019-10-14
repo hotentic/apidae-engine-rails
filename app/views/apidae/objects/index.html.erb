@@ -12,6 +12,7 @@
             <th>Identifiant</th>
             <th>Type</th>
             <th>Mise à jour</th>
+            <th></th>
           </tr>
           </thead>
           <tbody class="<%= styles[:table_body] %>">
@@ -21,6 +22,8 @@
                 <td><%= object.apidae_id %></td>
                 <td><%= object.apidae_type %></td>
                 <td><%= object.updated_at.strftime('Le %d/%m/%Y à %H:%M') if object.updated_at %></td>
+                <td><%= link_to 'Rafraîchir', refresh_object_path(object), method: :post,
+                                data: {confirm: 'Voulez-vous vraiment rafraîchir cet objet ? Les données existantes seront écrasées.'} %></td>
               </tr>
           <% end %>
           <% if @objects.empty? %>

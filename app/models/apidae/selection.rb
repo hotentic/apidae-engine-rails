@@ -8,6 +8,8 @@ module Apidae
 
     AGENDA_ENDPOINT = 'agenda/detaille/list-identifiants'
     SELECTION_ENDPOINT = 'recherche/list-identifiants'
+    OBJECTS_ENDPOINT = 'recherche/list-objets-touristiques'
+
     MAX_COUNT = 100
     MAX_LOOPS = 10
 
@@ -70,6 +72,37 @@ module Apidae
       res
     end
 
+    def api_objects(opts = {})
+      key = cache_key(:objects)
+      res = $apidae_cache.read(key)
+      unless res
+        query_args = build_args(OBJECTS_ENDPOINT, opts.merge({selection_ids: [apidae_id]}))
+        res = query_objects_api(query_args, true)
+        $apidae_cache.write(key, res)
+      end
+      res
+    end
+
+    def api_object(apidae_obj_id)
+      query_args = build_args(OBJECTS_ENDPOINT, {obj_ids: [apidae_obj_id], fields: ["@all"]})
+      query_objects_api(query_args, true)
+    end
+
+    def refresh_obj(apidae_obj_id)
+      res = api_object(apidae_obj_id)
+      if res[:results] && res[:results].length == 1
+        obj_data = res[:results].first.deep_symbolize_keys
+        obj = Obj.find_by_apidae_id(apidae_obj_id)
+        if obj
+          refreshed = Obj.update_object(obj, obj_data)
+          if refreshed && Rails.application.config.apidae_obj_refresh_callback
+            Rails.application.config.apidae_obj_refresh_callback.call(apidae_obj_id)
+          end
+          refreshed
+        end
+      end
+    end
+
     def as_text
       "#{label} (#{apidae_id})"
     end
@@ -110,6 +143,32 @@ module Apidae
       end
     end
 
+    def query_objects_api(query_args, all_results = false)
+      query_result = {}
+
+      if all_results
+        loops = 0
+        query_args[:first] = 0
+        query_args[:count] = MAX_COUNT
+        response = JSON.parse get_response(query_args), symbolize_names: false
+        total = response['numFound']
+        query_result[:results] = response['objetsTouristiques'] || {}
+
+        while total > results_count(query_result) && loops < MAX_LOOPS
+          loops += 1
+          query_args[:first] += MAX_COUNT
+          response = JSON.parse get_response(query_args), symbolize_names: false
+          merge_objects_results(response, query_result)
+        end
+        query_result[:count] = total
+      else
+        response = JSON.parse get_response(query_args), symbolize_names: false
+        query_result[:results] = response['objetsTouristiques'] || {}
+        query_result[:count] = response['numFound']
+      end
+      query_result
+    end
+
     def get_response(args)
       response = ''
       query = JSON.generate args.except(:url)
@@ -137,6 +196,15 @@ module Apidae
       end
     end
 
+    def merge_objects_results(response, result)
+      objects = response['objetsTouristiques']
+      unless objects.blank?
+        if result[:results] && result[:results].is_a?(Array)
+          result[:results] += objects
+        end
+      end
+    end
+
     def build_args(endpoint, opts = {})
       {
           url: "#{Rails.application.config.apidae_api_url}/#{endpoint}",
@@ -145,6 +213,7 @@ module Apidae
           first: opts[:first] || 0,
           count: opts[:count] || MAX_COUNT,
           selectionIds: opts[:selection_ids],
+          identifiants: opts[:obj_ids],
           dateDebut: opts[:from],
           dateFin: opts[:to],
           center: opts[:lat] && opts[:lng] ? {type: 'Point', coordinates: [opts[:lng], opts[:lat]]} : nil,
