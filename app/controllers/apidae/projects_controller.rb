@@ -14,7 +14,7 @@ module Apidae
 
     def update
       if @project.update(project_params)
-        referrer = session.delete(:referrer)
+        referrer = (session.delete(:referrer) || projects_url)
         redirect_to referrer, notice: 'Le projet a bien été mis à jour'
       else
         flash.now[:alert] = "Une erreur s'est produite lors la mise à jour du projet"

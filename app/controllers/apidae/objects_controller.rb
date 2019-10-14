@@ -50,7 +50,7 @@ module Apidae
     end
 
     def refresh
-      referrer = session.delete(:referrer)
+      referrer = (session.delete(:referrer) || objects_url)
       if @obj && @obj.selections.first.refresh_obj(@obj.apidae_id)
         redirect_to referrer, notice: "L'objet touristique a bien été mis à jour."
       else
@@ -64,7 +64,7 @@ module Apidae
       end
 
       def object_params
-        params.require(:object).permit!
+        params.require(:obj).permit!
       end
   end
 end

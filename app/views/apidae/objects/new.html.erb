@@ -5,7 +5,7 @@
   </div>
   <div id="apidae_new_object" class="<%= styles[:wrapper] %>">
     <div id="apidae_form" class="<%= styles[:body] %>">
-      <%= form_for(@obj, class: styles[:form]) do |f| %>
+      <%= form_for(@obj, url: objects_url, class: styles[:form]) do |f| %>
         <% if @obj.errors.any? %>
           <div id="apidae_form_errors">
             <ul>
