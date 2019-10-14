@@ -9,9 +9,9 @@ module Apidae
       session[:referrer] = request.referrer
       if params[:selection_id]
         @selection = Selection.find(params[:selection_id])
-        @objects = @selection.objects.select(:id, :apidae_id, :title, :apidae_type, :updated_at)
+        @objects = @selection.objects.select(:id, :apidae_id, :title_data, :apidae_type, :updated_at)
       else
-        @objects = Obj.all.select(:id, :apidae_id, :title, :apidae_type, :updated_at)
+        @objects = Obj.all.select(:id, :apidae_id, :title_data, :apidae_type, :updated_at)
       end
     end
 
