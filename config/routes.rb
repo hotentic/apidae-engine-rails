@@ -1,8 +1,13 @@
 Apidae::Engine.routes.draw do
 
-  resources :objects, only: [:index, :show], path: 'objets'
+  resources :objects, only: [:index, :show, :new, :create], path: 'objets' do
+    post 'refresh', on: :member
+  end
+
   resources :selections, only: [:index] do
-    resources :objects, only: [:index], path: 'objets'
+    resources :objects, only: [:index], path: 'objets' do
+      post 'refresh', on: :member
+    end
   end
   resources :references, only: [:index]
   resources :projects, only: [:index, :new, :create, :edit, :update, :destroy], path: 'projets'

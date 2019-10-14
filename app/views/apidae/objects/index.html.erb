@@ -1,6 +1,7 @@
 <%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
     <div id="apidae_header" class="<%= styles[:header] %>">
-      <%= link_to 'Retour', @selection ? selections_path : root_path, class: styles[:back] %>
+      <%= link_to 'Importer un objet', apidae.new_object_path, class: styles[:objects] %>
+      <%= link_to 'Retour', @selection ? apidae.selections_path : root_path, class: styles[:back] %>
       <h1 class="<%= styles[:h1] %>">Apidae - <%= @selection ? "Sélection \"#{@selection.label}\"" : "Tous les objets touristiques" %></h1>
     </div>
     <div id="apidae_dashboard" class="<%= styles[:wrapper] %>">
@@ -12,6 +13,7 @@
             <th>Identifiant</th>
             <th>Type</th>
             <th>Mise à jour</th>
+            <th></th>
           </tr>
           </thead>
           <tbody class="<%= styles[:table_body] %>">
@@ -21,6 +23,8 @@
                 <td><%= object.apidae_id %></td>
                 <td><%= object.apidae_type %></td>
                 <td><%= object.updated_at.strftime('Le %d/%m/%Y à %H:%M') if object.updated_at %></td>
+                <td><%= link_to 'Rafraîchir', apidae.refresh_object_path(object), method: :post,
+                                data: {confirm: 'Voulez-vous vraiment rafraîchir cet objet ? Les données existantes seront écrasées.'} %></td>
               </tr>
           <% end %>
           <% if @objects.empty? %>

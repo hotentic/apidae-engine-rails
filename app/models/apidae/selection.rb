@@ -83,6 +83,26 @@ module Apidae
       res
     end
 
+    def api_object(apidae_obj_id)
+      query_args = build_args(OBJECTS_ENDPOINT, {obj_ids: [apidae_obj_id], fields: ["@all"]})
+      query_objects_api(query_args, true)
+    end
+
+    def refresh_obj(apidae_obj_id)
+      res = api_object(apidae_obj_id)
+      if res[:results] && res[:results].length == 1
+        obj_data = res[:results].first.deep_symbolize_keys
+        obj = Obj.find_by_apidae_id(apidae_obj_id)
+        if obj
+          refreshed = Obj.update_object(obj, obj_data)
+          if refreshed && Rails.application.config.respond_to?(:apidae_obj_refresh_callback)
+            Rails.application.config.apidae_obj_refresh_callback.call(apidae_obj_id)
+          end
+          refreshed
+        end
+      end
+    end
+
     def as_text
       "#{label} (#{apidae_id})"
     end
@@ -115,6 +135,14 @@ module Apidae
       query_result
     end
 
+    def results_count(result)
+      if result[:results] && result[:results].is_a?(Hash)
+        result[:results].values.flatten.length
+      else
+        result[:results].blank? ? 0 : result[:results].length
+      end
+    end
+
     def query_objects_api(query_args, all_results = false)
       query_result = {}
 
@@ -139,14 +167,6 @@ module Apidae
         query_result[:count] = response['numFound']
       end
       query_result
-    end
-
-    def results_count(result)
-      if result[:results] && result[:results].is_a?(Hash)
-        result[:results].values.flatten.length
-      else
-        result[:results].blank? ? 0 : result[:results].length
-      end
     end
 
     def get_response(args)
@@ -193,6 +213,7 @@ module Apidae
           first: opts[:first] || 0,
           count: opts[:count] || MAX_COUNT,
           selectionIds: opts[:selection_ids],
+          identifiants: opts[:obj_ids],
           dateDebut: opts[:from],
           dateFin: opts[:to],
           center: opts[:lat] && opts[:lng] ? {type: 'Point', coordinates: [opts[:lng], opts[:lat]]} : nil,

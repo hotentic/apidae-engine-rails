@@ -1,5 +1,33 @@
-<h1>New Object</h1>
+<%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
+  <div id="apidae_header" class="<%= styles[:header] %>">
+    <%= link_to 'Retour', :back, class: styles[:back] %>
+    <h1 class="<%= styles[:h1] %>">Apidae - Importer un objet</h1>
+  </div>
+  <div id="apidae_new_object" class="<%= styles[:wrapper] %>">
+    <div id="apidae_form" class="<%= styles[:body] %>">
+      <%= form_for(@obj, url: objects_url, class: styles[:form]) do |f| %>
+        <% if @obj.errors.any? %>
+          <div id="apidae_form_errors">
+            <ul>
+              <% @obj.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', objects_path %>
+        <div class="<%= styles[:form_field] %>">
+          <div><%= f.label :apidae_id %></div>
+          <div><%= f.text_field :apidae_id %></div>
+        </div>
+        <div class="<%= styles[:form_field] %>">
+          <div><%= label_tag :selection_apidae_id %></div>
+          <div><%= text_field_tag :selection_apidae_id %></div>
+        </div>
+        <div class="<%= styles[:form_actions] %>">
+          <%= f.submit 'Valider' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -2,10 +2,11 @@ require_dependency "apidae/application_controller"
 
 module Apidae
   class ObjectsController < ApplicationController
-    before_action :set_object, only: [:show, :edit, :update, :destroy]
+    before_action :set_object, only: [:show, :edit, :update, :destroy, :refresh]
     skip_before_action Rails.application.config.apidae_auth, only: [:index, :show]
 
     def index
+      session[:referrer] = request.referrer
       if params[:selection_id]
         @selection = Selection.find(params[:selection_id])
         @objects = @selection.objects.select(:id, :apidae_id, :title, :apidae_type, :updated_at)
@@ -18,42 +19,52 @@ module Apidae
     end
 
     def new
-      @object = Obj.new
+      @obj = Obj.new
     end
 
     def edit
     end
 
     def create
-      @object = Obj.new(object_params)
-
-      if @object.save
-        redirect_to @object, notice: 'Object was successfully created.'
+      @obj = Obj.new(object_params)
+      selection = params[:selection_apidae_id].blank? ? Selection.last : Selection.find_by_apidae_id(params[:selection_apidae_id])
+      if @obj.save && selection.refresh_obj(@obj.apidae_id)
+        redirect_to objects_url, notice: "L'objet a bien été importé"
       else
+        flash[:alert] = "Une erreur s'est produite lors de l'import de l'objet."
         render :new
       end
     end
 
     def update
-      if @object.update(object_params)
-        redirect_to @object, notice: 'Object was successfully updated.'
+      if @obj.update(object_params)
+        redirect_to @obj, notice: 'Object was successfully updated.'
       else
         render :edit
       end
     end
 
     def destroy
-      @object.destroy
+      @obj.destroy
       redirect_to objects_url, notice: 'Object was successfully destroyed.'
+    end
+
+    def refresh
+      referrer = (session.delete(:referrer) || objects_url)
+      if @obj && @obj.selections.first.refresh_obj(@obj.apidae_id)
+        redirect_to referrer, notice: "L'objet touristique a bien été mis à jour."
+      else
+        redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de l'objet."
+      end
     end
 
     private
       def set_object
-        @object = Obj.find(params[:id])
+        @obj = Obj.find(params[:id])
       end
 
       def object_params
-        params.require(:object).permit!
+        params.require(:obj).permit!
       end
   end
 end
