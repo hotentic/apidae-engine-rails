@@ -1,6 +1,6 @@
 Apidae::Engine.routes.draw do
 
-  resources :objects, only: [:index, :show], path: 'objets' do
+  resources :objects, only: [:index, :show, :new, :create], path: 'objets' do
     post 'refresh', on: :member
   end
 

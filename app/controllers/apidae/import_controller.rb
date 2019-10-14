@@ -46,7 +46,7 @@ module Apidae
                 http.request(req)
               end
               e.update(status: Export::COMPLETE)
-              if Rails.application.config.apidae_import_callback
+              if Rails.application.config.respond_to?(:apidae_import_callback)
                 Rails.application.config.apidae_import_callback.call(e)
               end
             rescue Exception => ex
