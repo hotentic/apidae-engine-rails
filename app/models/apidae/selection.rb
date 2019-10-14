@@ -8,6 +8,8 @@ module Apidae
 
     AGENDA_ENDPOINT = 'agenda/detaille/list-identifiants'
     SELECTION_ENDPOINT = 'recherche/list-identifiants'
+    OBJECTS_ENDPOINT = 'recherche/list-objets-touristiques'
+
     MAX_COUNT = 100
     MAX_LOOPS = 10
 
@@ -70,6 +72,17 @@ module Apidae
       res
     end
 
+    def api_objects(opts = {})
+      key = cache_key(:objects)
+      res = $apidae_cache.read(key)
+      unless res
+        query_args = build_args(OBJECTS_ENDPOINT, opts.merge({selection_ids: [apidae_id]}))
+        res = query_objects_api(query_args, true)
+        $apidae_cache.write(key, res)
+      end
+      res
+    end
+
     def as_text
       "#{label} (#{apidae_id})"
     end
@@ -97,6 +110,32 @@ module Apidae
       else
         response = JSON.parse get_response(query_args), symbolize_names: false
         query_result[:results] = response['objetTouristiqueIds'] || {}
+        query_result[:count] = response['numFound']
+      end
+      query_result
+    end
+
+    def query_objects_api(query_args, all_results = false)
+      query_result = {}
+
+      if all_results
+        loops = 0
+        query_args[:first] = 0
+        query_args[:count] = MAX_COUNT
+        response = JSON.parse get_response(query_args), symbolize_names: false
+        total = response['numFound']
+        query_result[:results] = response['objetsTouristiques'] || {}
+
+        while total > results_count(query_result) && loops < MAX_LOOPS
+          loops += 1
+          query_args[:first] += MAX_COUNT
+          response = JSON.parse get_response(query_args), symbolize_names: false
+          merge_objects_results(response, query_result)
+        end
+        query_result[:count] = total
+      else
+        response = JSON.parse get_response(query_args), symbolize_names: false
+        query_result[:results] = response['objetsTouristiques'] || {}
         query_result[:count] = response['numFound']
       end
       query_result
@@ -133,6 +172,15 @@ module Apidae
           result[:results].merge!(ids.except(first_day))
         else
           result[:results] += ids
+        end
+      end
+    end
+
+    def merge_objects_results(response, result)
+      objects = response['objetsTouristiques']
+      unless objects.blank?
+        if result[:results] && result[:results].is_a?(Array)
+          result[:results] += objects
         end
       end
     end
