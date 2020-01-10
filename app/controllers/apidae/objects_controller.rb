@@ -28,7 +28,7 @@ module Apidae
     def create
       @obj = Obj.new(object_params)
       selection = params[:selection_apidae_id].blank? ? Selection.last : Selection.find_by_apidae_id(params[:selection_apidae_id])
-      if @obj.save && selection.refresh_obj(@obj.apidae_id)
+      if @obj.save && selection.add_or_refresh_obj(@obj.apidae_id)
         redirect_to objects_url, notice: "L'objet a bien été importé"
       else
         flash[:alert] = "Une erreur s'est produite lors de l'import de l'objet."
@@ -51,7 +51,7 @@ module Apidae
 
     def refresh
       referrer = (session.delete(:referrer) || objects_url)
-      if @obj && @obj.selections.first.refresh_obj(@obj.apidae_id)
+      if @obj && @obj.selections.first.add_or_refresh_obj(@obj.apidae_id)
         redirect_to referrer, notice: "L'objet touristique a bien été mis à jour."
       else
         redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de l'objet."

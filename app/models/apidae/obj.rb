@@ -115,6 +115,7 @@ module Apidae
     end
 
     def self.update_object(apidae_obj, object_data, locales, versions)
+      result = true
       populate_fields(apidae_obj, object_data, locales)
       apidae_obj.save!
 
@@ -130,6 +131,7 @@ module Apidae
           end
         end
       end
+      result
 
       # if Rails.application.config.respond_to?(:apidae_aspect) && !object_data[:aspects].blank?
       #   apidae_aspect = object_data[:aspects].find {|a| a[:aspect] == Rails.application.config.apidae_aspect}

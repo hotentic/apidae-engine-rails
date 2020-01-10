@@ -88,7 +88,7 @@ module Apidae
       query_objects_api(query_args, true)
     end
 
-    def refresh_obj(apidae_obj_id)
+    def add_or_refresh_obj(apidae_obj_id)
       if apidae_project
         res = api_object(apidae_obj_id)
         if res[:results] && res[:results].length == 1
@@ -100,6 +100,8 @@ module Apidae
               Rails.application.config.apidae_obj_refresh_callback.call(apidae_obj_id)
             end
             refreshed
+          else
+            Obj.add_object(obj_data, apidae_project.locales, apidae_project.versions)
           end
         end
       end
