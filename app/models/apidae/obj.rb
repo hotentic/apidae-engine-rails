@@ -9,6 +9,7 @@ module Apidae
     attr_accessor :obj_version
 
     store_accessor :title_data, :title
+    store_accessor :owner_data, :owner_name, :owner_id
     store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
@@ -132,21 +133,12 @@ module Apidae
         end
       end
       result
-
-      # if Rails.application.config.respond_to?(:apidae_aspect) && !object_data[:aspects].blank?
-      #   apidae_aspect = object_data[:aspects].find {|a| a[:aspect] == Rails.application.config.apidae_aspect}
-      #   if apidae_aspect
-      #     apidae_aspect[:type] = apidae_obj.apidae_type
-      #     aspect_obj = Obj.new
-      #     populate_fields(aspect_obj, apidae_aspect)
-      #     merge_fields(apidae_obj, aspect_obj)
-      #   end
-      # end
-      # apidae_obj.save!
     end
 
     def self.populate_fields(apidae_obj, object_data, locales)
       type_fields = TYPES_DATA[object_data[:type]]
+      apidae_obj.last_update = DateTime.parse(object_data[:gestion][:dateModification])
+      apidae_obj.owner_data = parse_owner_data(object_data[:gestion][:membreProprietaire])
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
       apidae_obj.title_data = parse_title(object_data, *locales)
@@ -188,6 +180,12 @@ module Apidae
 
     def self.parse_title(data_hash, *locales)
       {title: node_value(data_hash, :nom, *locales)}
+    end
+
+    def self.parse_owner_data(data_hash)
+      unless data_hash.blank?
+        {owner_name: data_hash[:nom], owner_id: data_hash[:id]}
+      end
     end
 
     def self.parse_desc_data(data_hash, private_data, *locales)
