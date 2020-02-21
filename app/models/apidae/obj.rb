@@ -320,7 +320,7 @@ module Apidae
       end
     end
 
-    def self.parse_type_data(apidae_obj, type_hash, presta_hash, business_hash *locales)
+    def self.parse_type_data(apidae_obj, type_hash, presta_hash, business_hash, *locales)
       data_hash = type_hash || {}
       prestations_hash = presta_hash || {}
       apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
