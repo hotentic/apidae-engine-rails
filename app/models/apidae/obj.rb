@@ -14,7 +14,7 @@ module Apidae
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
-                   :products, :audience, :animals, :extra, :duration, :certifications
+                   :products, :audience, :animals, :extra, :duration, :certifications, :business
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
@@ -150,7 +150,8 @@ module Apidae
       apidae_obj.openings_data = parse_openings(object_data[:ouverture], *locales)
       apidae_obj.rates_data = parse_rates(object_data[:descriptionTarif], *locales)
       apidae_obj.booking_data = parse_booking(object_data[:reservation], *locales)
-      apidae_obj.type_data = parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations], *locales)
+      apidae_obj.type_data = parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations],
+                                             object_data[:tourismeAffaires], *locales)
       apidae_obj.pictures_data = parse_pictures_data(object_data[:illustrations], *locales)
       apidae_obj.attachments_data = parse_attachments_data(object_data[:multimedias], *locales)
       apidae_obj.entity_data = entity_fields(object_data[:informations], object_data[type_fields[:node]])
@@ -319,7 +320,7 @@ module Apidae
       end
     end
 
-    def self.parse_type_data(apidae_obj, type_hash, presta_hash, *locales)
+    def self.parse_type_data(apidae_obj, type_hash, presta_hash, business_hash *locales)
       data_hash = type_hash || {}
       prestations_hash = presta_hash || {}
       apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == FEM
@@ -343,7 +344,8 @@ module Apidae
           animals: prestations_hash[:animauxAcceptes] == 'ACCEPTES',
           extra: apidae_obj.apidae_type == SPA ? node_value(data_hash, :formuleHebergement, *locales) : node_value(prestations_hash, :complementAccueil, *locales),
           duration: apidae_obj.apidae_type == SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance],
-          certifications: data_hash[:agrements].blank? ? [] : data_hash[:agrements].map {|a| {id: a[:type][:id], identifier: a[:numero]}}
+          certifications: data_hash[:agrements].blank? ? [] : data_hash[:agrements].map {|a| {id: a[:type][:id], identifier: a[:numero]}},
+          business: business_hash
       }
     end
 
