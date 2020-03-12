@@ -20,6 +20,7 @@ module Apidae
 
     def new
       @obj = Obj.new
+      @selection_apidae_id = params[:selection_apidae_id]
     end
 
     def edit
@@ -27,13 +28,18 @@ module Apidae
 
     def create
       @obj = Obj.new(object_params)
-      selection = params[:selection_apidae_id].blank? ? Selection.last : Selection.find_by_apidae_id(params[:selection_apidae_id])
-      if @obj.save && selection.add_or_refresh_obj(@obj.apidae_id)
-        redirect_to objects_url, notice: "L'objet a bien été importé"
+      if Obj.find_by_apidae_id(@obj.apidae_id)
+        redirect_to objects_url, alert: "Cet objet est déjà importé."
       else
-        flash[:alert] = "Une erreur s'est produite lors de l'import de l'objet."
-        render :new
+        selection = params[:selection_apidae_id].blank? ? Selection.last : Selection.find_by_apidae_id(params[:selection_apidae_id])
+        if @obj.save && selection.add_or_refresh_obj(@obj.apidae_id)
+          redirect_to objects_url, notice: "L'objet a bien été importé"
+        else
+          flash[:alert] = "Une erreur s'est produite lors de l'import de l'objet."
+          render :new
+        end
       end
+
     end
 
     def update

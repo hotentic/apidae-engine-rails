@@ -1,4 +1,21 @@
 fr:
+  activerecord:
+    attributes:
+      apidae/project:
+        name: Nom
+        apidae_id: Identifiant Apidae
+        api_key: Clé d'API
+        locales: Langues
+        versions: Aspects
+      apidae/obj:
+        apidae_id: Identifiant Apidae
+        selection_apidae_id: Sélection Apidae
+    errors:
+      models:
+        apidae/project:
+          attributes:
+            apidae_id:
+              taken: Un projet avec cet identifiant Apidae existe déjà.
   apidae:
     file_import:
       status:
@@ -6,19 +23,20 @@ fr:
         complete: Terminé
         cancelled: Annulé
     locales:
-      fr: fr
-      en: en
-      de: de
-      it: it
-      nl: nl
-      ru: ru
-      zh: zh
-      pt-BR: pt-BR
+      fr: Français
+      en: Anglais
+      it: Italien
+      es: Espagnol
+      de: Allemand
+      nl: Néerlandais
+      ru: Russe
+      zh: Chinois
+      'pt-BR': Brésilien
     versions:
-      STANDARD: standard
-      HIVER: hiver
-      ETE: été
-      HANDICAP: handicap
-      TOURISME_AFFAIRES: affaires
-      GROUPES: groupes
-      PRESTATAIRE_ACTIVITES: activités
+      STANDARD: Standard
+      HIVER: Hiver
+      ETE: Été
+      HANDICAP: Handicap
+      TOURISME_AFFAIRES: Affaires
+      GROUPES: Groupes
+      PRESTATAIRE_ACTIVITES: Prestataire d'activités

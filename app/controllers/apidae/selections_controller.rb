@@ -2,7 +2,7 @@ require_dependency "apidae/application_controller"
 
 module Apidae
   class SelectionsController < ApplicationController
-    before_action :set_selection, only: [:show, :edit, :update, :destroy]
+    before_action :set_selection, only: [:show, :edit, :update, :destroy, :refresh]
 
     def index
       @selections = Selection.all
@@ -39,6 +39,15 @@ module Apidae
     def destroy
       @selection.destroy
       redirect_to selections_url, notice: 'Selection was successfully destroyed.'
+    end
+
+    def refresh
+      referrer = (session.delete(:referrer) || selections_url)
+      if @selection && @selection.add_or_refresh_objs
+        redirect_to referrer, notice: "La sélection a bien été mise à jour."
+      else
+        redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de la sélection."
+      end
     end
 
     private

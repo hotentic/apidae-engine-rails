@@ -1,6 +1,6 @@
 <%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
     <div id="apidae_header" class="<%= styles[:header] %>">
-      <%= link_to 'Importer un objet', apidae.new_object_path, class: styles[:objects] %>
+      <%= link_to 'Importer un objet', apidae.new_object_path(selection_apidae_id: @selection ? @selection.apidae_id : nil), class: styles[:objects] %>
       <%= link_to 'Retour', @selection ? apidae.selections_path : root_path, class: styles[:back] %>
       <h1 class="<%= styles[:h1] %>">Apidae - <%= @selection ? "Sélection \"#{@selection.label}\"" : "Tous les objets touristiques" %></h1>
     </div>

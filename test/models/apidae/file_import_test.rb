@@ -6,6 +6,8 @@ module Apidae
       Obj.delete_all
       Project.delete_all
       Selection.delete_all
+      Town.delete_all
+      Reference.delete_all
       @result = {created: 0, updated: 0, deleted: 0, selections: []}
     end
 
@@ -85,6 +87,28 @@ module Apidae
       FileImport.delete_objects(objects_json, @result)
       assert_equal 0, Obj.count
       assert_equal({created: 0, updated: 0, deleted: 1, selections: []}, @result)
+    end
+    
+    test "nil versioned attachments field overrides standard one" do
+      objects_json = File.read('test/data/cos_winter.json')
+      FileImport.add_or_update_objects(objects_json, @result, [], [WINTER_VERSION])
+      assert_equal 1, Obj.count
+      assert_equal 2, Obj.unscoped.count
+      root_obj = Obj.find_by_apidae_id(4838849)
+      assert_equal 2, root_obj.attachments.length
+      root_obj.obj_version = WINTER_VERSION
+      assert_nil root_obj.attachments
+    end
+
+    test "blank versioned desc field overrides standard one" do
+      objects_json = File.read('test/data/equ_groups.json')
+      FileImport.add_or_update_objects(objects_json, @result, [], [GROUPS_VERSION])
+      assert_equal 1, Obj.count
+      assert_equal 2, Obj.unscoped.count
+      root_obj = Obj.find_by_apidae_id(185789)
+      assert_equal "Cette ligne de 4km", root_obj.long_desc
+      root_obj.obj_version = GROUPS_VERSION
+      assert_nil root_obj.long_desc
     end
 
     test "new selection insertion" do

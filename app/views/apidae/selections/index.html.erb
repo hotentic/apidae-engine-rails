@@ -12,6 +12,7 @@
             <th>Reference</th>
             <th>Identifiant</th>
             <th>Objets</th>
+            <th></th>
           </tr>
           </thead>
           <tbody class="<%= styles[:table_body] %>">
@@ -21,6 +22,8 @@
                 <td><%= selection.reference %></td>
                 <td><%= selection.apidae_id %></td>
                 <td><%= link_to selection.objects.count, selection_objects_path(selection) %></td>
+                <td><%= link_to 'Rafraîchir', apidae.refresh_selection_path(selection), method: :post,
+                                data: {confirm: 'Voulez-vous vraiment rafraîchir cette sélection ? Les données existantes seront écrasées.'} %></td>
               </tr>
           <% end %>
           <% if @selections.empty? %>

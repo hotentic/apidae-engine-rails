@@ -5,6 +5,7 @@ Apidae::Engine.routes.draw do
   end
 
   resources :selections, only: [:index] do
+    post 'refresh', on: :member
     resources :objects, only: [:index], path: 'objets' do
       post 'refresh', on: :member
     end

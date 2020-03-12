@@ -9,7 +9,7 @@ module Apidae
     end
 
     def new
-      session[:referrer] = request.referrer.split('?').first
+      session[:referrer] = request.referrer.split('?').first unless request.referrer.blank?
       @project = Project.new(locales: [DEFAULT_LOCALE], versions: [DEFAULT_VERSION])
     end
 
@@ -30,7 +30,7 @@ module Apidae
     end
 
     def edit
-      session[:referrer] = request.referrer.split('?').first
+      session[:referrer] = request.referrer.split('?').first unless request.referrer.blank?
     end
 
     def update

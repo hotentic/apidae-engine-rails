@@ -1,0 +1,1498 @@
+[{
+  "type" : "EQUIPEMENT",
+  "id" : 185789,
+  "nom" : {
+    "libelleFr" : "Train à vapeur du Haut Rhône"
+  },
+  "identifier" : "sitraLOI659444",
+  "state" : "PUBLISHED",
+  "gestion" : {
+    "dateCreation" : "2011-03-30T12:30:59.877+0000",
+    "dateModification" : "2020-02-21T13:26:38.013+0000",
+    "dateExportModification" : "2020-02-21T13:26:38.459+0000",
+    "membreProprietaire" : {
+      "type" : {
+        "elementReferenceType" : "MembreSitraType",
+        "id" : 233,
+        "libelleFr" : "Contributeur Généraliste",
+        "ordre" : 1
+      },
+      "nom" : "Office du Tourisme Les Balcons du Dauphiné",
+      "dateCreation" : "2009-01-26T08:21:11.550+0000",
+      "dateModification" : "2020-02-24T15:45:59.426+0000",
+      "departement" : "38",
+      "id" : 276,
+      "siteWeb" : "http://www.morestel.com"
+    },
+    "signalerUnProblemeMails" : [ "commercialisation@tousauxbalcons.com", "lesavenieres@tousauxbalcons.com", "cremieu@tousauxbalcons.com", "morestel@tousauxbalcons.com" ]
+  },
+  "informations" : {
+    "moyensCommunication" : [ {
+      "identifiant" : 5673157,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 201,
+        "libelleFr" : "Téléphone",
+        "ordre" : 1
+      },
+      "coordonnees" : {
+        "fr" : "04 78 81 84 30"
+      },
+      "observation" : {
+        "libelleFr" : "Jean Claude THOOS"
+      }
+    }, {
+      "identifiant" : 5673160,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 204,
+        "libelleFr" : "Mél",
+        "ordre" : 2
+      },
+      "coordonnees" : {
+        "fr" : "haut.rhone@aol.fr"
+      }
+    }, {
+      "identifiant" : 72276483,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 201,
+        "libelleFr" : "Téléphone",
+        "ordre" : 1
+      },
+      "coordonnees" : {
+        "fr" : "07 83 78 46 70"
+      },
+      "observation" : {
+        "libelleFr" : "Service réservations"
+      }
+    }, {
+      "identifiant" : 5673161,
+      "type" : {
+        "elementReferenceType" : "MoyenCommunicationType",
+        "id" : 205,
+        "libelleFr" : "Site web (URL)",
+        "ordre" : 3
+      },
+      "coordonnees" : {
+        "fr" : "http://www.cft-hr.com"
+      }
+    } ],
+    "informationsLegales" : { },
+    "structureGestion" : {
+      "type" : "STRUCTURE",
+      "id" : 67303,
+      "nom" : {
+        "libelleFr" : "Chemin de Fer Touristique du Haut Rhône"
+      },
+      "identifier" : "38AASOR100337_struct",
+      "state" : "PUBLISHED",
+      "adresse" : {
+        "adresse1" : "Rue des carrières",
+        "codePostal" : "38390",
+        "commune" : {
+          "id" : 14939,
+          "code" : "38247",
+          "nom" : "Montalieu-Vercieu",
+          "pays" : {
+            "elementReferenceType" : "Pays",
+            "id" : 532,
+            "libelleFr" : "France",
+            "ordre" : 78
+          },
+          "codePostal" : "38390"
+        }
+      },
+      "geolocalisation" : {
+        "altitude" : 245,
+        "valide" : true,
+        "geoJson" : {
+          "type" : "Point",
+          "coordinates" : [ 5.417759, 45.825920 ]
+        }
+      }
+    }
+  },
+  "presentation" : {
+    "descriptifCourt" : {
+      "libelleFr" : "A bord d'une véritable locomotive à vapeur, voyagez dans le temps et dans un paysage le long du Rhône, des falaises du Bugey, et à travers le bois de Corniolay."
+    },
+    "descriptifDetaille" : {
+      "libelleFr" : "Cette ligne de 4km"
+    },
+    "typologiesPromoSitra" : [ {
+      "elementReferenceType" : "TypologiePromoSitra",
+      "id" : 1595,
+      "libelleFr" : "Viarhona",
+      "ordre" : 240,
+      "description" : "Concerne les prestataires et prestations sur l'itinéraire ou à proximité immédiate (5 km maximum)",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 116,
+        "libelleFr" : "Régional",
+        "ordre" : 109
+      }
+    }, {
+      "elementReferenceType" : "TypologiePromoSitra",
+      "id" : 1603,
+      "libelleFr" : "Circuits de France_POI",
+      "ordre" : 282,
+      "description" : "permet d'identifier les curiosités à proximité de vos itinéraires à faire remonter sur le site www.cirkwi.com",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 34,
+        "libelleFr" : "Sélections pour les diffuseurs",
+        "ordre" : 116
+      }
+    } ]
+  },
+  "localisation" : {
+    "adresse" : {
+      "adresse1" : "Base de loisirs de la Vallée Bleue",
+      "adresse2" : "Rue des carrières",
+      "codePostal" : "38390",
+      "commune" : {
+        "id" : 14939,
+        "code" : "38247",
+        "nom" : "Montalieu-Vercieu",
+        "pays" : {
+          "elementReferenceType" : "Pays",
+          "id" : 532,
+          "libelleFr" : "France",
+          "ordre" : 78
+        },
+        "codePostal" : "38390"
+      }
+    },
+    "geolocalisation" : {
+      "complement" : {
+        "libelleFr" : "Au rond point dit de la Locomotive, faites les 3/4 et à gauche. La gare se trouve en bord de route."
+      },
+      "valide" : true,
+      "geoJson" : {
+        "type" : "Point",
+        "coordinates" : [ 5.417759, 45.825920 ]
+      }
+    },
+    "perimetreGeographique" : [ {
+      "id" : 14939,
+      "code" : "38247",
+      "nom" : "Montalieu-Vercieu",
+      "pays" : {
+        "elementReferenceType" : "Pays",
+        "id" : 532,
+        "libelleFr" : "France",
+        "ordre" : 78
+      },
+      "codePostal" : "38390"
+    } ],
+    "environnements" : [ {
+      "elementReferenceType" : "Environnement",
+      "id" : 135,
+      "libelleFr" : "A la campagne",
+      "ordre" : 1
+    }, {
+      "elementReferenceType" : "Environnement",
+      "id" : 141,
+      "libelleFr" : "Sortie d’Autoroute à moins de 5 km",
+      "ordre" : 47,
+      "description" : "5 km maxi d'une entrée ou sortie d'autoroute"
+    }, {
+      "elementReferenceType" : "Environnement",
+      "id" : 147,
+      "libelleFr" : "Lac ou plan d'eau à moins de 300 m",
+      "ordre" : 17,
+      "description" : "300 m maxi"
+    }, {
+      "elementReferenceType" : "Environnement",
+      "id" : 191,
+      "libelleFr" : "Port de plaisance à moins de 500 m",
+      "ordre" : 45,
+      "description" : "500 m maxi"
+    }, {
+      "elementReferenceType" : "Environnement",
+      "id" : 195,
+      "libelleFr" : "Village à -2 km",
+      "ordre" : 57
+    } ]
+  },
+  "liens" : {
+    "liensObjetsTouristiquesTypes" : [ {
+      "type" : "SUR_PLACE",
+      "objetTouristique" : {
+        "type" : "EQUIPEMENT",
+        "id" : 185796,
+        "nom" : {
+          "libelleFr" : "Vélorail, cyclo-draisine de la Vallée Bleue"
+        },
+        "identifier" : "sitraLOI659476",
+        "state" : "PUBLISHED",
+        "adresse" : {
+          "adresse1" : "Base de loisirs de la Vallée Bleue",
+          "codePostal" : "38390",
+          "commune" : {
+            "id" : 14939,
+            "code" : "38247",
+            "nom" : "Montalieu-Vercieu",
+            "pays" : {
+              "elementReferenceType" : "Pays",
+              "id" : 532,
+              "libelleFr" : "France",
+              "ordre" : 78
+            },
+            "codePostal" : "38390"
+          }
+        },
+        "geolocalisation" : {
+          "valide" : true,
+          "geoJson" : {
+            "type" : "Point",
+            "coordinates" : [ 5.417719, 45.825861 ]
+          }
+        }
+      }
+    }, {
+      "type" : "SUR_PLACE",
+      "objetTouristique" : {
+        "type" : "FETE_ET_MANIFESTATION",
+        "id" : 5270038,
+        "nom" : {
+          "libelleFr" : "Balade en petit train à vapeur"
+        },
+        "identifier" : "SITRA2_EVE_5270038",
+        "state" : "HIDDEN",
+        "adresse" : {
+          "nomDuLieu" : "Base de Loisirs de la Vallée Bleue",
+          "codePostal" : "38390",
+          "commune" : {
+            "id" : 14939,
+            "code" : "38247",
+            "nom" : "Montalieu-Vercieu",
+            "pays" : {
+              "elementReferenceType" : "Pays",
+              "id" : 532,
+              "libelleFr" : "France",
+              "ordre" : 78
+            },
+            "codePostal" : "38390"
+          }
+        },
+        "geolocalisation" : {
+          "altitude" : 205,
+          "valide" : true,
+          "geoJson" : {
+            "type" : "Point",
+            "coordinates" : [ 5.420868, 45.824262 ]
+          }
+        }
+      }
+    }, {
+      "type" : "DEFAUT",
+      "objetTouristique" : {
+        "type" : "EQUIPEMENT",
+        "id" : 76030,
+        "nom" : {
+          "libelleFr" : "Base de Loisirs de la Vallée Bleue"
+        },
+        "identifier" : "38AASOR100081",
+        "state" : "PUBLISHED",
+        "adresse" : {
+          "codePostal" : "38390",
+          "commune" : {
+            "id" : 14939,
+            "code" : "38247",
+            "nom" : "Montalieu-Vercieu",
+            "pays" : {
+              "elementReferenceType" : "Pays",
+              "id" : 532,
+              "libelleFr" : "France",
+              "ordre" : 78
+            },
+            "codePostal" : "38390"
+          }
+        },
+        "geolocalisation" : {
+          "altitude" : 205,
+          "valide" : true,
+          "geoJson" : {
+            "type" : "Point",
+            "coordinates" : [ 5.420868, 45.824262 ]
+          }
+        }
+      }
+    } ]
+  },
+  "prestations" : {
+    "equipements" : [ {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 613,
+      "libelleFr" : "Aire de pique-nique",
+      "ordre" : 30,
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 122,
+        "libelleFr" : "Equipements de loisirs",
+        "ordre" : 51
+      }
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 741,
+      "libelleFr" : "Toilettes",
+      "ordre" : 143,
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 125,
+        "libelleFr" : "Equipements intérieurs",
+        "ordre" : 54
+      }
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 972,
+      "libelleFr" : "Parking",
+      "ordre" : 204,
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 126,
+        "libelleFr" : "Stationnement",
+        "ordre" : 142
+      }
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 1321,
+      "libelleFr" : "Parking à proximité",
+      "ordre" : 212,
+      "description" : "A 500 m maxi\r\nNe concerne que les parkings publics, sinon utiliser \"parking privé\"",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 126,
+        "libelleFr" : "Stationnement",
+        "ordre" : 142
+      }
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 1322,
+      "libelleFr" : "Parking autocar",
+      "ordre" : 211,
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 126,
+        "libelleFr" : "Stationnement",
+        "ordre" : 142
+      },
+      "parent" : {
+        "elementReferenceType" : "PrestationEquipement",
+        "id" : 972,
+        "libelleFr" : "Parking",
+        "ordre" : 204
+      }
+    }, {
+      "elementReferenceType" : "PrestationEquipement",
+      "id" : 5592,
+      "libelleFr" : "Parking gratuit",
+      "ordre" : 208,
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 126,
+        "libelleFr" : "Stationnement",
+        "ordre" : 142
+      },
+      "parent" : {
+        "elementReferenceType" : "PrestationEquipement",
+        "id" : 972,
+        "libelleFr" : "Parking",
+        "ordre" : 204
+      }
+    } ],
+    "services" : [ {
+      "elementReferenceType" : "PrestationService",
+      "id" : 687,
+      "libelleFr" : "Animaux acceptés",
+      "ordre" : 294
+    }, {
+      "elementReferenceType" : "PrestationService",
+      "id" : 781,
+      "libelleFr" : "Accès autocar",
+      "ordre" : 69,
+      "description" : "Concerne tous les objets accessibles aux bus (route praticable...)",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 80,
+        "libelleFr" : "Aide au client / transport",
+        "ordre" : 8
+      }
+    }, {
+      "elementReferenceType" : "PrestationService",
+      "id" : 785,
+      "libelleFr" : "Camping-cars autorisés",
+      "ordre" : 353
+    }, {
+      "elementReferenceType" : "PrestationService",
+      "id" : 1130,
+      "libelleFr" : "Documentation Touristique",
+      "ordre" : 30,
+      "description" : "Documentations diverses et gratuites à disposition des clients",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 78,
+        "libelleFr" : "Aide au client / pratique",
+        "ordre" : 6
+      }
+    } ],
+    "animauxAcceptes" : "ACCEPTES",
+    "animauxAcceptesSupplement" : "SANS_SUPPLEMENT",
+    "descriptifAnimauxAcceptes" : {
+      "libelleFr" : "Tenus en laisse uniquement"
+    },
+    "languesParlees" : [ {
+      "elementReferenceType" : "Langue",
+      "id" : 1192,
+      "libelleFr" : "Anglais",
+      "ordre" : 4
+    }, {
+      "elementReferenceType" : "Langue",
+      "id" : 1197,
+      "libelleFr" : "Français",
+      "ordre" : 13
+    } ],
+    "languesDocumentation" : [ {
+      "elementReferenceType" : "Langue",
+      "id" : 1197,
+      "libelleFr" : "Français",
+      "ordre" : 13
+    } ],
+    "tourismesAdaptes" : [ {
+      "elementReferenceType" : "TourismeAdapte",
+      "id" : 3652,
+      "libelleFr" : "Accessible en fauteuil roulant avec aide",
+      "ordre" : 11,
+      "description" : "Certaines contraintes matérielles, rendent impossible le déplacement d'une personne en fauteuil roulant sans l'aide de quelqu'un.",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 3650,
+        "libelleFr" : "Critères d'accessibilité pour personnes à mobilité réduite",
+        "ordre" : 28,
+        "description" : "Conditions à remplir pour qu'un site soit considéré comme accessible en fauteuil roulant."
+      }
+    }, {
+      "elementReferenceType" : "TourismeAdapte",
+      "id" : 4219,
+      "libelleFr" : "Personnel d’accueil sensibilisé à l’accueil des personnes en situation de handicap",
+      "ordre" : 7,
+      "description" : "Au moins une personne du personnel a reçu une formation sur l'accueil des publics handicapés et est en mesure d'adopter un comportement adapté."
+    } ],
+    "nombrePersonnesEnFauteuilRoulantAccueilliesSimultanement" : 2,
+    "typesClientele" : [ {
+      "elementReferenceType" : "TypeClientele",
+      "id" : 513,
+      "libelleFr" : "Spécial famille avec enfants",
+      "ordre" : 46,
+      "description" : "Permet de caractériser une offre accessible et attractive pour des familles avec enfants de moins de 12 ou 14 ans, et remplissant au moins une des deux conditions suivantes :\r\n\r\n- permettre une pratique que l’on recommanderait pour une famille (enfants, parents…,) \r\n- proposer un contenu et/ou des services particulièrement adaptés (ex : hébergements et restaurants avec jeux, services – Animations, spectacles, événements pour les enfants – Musées, sites de visites avec prestations adaptées.\r\n\r\nRenseigner le bon plan dans les types objets suivants HOT, HCO, CAM, PCU, RES., pour bien valoriser les services et équipements offerts.",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 2,
+        "libelleFr" : "Offres adaptées à des clientèles spécifiques",
+        "ordre" : 169,
+        "description" : "Les critères suivants doivent être utilisés uniquement pour identifier une offre ou un service adapté ou réservé à une clientèle particulière. Sans sélection de l’un ou l’autre de ces critères, l’objet est considéré concernant tous les publics au sens large.\r\n \r\nLes grands principes :\r\n\r\n- Par défaut, la majeure partie de l’offre concerne une clientèle touristique, grand public et adulte.\r\n- Il faut réserver l’utilisation des critères à la qualification d’une offre qui présente des spécificités pour un public particulier :\r\n -> Soit pour répondre à une organisation marketing de l’offre relative à la nature du client.\r\n-> Soit parce que pour répondre aux exigences des différentes pratiques."
+      }
+    }, {
+      "elementReferenceType" : "TypeClientele",
+      "id" : 593,
+      "libelleFr" : "Accueil groupes",
+      "ordre" : 25,
+      "description" : "Permet d’identifier les prestataires susceptibles d’accueillir en plus une clientèle groupe.\r\n\r\nSont retenus par ailleurs les critères « Accueil groupes affaire/incentive » et « Accueil groupes scolaires/enfants » qui doivent être réservés aux offres proposant des prestations, tarifs et services adaptés.\r\n\r\nIl y a nécessité d’avoir une politique tarifaire pour les groupes, quelle que soit leur taille. Les tarifs groupes devront être renseignés en précisant la taille des groupes pour bénéficier des tarifs indiqués.",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 5,
+        "libelleFr" : "Public ciblé : groupes et professionnels",
+        "ordre" : 170
+      }
+    }, {
+      "elementReferenceType" : "TypeClientele",
+      "id" : 596,
+      "libelleFr" : "Accueil de groupes scolaires",
+      "ordre" : 29,
+      "description" : "Permet d’identifier \r\n- les hébergements collectifs qui accueillent les groupes scolaires. L’accueil de ce type de public nécessite pour la structure d’être répertoriée auprès de la DDCS (Direction Départementale de la Cohésion Sociale) pour l’accueil collectif de mineurs. \r\nPour accueillir des maternels, l’hébergement doit avoir reçu en plus l’avis favorable de la Protection Maternelle Infantile.\r\nPour accueillir des enfants d’écoles élémentaires, l’hébergement doit en plus être inscrit au répertoire de l’Education Nationale. \r\n\r\n- les prestataires qui accueillent des groupes scolaires et qui proposent des offres, tarifs et services adaptés. \r\n\r\nSi vous utilisez ce critère, merci de renseigner les autres critères dessous pour permettre une meilleure segmentation du public visé.\r\n\r\nPensez à renseigner la taille des groupes, les tarifs spécifiques consentis.\r\nÉventuellement renseigner l'aspect \"Groupes\" si nécessaire.",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 5,
+        "libelleFr" : "Public ciblé : groupes et professionnels",
+        "ordre" : 170
+      }
+    }, {
+      "elementReferenceType" : "TypeClientele",
+      "id" : 597,
+      "libelleFr" : "Accueil groupes affaire/incentive",
+      "ordre" : 26,
+      "description" : "Pensez à renseigner la taille des groupes, les tarifs spécifiques consentis.\r\nÉventuellement renseigner l'aspect \"Groupes\" si nécessaire.",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 5,
+        "libelleFr" : "Public ciblé : groupes et professionnels",
+        "ordre" : 170
+      },
+      "parent" : {
+        "elementReferenceType" : "TypeClientele",
+        "id" : 593,
+        "libelleFr" : "Accueil groupes",
+        "ordre" : 25,
+        "description" : "Permet d’identifier les prestataires susceptibles d’accueillir en plus une clientèle groupe.\r\n\r\nSont retenus par ailleurs les critères « Accueil groupes affaire/incentive » et « Accueil groupes scolaires/enfants » qui doivent être réservés aux offres proposant des prestations, tarifs et services adaptés.\r\n\r\nIl y a nécessité d’avoir une politique tarifaire pour les groupes, quelle que soit leur taille. Les tarifs groupes devront être renseignés en précisant la taille des groupes pour bénéficier des tarifs indiqués."
+      }
+    }, {
+      "elementReferenceType" : "TypeClientele",
+      "id" : 4547,
+      "libelleFr" : "Accueil de colonies de vacances",
+      "ordre" : 31,
+      "description" : "Permet d’identifier :\r\n- les hébergements collectifs qui accueillent des colonies de vacances. L’accueil de ce type de public nécessite pour la structure d’être répertoriée auprès de la DDCS pour l’accueil collectif de mineurs.\r\nPour accueillir des enfants de moins de 6 ans, l’hébergement doit avoir reçu en plus l’avis favorable de la Protection Maternelle Infantile.\r\n\r\n- les prestataires qui accueillent des colonies de vacances et qui proposent des offres, tarifs et services adaptés. \r\n\r\nSi vous utilisez ce critère, merci de renseigner les autres critères dessous pour permettre une meilleure segmentation du public visé.\r\n\r\nPensez à renseigner la taille des groupes, les tarifs spécifiques consentis.\r\nÉventuellement renseigner l'aspect \"Groupes\" si nécessaire.",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 5,
+        "libelleFr" : "Public ciblé : groupes et professionnels",
+        "ordre" : 170
+      }
+    } ],
+    "tailleGroupeMax" : 72
+  },
+  "ouverture" : {
+    "periodeEnClair" : {
+      "libelleFr" : "Du 01/05 au 30/06, tous les dimanches à 15h30.\nOuvertures exceptionnelles les 01/05, 08/05, 21/05 et 01/06.\n\nDu 01/07 au 31/08, tous les dimanches à 16h30.\nOuvertures exceptionnelles les 14/07 et 15/08.\n\nDu 01/09 au 30/09, tous les dimanches à 15h30.\n\nSous réserve de conditions météo favorables."
+    },
+    "periodeEnClairGenerationMode" : "AUTOMATIQUE",
+    "indicationsPeriode" : [ {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 416,
+      "libelleFr" : "Automne",
+      "ordre" : 4,
+      "description" : "Permet de trouver des objets en fonction de la saison automnale - 21 septembre au 20 décembre",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 114,
+        "libelleFr" : "Période",
+        "ordre" : 104
+      }
+    }, {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 418,
+      "libelleFr" : "Eté",
+      "ordre" : 3,
+      "description" : "Permet de trouver des objets en fonction de la saison estivale - 21 juin au 20 septembre",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 114,
+        "libelleFr" : "Période",
+        "ordre" : 104
+      }
+    }, {
+      "elementReferenceType" : "IndicationPeriode",
+      "id" : 436,
+      "libelleFr" : "Printemps",
+      "ordre" : 2,
+      "description" : "Permet de trouver des objets en fonction de la saison printanière - 21 mars au 20 juin",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 114,
+        "libelleFr" : "Période",
+        "ordre" : 104
+      }
+    } ],
+    "periodesOuvertures" : [ {
+      "identifiant" : 17994901,
+      "dateDebut" : "2020-05-01",
+      "dateFin" : "2020-06-30",
+      "complementHoraire" : { },
+      "horaireOuverture" : "15:30:00",
+      "type" : "OUVERTURE_SEMAINE",
+      "tousLesAns" : true,
+      "ouverturesExceptionnelles" : [ {
+        "dateOuverture" : "2020-05-01"
+      }, {
+        "dateOuverture" : "2020-05-08"
+      }, {
+        "dateOuverture" : "2020-05-21"
+      }, {
+        "dateOuverture" : "2020-06-01"
+      } ],
+      "ouverturesJournalieres" : [ {
+        "jour" : "DIMANCHE"
+      } ],
+      "identifiantTechnique" : 18183551
+    }, {
+      "identifiant" : 9577872,
+      "dateDebut" : "2019-07-01",
+      "dateFin" : "2019-08-31",
+      "horaireOuverture" : "16:30:00",
+      "type" : "OUVERTURE_SEMAINE",
+      "tousLesAns" : true,
+      "ouverturesExceptionnelles" : [ {
+        "dateOuverture" : "2019-07-14"
+      }, {
+        "dateOuverture" : "2019-08-15"
+      } ],
+      "ouverturesJournalieres" : [ {
+        "jour" : "DIMANCHE"
+      } ],
+      "identifiantTechnique" : 18183552
+    }, {
+      "identifiant" : 9577873,
+      "dateDebut" : "2019-09-01",
+      "dateFin" : "2019-09-30",
+      "horaireOuverture" : "15:30:00",
+      "type" : "OUVERTURE_SEMAINE",
+      "tousLesAns" : true,
+      "ouverturesJournalieres" : [ {
+        "jour" : "DIMANCHE"
+      } ],
+      "identifiantTechnique" : 18183553
+    } ],
+    "ouverturesComplementaires" : [ {
+      "elementReferenceType" : "OuvertureComplementaire",
+      "id" : 4188,
+      "libelleFr" : "Sous réserve de conditions météo favorables",
+      "ordre" : 3
+    } ]
+  },
+  "descriptionTarif" : {
+    "indicationTarif" : "PAYANT",
+    "gratuit" : false,
+    "tarifsEnClair" : {
+      "libelleFr" : "Adulte : 10 € (à partir de 12 ans)\nEnfant (4-12 ans) : 6 €.\n\n Gratuit pour les moins de 4 ans.\n\nTarifs groupes et scolaires en téléchargement (fichiers ci-dessous)."
+    },
+    "tarifsEnClairGenerationMode" : "AUTOMATIQUE",
+    "complement" : {
+      "libelleFr" : "Tarifs groupes et scolaires en téléchargement (fichiers ci-dessous)"
+    },
+    "periodes" : [ {
+      "identifiant" : 5287221,
+      "dateDebut" : "2020-05-01",
+      "dateFin" : "2020-09-30",
+      "tarifs" : [ {
+        "devise" : "EUR",
+        "minimum" : 10.00,
+        "maximum" : 10.00,
+        "precisionTarif" : {
+          "libelleFr" : "à partir de 12 ans"
+        },
+        "type" : {
+          "elementReferenceType" : "TarifType",
+          "id" : 1717,
+          "libelleFr" : "Adulte",
+          "ordre" : 20
+        }
+      }, {
+        "devise" : "EUR",
+        "minimum" : 6.00,
+        "maximum" : 6.00,
+        "precisionTarif" : { },
+        "type" : {
+          "elementReferenceType" : "TarifType",
+          "id" : 1718,
+          "libelleFr" : "Enfant",
+          "ordre" : 21
+        }
+      } ],
+      "type" : {
+        "elementReferenceType" : "TarifTypePeriode",
+        "id" : 1304,
+        "libelleFr" : "A l'année",
+        "ordre" : 1
+      }
+    } ],
+    "modesPaiement" : [ {
+      "elementReferenceType" : "ModePaiement",
+      "id" : 1268,
+      "libelleFr" : "Carte bancaire/crédit",
+      "ordre" : 4
+    }, {
+      "elementReferenceType" : "ModePaiement",
+      "id" : 1271,
+      "libelleFr" : "Chèque",
+      "ordre" : 10
+    }, {
+      "elementReferenceType" : "ModePaiement",
+      "id" : 1277,
+      "libelleFr" : "Espèces",
+      "ordre" : 20
+    }, {
+      "elementReferenceType" : "ModePaiement",
+      "id" : 1281,
+      "libelleFr" : "Virement",
+      "ordre" : 30
+    } ],
+    "devise" : "EUR",
+    "conditions" : {
+      "gratuitPourLesMoinsDe" : 4,
+      "conditionEnfantAgeMin" : 4,
+      "conditionEnfantAgeMax" : 12
+    }
+  },
+  "reservation" : {
+    "organismes" : [ {
+      "identifiant" : 1154312,
+      "structureReference" : {
+        "type" : "STRUCTURE",
+        "id" : 67303,
+        "nom" : {
+          "libelleFr" : "Chemin de Fer Touristique du Haut Rhône"
+        },
+        "identifier" : "38AASOR100337_struct",
+        "state" : "PUBLISHED",
+        "adresse" : {
+          "adresse1" : "Rue des carrières",
+          "codePostal" : "38390",
+          "commune" : {
+            "id" : 14939,
+            "code" : "38247",
+            "nom" : "Montalieu-Vercieu",
+            "pays" : {
+              "elementReferenceType" : "Pays",
+              "id" : 532,
+              "libelleFr" : "France",
+              "ordre" : 78
+            },
+            "codePostal" : "38390"
+          }
+        },
+        "geolocalisation" : {
+          "altitude" : 245,
+          "valide" : true,
+          "geoJson" : {
+            "type" : "Point",
+            "coordinates" : [ 5.417759, 45.825920 ]
+          }
+        }
+      },
+      "nom" : "Chemin de Fer Touristique du Haut Rhône",
+      "type" : {
+        "elementReferenceType" : "ReservationType",
+        "id" : 475,
+        "libelleFr" : "Directe",
+        "ordre" : 2
+      },
+      "moyensCommunication" : [ {
+        "identifiant" : 5673160,
+        "type" : {
+          "elementReferenceType" : "MoyenCommunicationType",
+          "id" : 204,
+          "libelleFr" : "Mél",
+          "ordre" : 2
+        },
+        "coordonnees" : {
+          "fr" : "haut.rhone@aol.fr"
+        }
+      }, {
+        "identifiant" : 5673161,
+        "type" : {
+          "elementReferenceType" : "MoyenCommunicationType",
+          "id" : 205,
+          "libelleFr" : "Site web (URL)",
+          "ordre" : 3
+        },
+        "coordonnees" : {
+          "fr" : "http://www.cft-hr.com"
+        }
+      } ],
+      "locked" : false
+    }, {
+      "identifiant" : 4457490,
+      "structureReference" : {
+        "type" : "STRUCTURE",
+        "id" : 67303,
+        "nom" : {
+          "libelleFr" : "Chemin de Fer Touristique du Haut Rhône"
+        },
+        "identifier" : "38AASOR100337_struct",
+        "state" : "PUBLISHED",
+        "adresse" : {
+          "adresse1" : "Rue des carrières",
+          "codePostal" : "38390",
+          "commune" : {
+            "id" : 14939,
+            "code" : "38247",
+            "nom" : "Montalieu-Vercieu",
+            "pays" : {
+              "elementReferenceType" : "Pays",
+              "id" : 532,
+              "libelleFr" : "France",
+              "ordre" : 78
+            },
+            "codePostal" : "38390"
+          }
+        },
+        "geolocalisation" : {
+          "altitude" : 245,
+          "valide" : true,
+          "geoJson" : {
+            "type" : "Point",
+            "coordinates" : [ 5.417759, 45.825920 ]
+          }
+        }
+      },
+      "nom" : "Chemin de Fer Touristique du Haut Rhône",
+      "type" : {
+        "elementReferenceType" : "ReservationType",
+        "id" : 475,
+        "libelleFr" : "Directe",
+        "ordre" : 2
+      },
+      "moyensCommunication" : [ {
+        "identifiant" : 72276483,
+        "type" : {
+          "elementReferenceType" : "MoyenCommunicationType",
+          "id" : 201,
+          "libelleFr" : "Téléphone",
+          "ordre" : 1
+        },
+        "coordonnees" : {
+          "fr" : "07 83 78 46 70"
+        },
+        "observation" : {
+          "libelleFr" : "Service réservations"
+        }
+      } ],
+      "locked" : false
+    } ],
+    "complement" : { }
+  },
+  "contacts" : [ {
+    "identifiant" : 1441007,
+    "referent" : false,
+    "civilite" : {
+      "elementReferenceType" : "ContactCivilite",
+      "id" : 442,
+      "libelleFr" : "Madame",
+      "ordre" : 4
+    },
+    "nom" : "THOOS",
+    "prenom" : "Josette",
+    "titre" : {
+      "libelleFr" : "04 78 81 84 30"
+    },
+    "fonction" : {
+      "elementReferenceType" : "ContactFonction",
+      "id" : 470,
+      "libelleFr" : "Gérance",
+      "ordre" : 9
+    }
+  }, {
+    "identifiant" : 1441008,
+    "referent" : true,
+    "civilite" : {
+      "elementReferenceType" : "ContactCivilite",
+      "id" : 443,
+      "libelleFr" : "Monsieur",
+      "ordre" : 9
+    },
+    "nom" : "THOOS",
+    "prenom" : "Jean Claude",
+    "titre" : {
+      "libelleFr" : "04 78 81 84 30"
+    },
+    "fonction" : {
+      "elementReferenceType" : "ContactFonction",
+      "id" : 460,
+      "libelleFr" : "Présidence",
+      "ordre" : 15
+    }
+  } ],
+  "illustrations" : [ {
+    "identifiant" : 7443871,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : {
+      "libelleFr" : "Train à vapeur du Haut Rhône - Vallée Bleue"
+    },
+    "legende" : {
+      "libelleFr" : "Train à vapeur du Haut Rhône - Vallée Bleue"
+    },
+    "copyright" : {
+      "libelleFr" : "Régie Vallée Bleue"
+    },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/153/143/7245721.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/153/143/7245721-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/153/143/7245721-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/153/143/7245721-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "DSC_1653",
+      "taille" : 2473805,
+      "hauteur" : 2592,
+      "largeur" : 3872,
+      "lastModifiedDate" : "2020-01-24T15:27:59.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 7443850,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : {
+      "libelleFr" : "Train à vapeur du Haut Rhône - Vallée Bleue"
+    },
+    "legende" : {
+      "libelleFr" : "Train à vapeur du Haut Rhône - Vallée Bleue"
+    },
+    "copyright" : {
+      "libelleFr" : "CFHR - M. THOOS"
+    },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/132/143/7245700.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/132/143/7245700-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/132/143/7245700-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/132/143/7245700-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "Locomotive à vapeur",
+      "taille" : 1654585,
+      "hauteur" : 1366,
+      "largeur" : 2048,
+      "lastModifiedDate" : "2020-01-24T15:27:55.000+0000"
+    } ],
+    "locked" : false
+  }, {
+    "identifiant" : 7443849,
+    "link" : false,
+    "type" : "IMAGE",
+    "nom" : {
+      "libelleFr" : "Train à vapeur du Haut Rhône - Vallée Bleue"
+    },
+    "legende" : {
+      "libelleFr" : "Train à vapeur du Haut Rhône - Vallée Bleue"
+    },
+    "copyright" : {
+      "libelleFr" : "CFHR - M. THOOS"
+    },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/131/143/7245699.jpg",
+      "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/131/143/7245699-liste.jpg",
+      "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/131/143/7245699-fiche.jpg",
+      "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/131/143/7245699-diaporama.jpg",
+      "extension" : "jpg",
+      "fileName" : "l'intérieur d'une voiture",
+      "taille" : 3816504,
+      "hauteur" : 2592,
+      "largeur" : 3872,
+      "lastModifiedDate" : "2020-01-24T15:27:56.000+0000"
+    } ],
+    "locked" : false
+  } ],
+  "multimedias" : [ {
+    "identifiant" : 7441611,
+    "link" : false,
+    "type" : "DOCUMENT",
+    "nom" : {
+      "libelleFr" : "Tarifs groupes 2020"
+    },
+    "legende" : {
+      "libelleFr" : "Petit train Haut Rhône - Tarifs groupes 2020"
+    },
+    "copyright" : {
+      "libelleFr" : "M. et Mme Thoos (gérants)"
+    },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/documents/227/134/7243491.pdf",
+      "extension" : "pdf",
+      "fileName" : "tarif groupes 2020",
+      "taille" : 487184,
+      "lastModifiedDate" : "2020-01-24T09:04:56.000+0000"
+    } ],
+    "dateLimiteDePublication" : "2020-10-31T00:00:00.000+0000",
+    "locked" : false
+  }, {
+    "identifiant" : 7441612,
+    "link" : false,
+    "type" : "DOCUMENT",
+    "nom" : {
+      "libelleFr" : "Tarifs groupes scolaires 2020"
+    },
+    "legende" : {
+      "libelleFr" : "Petit train Haut Rhône - Tarifs groupes scolaires 2020"
+    },
+    "copyright" : {
+      "libelleFr" : "M. et Mme Thoos (gérants)"
+    },
+    "traductionFichiers" : [ {
+      "locale" : "fr",
+      "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/documents/228/134/7243492.pdf",
+      "extension" : "pdf",
+      "fileName" : "tarif groupes enfants et scolaires 2020",
+      "taille" : 490199,
+      "lastModifiedDate" : "2020-01-24T09:04:56.000+0000"
+    } ],
+    "dateLimiteDePublication" : "2020-10-31T00:00:00.000+0000",
+    "locked" : false
+  } ],
+  "visites" : {
+    "languesVisite" : [ {
+      "elementReferenceType" : "Langue",
+      "id" : 1197,
+      "libelleFr" : "Français",
+      "ordre" : 13
+    } ],
+    "visitable" : false,
+    "dureeMoyenneVisiteIndividuelle" : 50,
+    "prestationsVisitesGroupees" : [ {
+      "elementReferenceType" : "PrestationVisiteGroupee",
+      "id" : 491,
+      "libelleFr" : "Visites groupes guidées sur demande",
+      "ordre" : 42
+    } ]
+  },
+  "territoires" : [ {
+    "type" : "TERRITOIRE",
+    "id" : 326,
+    "nom" : {
+      "libelleFr" : "Isle Crémieu Pays des Couleurs - Pays des Couleurs"
+    },
+    "identifier" : "sitraGEO105656",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 3028,
+    "nom" : {
+      "libelleFr" : "Isle Crémieu Pays des Couleurs"
+    },
+    "identifier" : "sitraGEO102849",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 3119,
+    "nom" : {
+      "libelleFr" : "Isère - Plaine et Collines"
+    },
+    "identifier" : "sitraGEO165756",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 3897,
+    "nom" : {
+      "libelleFr" : "Sur les bords du Rhône"
+    },
+    "identifier" : "sitraGEO240613",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 60439,
+    "nom" : {
+      "libelleFr" : "Rhône-Alpes"
+    },
+    "identifier" : "sitraGEO127256",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 67816,
+    "nom" : {
+      "libelleFr" : "ViaRhôna"
+    },
+    "identifier" : "sitraGEO661444",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 75691,
+    "nom" : {
+      "libelleFr" : "Isère"
+    },
+    "identifier" : "sitraGEO102661",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 78546,
+    "nom" : {
+      "libelleFr" : "Haut Rhône Dauphinois"
+    },
+    "identifier" : "sitraGEO697283",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 324298,
+    "nom" : {
+      "libelleFr" : "ViaRhôna 5 : Groslée- La Balme"
+    },
+    "identifier" : "sitraGEO908525",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 658199,
+    "nom" : {
+      "libelleFr" : "ViaRhôna - 5 km autour"
+    },
+    "identifier" : "SITRA2_GEO_658199",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 718400,
+    "nom" : {
+      "libelleFr" : "Viarhôna Isère 5 km"
+    },
+    "identifier" : "SITRA2_GEO_718400",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 745569,
+    "nom" : {
+      "libelleFr" : "Isle Crémieu - Pays des Couleurs - Saisie Montalieu"
+    },
+    "identifier" : "SITRA2_GEO_745569",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 908439,
+    "nom" : {
+      "libelleFr" : "Auvergne - Rhône-Alpes"
+    },
+    "identifier" : "SITRA2_GEO_908439",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 921669,
+    "nom" : {
+      "libelleFr" : "Les Balcons du Dauphiné"
+    },
+    "identifier" : "SITRA2_GEO_921669",
+    "state" : "PUBLISHED"
+  }, {
+    "type" : "TERRITOIRE",
+    "id" : 5173666,
+    "nom" : {
+      "libelleFr" : "Villes et Villages Fleuris – 1 Fleur – Auvergne Rhône-Alpes"
+    },
+    "identifier" : "SITRA2_GEO_5173666",
+    "state" : "PUBLISHED"
+  } ],
+  "informationsEquipement" : {
+    "rubrique" : {
+      "elementReferenceType" : "EquipementRubrique",
+      "id" : 2993,
+      "libelleFr" : "Autres loisirs",
+      "ordre" : 3,
+      "description" : "A utiliser pour les \"Autres équipements de Loisirs\"."
+    },
+    "activites" : [ {
+      "elementReferenceType" : "EquipementActivite",
+      "id" : 3232,
+      "libelleFr" : "Transports touristiques",
+      "ordre" : 191,
+      "description" : "Si le moyen de transport touristique ne fait pas partie de la liste ci-dessous,\r\ncocher uniquement Transports touristiques (par exemple pour les ulms montgolfières ou planeurs...\r\n\r\nAttention :\r\nLes navettes vtt, parapente ... sont à saisir en COS / services / navette (la navette n'est qu'un moyen de locomotion mais pas un but en soi)\r\nLes stages de pilotage d'hélicoptère, montgolfière, avion, ulm et planeur sont des ACT car le public est actif\r\nIdem pour le baptème de parapente, parachute ascensionnel, parachutisme, deltaplane, traîneaux à chiens ...",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 44,
+        "libelleFr" : "Transports touristiques",
+        "ordre" : 147
+      }
+    }, {
+      "elementReferenceType" : "EquipementActivite",
+      "id" : 3415,
+      "libelleFr" : "Trains touristiques",
+      "ordre" : 197,
+      "description" : "Concerne les funiculaires, les petits trains de ville, les autres trains touristiques (anciennes lignes réhabilitées, trains de montagne).",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 44,
+        "libelleFr" : "Transports touristiques",
+        "ordre" : 147
+      },
+      "parent" : {
+        "elementReferenceType" : "EquipementActivite",
+        "id" : 3232,
+        "libelleFr" : "Transports touristiques",
+        "ordre" : 191,
+        "description" : "Si le moyen de transport touristique ne fait pas partie de la liste ci-dessous,\r\ncocher uniquement Transports touristiques (par exemple pour les ulms montgolfières ou planeurs...\r\n\r\nAttention :\r\nLes navettes vtt, parapente ... sont à saisir en COS / services / navette (la navette n'est qu'un moyen de locomotion mais pas un but en soi)\r\nLes stages de pilotage d'hélicoptère, montgolfière, avion, ulm et planeur sont des ACT car le public est actif\r\nIdem pour le baptème de parapente, parachute ascensionnel, parachutisme, deltaplane, traîneaux à chiens ..."
+      }
+    } ],
+    "itineraire" : { }
+  },
+  "formatVersion" : "v002",
+  "informationsPrestataireActivites" : {
+    "prestataireActivites" : true,
+    "activitesCulturelles" : [ {
+      "elementReferenceType" : "ActiviteCulturellePrestation",
+      "id" : 1820,
+      "libelleFr" : "Découverte",
+      "ordre" : 45,
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 7,
+        "libelleFr" : "Découvertes et connaissances",
+        "ordre" : 32
+      }
+    }, {
+      "elementReferenceType" : "ActiviteCulturellePrestation",
+      "id" : 1826,
+      "libelleFr" : "Industrie",
+      "ordre" : 72,
+      "description" : "Activités économiques qui produisent des biens matériels pour la transformation et la mise en oeuvre des matières premières.\r\nExemples : industrie automobile, industrie du vêtement...",
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 10,
+        "libelleFr" : "Sciences",
+        "ordre" : 113
+      }
+    }, {
+      "elementReferenceType" : "ActiviteCulturellePrestation",
+      "id" : 1844,
+      "libelleFr" : "Technologie / Electronique",
+      "ordre" : 77,
+      "familleCritere" : {
+        "elementReferenceType" : "FamilleCritere",
+        "id" : 10,
+        "libelleFr" : "Sciences",
+        "ordre" : 113
+      }
+    } ]
+  },
+  "aspects" : [ {
+    "aspect" : "GROUPES",
+    "champsAspect" : [ "illustrations", "descriptionTarif.indicationTarif", "descriptionTarif.periodes", "descriptionTarif.tarifsEnClairAutomatique", "ouverture.periodeEnClair", "descriptionTarif.conditions.gratuitPourLesMoinsDe", "descriptionTarif.complement", "multimedias", "presentation.descriptifDetaille", "informations.moyensCommunication", "descriptionTarif.tarifsEnClair", "prestations.tailleGroupeMax", "ouverture.periodeEnClairAutomatique", "presentation.descriptifCourt", "reservation.complement", "ouverture.periodesOuvertures" ],
+    "informations" : {
+      "moyensCommunication" : [ {
+        "identifiant" : 72276483,
+        "type" : {
+          "elementReferenceType" : "MoyenCommunicationType",
+          "id" : 201,
+          "libelleFr" : "Téléphone",
+          "ordre" : 1
+        },
+        "coordonnees" : {
+          "fr" : "07 83 78 46 70"
+        },
+        "observation" : {
+          "libelleFr" : "Service réservations"
+        }
+      }, {
+        "identifiant" : 5673160,
+        "type" : {
+          "elementReferenceType" : "MoyenCommunicationType",
+          "id" : 204,
+          "libelleFr" : "Mél",
+          "ordre" : 2
+        },
+        "coordonnees" : {
+          "fr" : "haut.rhone@aol.fr"
+        }
+      }, {
+        "identifiant" : 5673161,
+        "type" : {
+          "elementReferenceType" : "MoyenCommunicationType",
+          "id" : 205,
+          "libelleFr" : "Site web (URL)",
+          "ordre" : 3
+        },
+        "coordonnees" : {
+          "fr" : "http://www.cft-hr.com"
+        }
+      } ]
+    },
+    "presentation" : {
+      "descriptifCourt" : {
+        "libelleFr" : "Voyagez dans le temps depuis la Vallée Bleue, à bord d'une véritable locomotive à vapeur pour une promenade le long du Rhône, des falaises du Bugey, à travers le bois de Corniolay. En fin de balade, visite privative du dépôt\r\nDurée de visite : 1h30 à 1h45"
+      }
+    },
+    "prestations" : {
+      "tailleGroupeMax" : 72
+    },
+    "ouverture" : {
+      "periodeEnClair" : {
+        "libelleFr" : "Du 01/05 au 31/10.\nÀ partir de 10h30, uniquement sur réservation.\n\nSous réserve de conditions météo favorables."
+      },
+      "periodeEnClairGenerationMode" : "AUTOMATIQUE",
+      "periodesOuvertures" : [ {
+        "identifiant" : 18024471,
+        "dateDebut" : "2020-05-01",
+        "dateFin" : "2020-10-31",
+        "complementHoraire" : {
+          "libelleFr" : "à partir de 10h30, uniquement sur réservation"
+        },
+        "type" : "OUVERTURE_TOUS_LES_JOURS",
+        "tousLesAns" : true,
+        "identifiantTechnique" : 18183554
+      } ]
+    },
+    "descriptionTarif" : {
+      "indicationTarif" : "PAYANT",
+      "gratuit" : false,
+      "tarifsEnClair" : {
+        "libelleFr" : "Forfait groupe adultes : 450 € (Groupe de 40 participants ou moins  supplément de 10 € par participant supplémentaire à partir du 41ème voyageur)\nForfait groupe enfants (4-12 ans) : 380 € (Groupe de 40 enfants ou moins supplément de 6 € par participant supplémentaire à partir du 41ème voyageur).\n\n\nGroupes : Gratuité pour le chauffeur du car et 1 accompagnateur\r\nScolaires : Gratuité pour le chauffeur du car et pour 1 accompagnateur pour 10 enfants."
+      },
+      "tarifsEnClairGenerationMode" : "AUTOMATIQUE",
+      "complement" : {
+        "libelleFr" : "Groupes : Gratuité pour le chauffeur du car et 1 accompagnateur\r\nScolaires : Gratuité pour le chauffeur du car et pour 1 accompagnateur pour 10 enfants"
+      },
+      "periodes" : [ {
+        "identifiant" : 10815968,
+        "dateDebut" : "2020-05-01",
+        "dateFin" : "2020-10-31",
+        "tarifs" : [ {
+          "devise" : "EUR",
+          "minimum" : 450.00,
+          "maximum" : 450.00,
+          "precisionTarif" : {
+            "libelleFr" : "Groupe de 40 participants ou moins  supplément de 10 € par participant supplémentaire à partir du 41ème voyageur"
+          },
+          "type" : {
+            "elementReferenceType" : "TarifType",
+            "id" : 1719,
+            "libelleFr" : "Forfait groupe adultes",
+            "ordre" : 312,
+            "description" : "Tarif déterminé pour l'ensemble du groupe."
+          }
+        }, {
+          "devise" : "EUR",
+          "minimum" : 380.00,
+          "maximum" : 380.00,
+          "precisionTarif" : {
+            "libelleFr" : "Groupe de 40 enfants ou moins supplément de 6 € par participant supplémentaire à partir du 41ème voyageur"
+          },
+          "type" : {
+            "elementReferenceType" : "TarifType",
+            "id" : 1720,
+            "libelleFr" : "Forfait groupe enfants",
+            "ordre" : 313,
+            "description" : "Tarif déterminé pour l'ensemble du groupe."
+          }
+        } ],
+        "type" : {
+          "elementReferenceType" : "TarifTypePeriode",
+          "id" : 1304,
+          "libelleFr" : "A l'année",
+          "ordre" : 1
+        }
+      } ],
+      "devise" : "EUR",
+      "conditions" : { }
+    },
+    "reservation" : {
+      "complement" : {
+        "libelleFr" : "Arrhes demandés pour les groupes"
+      }
+    },
+    "illustrations" : [ {
+      "identifiant" : 7558355,
+      "link" : false,
+      "type" : "IMAGE",
+      "nom" : {
+        "libelleFr" : "Train à vapeur du Haut Rhône"
+      },
+      "legende" : {
+        "libelleFr" : "Train à vapeur du Haut Rhône"
+      },
+      "copyright" : {
+        "libelleFr" : "CFHR - M. THOOS"
+      },
+      "traductionFichiers" : [ {
+        "locale" : "fr",
+        "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/248/59/7355384.jpg",
+        "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/248/59/7355384-liste.jpg",
+        "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/248/59/7355384-fiche.jpg",
+        "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/248/59/7355384-diaporama.jpg",
+        "extension" : "jpg",
+        "fileName" : "Train",
+        "taille" : 8499216,
+        "hauteur" : 2336,
+        "largeur" : 4160,
+        "lastModifiedDate" : "2020-02-20T13:54:36.000+0000"
+      } ],
+      "locked" : false
+    }, {
+      "identifiant" : 7558383,
+      "link" : false,
+      "type" : "IMAGE",
+      "nom" : {
+        "libelleFr" : "Train à vapeur du Haut Rhône"
+      },
+      "legende" : {
+        "libelleFr" : "Train à vapeur du Haut Rhône"
+      },
+      "copyright" : {
+        "libelleFr" : "Régie Vallée Bleue"
+      },
+      "traductionFichiers" : [ {
+        "locale" : "fr",
+        "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/20/60/7355412.jpg",
+        "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/20/60/7355412-liste.jpg",
+        "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/20/60/7355412-fiche.jpg",
+        "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/20/60/7355412-diaporama.jpg",
+        "extension" : "jpg",
+        "fileName" : "7245721",
+        "taille" : 2473805,
+        "hauteur" : 2592,
+        "largeur" : 3872,
+        "lastModifiedDate" : "2020-02-20T13:54:33.000+0000"
+      } ],
+      "locked" : false
+    }, {
+      "identifiant" : 7558354,
+      "link" : false,
+      "type" : "IMAGE",
+      "nom" : {
+        "libelleFr" : "Train à vapeur du Haut Rhône"
+      },
+      "legende" : {
+        "libelleFr" : "Train à vapeur du Haut Rhône"
+      },
+      "copyright" : {
+        "libelleFr" : "CFHR - M. THOOS"
+      },
+      "traductionFichiers" : [ {
+        "locale" : "fr",
+        "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/247/59/7355383.jpg",
+        "urlListe" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/247/59/7355383-liste.jpg",
+        "urlFiche" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/247/59/7355383-fiche.jpg",
+        "urlDiaporama" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/images/247/59/7355383-diaporama.jpg",
+        "extension" : "jpg",
+        "fileName" : "l'intérieur d'une voiture",
+        "taille" : 3816504,
+        "hauteur" : 2592,
+        "largeur" : 3872,
+        "lastModifiedDate" : "2020-02-20T13:54:30.000+0000"
+      } ],
+      "locked" : false
+    } ],
+    "multimedias" : [ {
+      "identifiant" : 7440828,
+      "link" : false,
+      "type" : "DOCUMENT",
+      "nom" : {
+        "libelleFr" : "Tarifs Groupes 2020"
+      },
+      "legende" : {
+        "libelleFr" : "Train à vapeur du Haut Rhône"
+      },
+      "copyright" : {
+        "libelleFr" : "M. et Mme THOOS (gérants)"
+      },
+      "traductionFichiers" : [ {
+        "locale" : "fr",
+        "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/documents/213/131/7242709.pdf",
+        "extension" : "pdf",
+        "fileName" : "tarif groupes 2020",
+        "taille" : 487184,
+        "lastModifiedDate" : "2020-01-24T08:38:55.000+0000"
+      } ],
+      "dateLimiteDePublication" : "2020-10-31T00:00:00.000+0000",
+      "locked" : false
+    }, {
+      "identifiant" : 7440829,
+      "link" : false,
+      "type" : "DOCUMENT",
+      "nom" : {
+        "libelleFr" : "Tarifs Groupes Scolaires 2020"
+      },
+      "legende" : {
+        "libelleFr" : "Train à vapeur du Haut Rhône"
+      },
+      "copyright" : {
+        "libelleFr" : "M. et Mme THOOS (gérants)"
+      },
+      "traductionFichiers" : [ {
+        "locale" : "fr",
+        "url" : "http://static.apidae-tourisme.com/filestore/objets-touristiques/documents/214/131/7242710.pdf",
+        "extension" : "pdf",
+        "fileName" : "tarif groupes enfants et scolaires 2020",
+        "taille" : 490199,
+        "lastModifiedDate" : "2020-01-24T08:38:55.000+0000"
+      } ],
+      "dateLimiteDePublication" : "2020-10-31T00:00:00.000+0000",
+      "locked" : false
+    } ]
+  } ]
+}]

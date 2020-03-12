@@ -393,10 +393,12 @@
   },
   "aspects" : [ {
     "aspect" : "HIVER",
-    "champsAspect" : [ "illustrations", "presentation.descriptifCourt", "informationsPrestataireActivites.activitesSportives", "presentation.descriptifDetaille" ],
+    "champsAspect" : [ "illustrations", "multimedias", "presentation.descriptifCourt", "informationsPrestataireActivites.activitesSportives", "presentation.descriptifDetaille" ],
     "presentation" : {
       "descriptifCourt" : {
-        "libelleFr" : "short desc winter fr"
+        "libelleFr" : "short desc winter fr",
+        "libelleEn" : "short desc standard en",
+        "libelleDe" : "short desc standard de"
       },
       "descriptifDetaille" : {
         "libelleFr" : "long desc winter fr"
@@ -475,6 +477,7 @@
       } ],
       "locked" : false
     } ],
+    "multimedias": [],
     "informationsPrestataireActivites" : {
       "prestataireActivites" : false,
       "activitesSportives" : [ {

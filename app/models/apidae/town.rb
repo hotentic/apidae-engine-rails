@@ -2,7 +2,7 @@ module Apidae
   class Town < ActiveRecord::Base
     def self.import(towns_json)
       towns_hashes = JSON.parse(towns_json, symbolize_names: true)
-      if Time.current > (maximum(:updated_at) + 1.day)
+      if count == 0 || Time.current > (maximum(:updated_at) + 1.day)
         countries = Hash[Reference.where(apidae_type: "Pays").map {|ref| [ref.apidae_id, ref.label(:fr)]}]
         towns_hashes.each do |town_data|
           town = Town.find_or_initialize_by(apidae_id: town_data[:id])

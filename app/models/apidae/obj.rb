@@ -23,20 +23,29 @@ module Apidae
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :booking_data, :booking_desc, :booking_entities
     store_accessor :tags_data, :promo, :internal, :linked
+    store_accessor :version_data, :versioned_fields
 
     LOCALIZED_FIELDS.each do |f|
       alias_method :"#{f}_hash", :"#{f}"
       alias_method :"#{f}_hash=", :"#{f}="
 
       define_method "#{f}=" do |val|
-        ref_obj = @obj_version == DEFAULT_VERSION ? self : in_version(@obj_version)
-        field_hash = ref_obj.send(:"#{f}_hash")
+        ref_obj = (@obj_version == DEFAULT_VERSION || @obj_version.nil?) ? self : in_version(@obj_version)
+        field_hash = ref_obj.send(:"#{f}_hash") || {}
         ref_obj.send(:"#{f}_hash=", field_hash.merge(@locale => val))
       end
 
       define_method f do
-        ref_obj = @obj_version == DEFAULT_VERSION ? self : in_version(@obj_version)
-        field_hash = ref_obj.send(:"#{f}_hash") || {}
+        field_hash = self.send(:"#{f}_hash") || {}
+        unless @obj_version == DEFAULT_VERSION
+          versioned_obj = in_version(@obj_version)
+          versioned_hash = versioned_obj ? (versioned_obj.send(:"#{f}_hash") || {}) : {}
+          if versioned_obj.versioned_fields.include?(f.to_s)
+            field_hash = versioned_hash
+          else
+            field_hash.deep_merge!(versioned_hash)
+          end
+        end
         field_hash[@locale] || field_hash[DEFAULT_LOCALE]
       end
     end
@@ -116,7 +125,6 @@ module Apidae
     end
 
     def self.update_object(apidae_obj, object_data, locales, versions)
-      result = true
       populate_fields(apidae_obj, object_data, locales)
       apidae_obj.save!
 
@@ -127,18 +135,19 @@ module Apidae
             version_data[:type] = apidae_obj.apidae_type
             version_obj = apidae_obj.in_version(version) || Obj.new(apidae_id: apidae_obj.apidae_id,
                                                                     root_obj_id: apidae_obj.id, version: version)
+            version_obj.versioned_fields = parse_versioned_fields(version_data)
             populate_fields(version_obj, version_data, locales)
             version_obj.save!
           end
         end
       end
-      result
+      apidae_obj
     end
 
     def self.populate_fields(apidae_obj, object_data, locales)
       type_fields = TYPES_DATA[object_data[:type]]
-      apidae_obj.last_update = DateTime.parse(object_data[:gestion][:dateModification])
-      apidae_obj.owner_data = parse_owner_data(object_data[:gestion][:membreProprietaire])
+      apidae_obj.last_update = DateTime.parse(object_data[:gestion][:dateModification]) unless object_data[:gestion].blank?
+      apidae_obj.owner_data = parse_owner_data(object_data[:gestion][:membreProprietaire]) unless object_data[:gestion].blank?
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
       apidae_obj.title_data = parse_title(object_data, *locales)
@@ -160,23 +169,55 @@ module Apidae
       apidae_obj.meta_data = object_data[:metadonnees]
     end
 
-    def self.merge_fields(apidae_obj, aspect_obj)
-      apidae_obj.description_data.merge!(non_empty(aspect_obj.description_data)) if aspect_obj.description_data
-      apidae_obj.contact.merge!(non_empty(aspect_obj.contact)) if aspect_obj.contact
-      apidae_obj.location_data.merge!(non_empty(aspect_obj.location_data)) if aspect_obj.location_data
-      apidae_obj.openings_data.merge!(non_empty(aspect_obj.openings_data)) if aspect_obj.openings_data
-      apidae_obj.rates_data.merge!(non_empty(aspect_obj.rates_data)) if aspect_obj.rates_data
-      apidae_obj.booking_data.merge!(non_empty(aspect_obj.booking_data)) if aspect_obj.booking_data
-      apidae_obj.type_data.merge!(non_empty(aspect_obj.type_data)) if aspect_obj.type_data
-      apidae_obj.pictures_data.merge!(non_empty(aspect_obj.pictures_data)) if aspect_obj.pictures_data
-      apidae_obj.attachments_data.merge!(non_empty(aspect_obj.attachments_data)) if aspect_obj.attachments_data
-      apidae_obj.service_data.merge!(non_empty(aspect_obj.service_data)) if aspect_obj.service_data
-      apidae_obj.tags_data.merge!(non_empty(aspect_obj.tags_data)) if aspect_obj.tags_data
-      apidae_obj.meta_data.merge!(non_empty(aspect_obj.meta_data)) if aspect_obj.meta_data
-    end
-
     def self.non_empty(data_hash)
       data_hash.keep_if {|k, v| !v.blank?}
+    end
+
+    def self.parse_versioned_fields(data_hash)
+      version_fields = data_hash[:champsAspect] || []
+      matched_fields = []
+      version_fields.each do |f|
+        case f
+        when 'nom'
+          matched_fields << 'title'
+        when 'presentation.descriptifCourt'
+          matched_fields << 'short_desc'
+        when 'presentation.descriptifDetaille'
+          matched_fields << 'long_desc'
+        when 'illustrations'
+          matched_fields << 'pictures'
+        when 'multimedias'
+          matched_fields << 'attachments'
+        when 'informations.moyensCommunication'
+          matched_fields << 'contact'
+        when 'descriptifsThematises'
+          matched_fields << 'theme_desc'
+        when 'ouverture.periodesOuvertures', 'ouverture.periodeEnClair'
+          matched_fields << 'openings_desc'
+          matched_fields << 'openings'
+        when 'ouverture.periodeEnClairAutomatique'
+          matched_fields << 'openings_desc_mode'
+        when 'descriptionTarif.tarifsEnClair', 'descriptionTarif.periodes'
+          matched_fields << 'rates_desc'
+          matched_fields << 'rates'
+        when 'descriptionTarif.tarifsEnClairAutomatique'
+          matched_fields << 'rates_desc_mode'
+        when 'prestations.equipements'
+          matched_fields << 'equipments'
+        when 'prestations.activites'
+          matched_fields << 'activities'
+        when 'prestations.services'
+          matched_fields << 'services'
+        when 'localisation.environnements'
+          matched_fields << 'environments'
+        when 'prestations.complementAccueil'
+          matched_fields << 'extra'
+        when 'localisation.geolocalisation.complement'
+          matched_fields << 'access'
+        else
+        end
+      end
+      matched_fields.uniq
     end
 
     def self.parse_title(data_hash, *locales)

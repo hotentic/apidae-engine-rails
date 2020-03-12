@@ -93,18 +93,35 @@ module Apidae
         res = api_object(apidae_obj_id)
         if res[:results] && res[:results].length == 1
           obj_data = res[:results].first.deep_symbolize_keys
-          obj = Obj.find_by_apidae_id(apidae_obj_id)
-          if obj
-            refreshed = Obj.update_object(obj, obj_data, apidae_project.locales, apidae_project.versions)
-            if refreshed && Rails.application.config.respond_to?(:apidae_obj_refresh_callback)
-              Rails.application.config.apidae_obj_refresh_callback.call(apidae_obj_id)
-            end
-            refreshed
-          else
-            Obj.add_object(obj_data, apidae_project.locales, apidae_project.versions)
+          add_or_refresh(obj_data)
+        end
+      end
+    end
+
+    def add_or_refresh_objs(fields = ["@all"])
+      if apidae_project
+        res = api_objects({fields: fields})
+        if res[:results] && res[:results].length > 0
+          res[:results].each do |result|
+            obj_data = result.deep_symbolize_keys
+            add_or_refresh(obj_data)
           end
         end
       end
+    end
+
+    def add_or_refresh(obj_data)
+      obj = Obj.find_by_apidae_id(obj_data[:id])
+      if obj
+        obj = Obj.update_object(obj, obj_data, apidae_project.locales, apidae_project.versions)
+      else
+        obj = Obj.add_object(obj_data, apidae_project.locales, apidae_project.versions)
+        SelectionObject.create(apidae_selection_id: id, apidae_object_id: added_obj.id)
+      end
+      if Rails.application.config.respond_to?(:apidae_obj_refresh_callback)
+        Rails.application.config.apidae_obj_refresh_callback.call(obj.apidae_id)
+      end
+      obj
     end
 
     def as_text

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_27_213602) do
+ActiveRecord::Schema.define(version: 2020_03_12_150904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,13 @@ ActiveRecord::Schema.define(version: 2019_01_27_213602) do
     t.jsonb "booking_data"
     t.string "version"
     t.integer "root_obj_id"
+    t.datetime "last_update"
+    t.jsonb "owner_data"
+    t.jsonb "version_data"
+    t.index ["apidae_id"], name: "apidae_objs_apidae_id"
+    t.index ["root_obj_id", "version"], name: "index_apidae_objs_on_root_obj_id_and_version", unique: true
+    t.index ["root_obj_id"], name: "apidae_objs_root_obj_id"
+    t.index ["town_insee_code"], name: "index_apidae_objs_on_town_insee_code"
   end
 
   create_table "apidae_projects", force: :cascade do |t|
@@ -86,6 +93,7 @@ ActiveRecord::Schema.define(version: 2019_01_27_213602) do
     t.datetime "updated_at", null: false
     t.jsonb "meta_data"
     t.index ["apidae_id"], name: "index_apidae_references_on_apidae_id"
+    t.index ["apidae_type"], name: "index_apidae_references_on_apidae_type"
   end
 
   create_table "apidae_selection_objects", force: :cascade do |t|
@@ -112,6 +120,7 @@ ActiveRecord::Schema.define(version: 2019_01_27_213602) do
     t.string "postal_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
     t.index ["insee_code"], name: "index_apidae_towns_on_insee_code"
   end
 
