@@ -39,11 +39,13 @@ module Apidae
         field_hash = self.send(:"#{f}_hash") || {}
         unless @obj_version == DEFAULT_VERSION
           versioned_obj = in_version(@obj_version)
-          versioned_hash = versioned_obj ? (versioned_obj.send(:"#{f}_hash") || {}) : {}
-          if versioned_obj.versioned_fields.include?(f.to_s)
-            field_hash = versioned_hash
-          else
-            field_hash.deep_merge!(versioned_hash)
+          if versioned_obj
+            versioned_hash = versioned_obj.send(:"#{f}_hash") || {}
+            if versioned_obj.versioned_fields.include?(f.to_s)
+              field_hash = versioned_hash
+            else
+              field_hash.deep_merge!(versioned_hash)
+            end
           end
         end
         field_hash[@locale] || field_hash[DEFAULT_LOCALE]
