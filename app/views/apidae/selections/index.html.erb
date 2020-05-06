@@ -3,8 +3,8 @@
       <%= link_to 'Retour', root_path, class: styles[:back] %>
       <h1 class="<%= styles[:h1] %>">Apidae - Sélections</h1>
     </div>
-    <div id="apidae_dashboard" class="<%= styles[:wrapper] %>">
-      <div id="apidae_imports_panel" class="<%= styles[:body] %>">
+    <div class="<%= styles[:wrapper] %>">
+      <div class="<%= styles[:body] %>">
         <table id="apidae_selections" class="<%= styles[:table] %>">
           <thead class="<%= styles[:table_head] %>">
           <tr>
@@ -28,7 +28,7 @@
           <% end %>
           <% if @selections.empty? %>
             <tr>
-              <td colspan="4">Aucune sélection importée pour le moment.</td>
+              <td colspan="5">Aucune sélection importée pour le moment.</td>
             </tr>
           <% end %>
           </tbody>

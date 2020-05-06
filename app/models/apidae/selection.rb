@@ -77,7 +77,7 @@ module Apidae
       res = $apidae_cache.read(key)
       unless res
         query_args = build_args(OBJECTS_ENDPOINT, opts.merge({selection_ids: [apidae_id]}))
-        res = query_objects_api(query_args, true)
+        res = query_api(query_args, true, false)
         $apidae_cache.write(key, res)
       end
       res
@@ -85,7 +85,7 @@ module Apidae
 
     def api_object(apidae_obj_id)
       query_args = build_args(OBJECTS_ENDPOINT, {obj_ids: [apidae_obj_id], fields: ["@all"]})
-      query_objects_api(query_args, true)
+      query_api(query_args, true, false)
     end
 
     def add_or_refresh_obj(apidae_obj_id)
@@ -130,27 +130,32 @@ module Apidae
 
     private
 
-    def query_api(query_args, all_results = false)
+    def query_api(query_args, all_results = false, only_ids = true)
       query_result = {}
 
       if all_results
         loops = 0
         query_args[:first] = 0
         query_args[:count] = MAX_COUNT
+        query_args[:locales] ||= apidae_project && !apidae_project.locales.blank? ? apidae_project.locales : [DEFAULT_LOCALE]
         response = JSON.parse get_response(query_args), symbolize_names: false
         total = response['numFound']
-        query_result[:results] = response['objetTouristiqueIds'] || {}
+        query_result[:results] = (only_ids ? response['objetTouristiqueIds'] : response['objetsTouristiques']) || {}
 
         while total > results_count(query_result) && loops < MAX_LOOPS
           loops += 1
           query_args[:first] += MAX_COUNT
           response = JSON.parse get_response(query_args), symbolize_names: false
-          merge_results(response, query_result)
+          if only_ids
+            merge_results(response, query_result)
+          else
+            merge_objects_results(response, query_result)
+          end
         end
         query_result[:count] = total
       else
         response = JSON.parse get_response(query_args), symbolize_names: false
-        query_result[:results] = response['objetTouristiqueIds'] || {}
+        query_result[:results] = (only_ids ? response['objetTouristiqueIds'] : response['objetsTouristiques']) || {}
         query_result[:count] = response['numFound']
       end
       query_result

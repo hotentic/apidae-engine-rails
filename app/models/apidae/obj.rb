@@ -255,7 +255,8 @@ module Apidae
                 name: localized_value(pic, :nom, locale),
                 url: pic[:traductionFichiers][0][:url].gsub('http:', 'https:'),
                 description: localized_value(pic, :legende, locale),
-                credits: localized_value(pic, :copyright, locale)
+                credits: localized_value(pic, :copyright, locale),
+                expiration_date: pic[:dateLimiteDePublication]
             }
           end
         end

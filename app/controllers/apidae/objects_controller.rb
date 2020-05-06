@@ -3,7 +3,7 @@ require_dependency "apidae/application_controller"
 module Apidae
   class ObjectsController < ApplicationController
     before_action :set_object, only: [:show, :edit, :update, :destroy, :refresh]
-    skip_before_action Rails.application.config.apidae_auth, only: [:index, :show]
+    skip_before_action Rails.application.config.apidae_auth, only: [:index, :show], :if => Proc.new {|c| c.request.format.json?}
 
     def index
       session[:referrer] = request.referrer
