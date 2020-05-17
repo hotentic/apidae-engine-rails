@@ -109,7 +109,11 @@ module Apidae
     end
 
     def in_version(v)
-      versions.where(version: v).first
+      @cached_versions ||= {}
+      if @cached_versions[v].nil?
+        @cached_versions[v] = versions.where(version: v).first
+      end
+      @cached_versions[v]
     end
 
     def in_locale(l)
@@ -339,6 +343,7 @@ module Apidae
       end
     end
 
+    # Note : use internal format for openings storage (ideally Apihours one, to merge data from both sources)
     def self.parse_openings(openings_hash, *locales)
       if openings_hash && openings_hash[:periodeEnClair]
         {
@@ -452,7 +457,7 @@ module Apidae
 
     def self.build_rate(rate_period)
       {
-          id: rate_period[:identifiant], from: rate_period[:dateDebut], to: rate_period[:dateFin],
+          id: rate_period[:identifiant], start_date: rate_period[:dateDebut], end_date: rate_period[:dateFin],
           values: rate_period[:tarifs].blank? ? [] : rate_period[:tarifs].map {|t| {min: t[:minimum], max: t[:maximum], type: t[:type][:id], details: node_value(t, :precisionTarif)}}
       }
     end
