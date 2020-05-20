@@ -111,6 +111,19 @@ module Apidae
       assert_nil root_obj.long_desc
     end
 
+    test "non-localized versioned prestations fields override" do
+      objects_json = File.read('test/data/equ_groups.json')
+      FileImport.add_or_update_objects(objects_json, @result, [], [GROUPS_VERSION])
+      assert_equal 1, Obj.count
+      assert_equal 2, Obj.unscoped.count
+      root_obj = Obj.find_by_apidae_id(185789)
+      assert_equal 64, root_obj.capacity['group_max']
+      assert_equal 6, root_obj.equipments.length
+      root_obj.obj_version = GROUPS_VERSION
+      assert_equal 72, root_obj.capacity['group_max']
+      assert_equal 1, root_obj.equipments.length
+    end
+
     test "new selection insertion" do
       Obj.create(apidae_id: 504, title: 'Société des contrebassistes aixois')
       objects_json = File.read('test/data/selections.json')

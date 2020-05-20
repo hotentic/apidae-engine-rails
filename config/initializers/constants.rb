@@ -26,4 +26,6 @@ module Apidae
 
   LOCALIZED_FIELDS = [:title, :short_desc, :long_desc, :pictures, :attachments, :openings_desc, :rates_desc,
                       :includes, :excludes, :extra, :booking_desc]
+  ALL_FIELDS = LOCALIZED_FIELDS + [:theme_desc, :private_desc, :capacity, :telephone, :email, :website, :services,
+                                   :equipments, :comfort, :activities, :promo, :internal, :linked]
 end

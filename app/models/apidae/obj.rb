@@ -25,30 +25,38 @@ module Apidae
     store_accessor :tags_data, :promo, :internal, :linked
     store_accessor :version_data, :versioned_fields
 
-    LOCALIZED_FIELDS.each do |f|
-      alias_method :"#{f}_hash", :"#{f}"
-      alias_method :"#{f}_hash=", :"#{f}="
+    ALL_FIELDS.each do |f|
+      alias_method :"get_#{f}", :"#{f}"
+      alias_method :"set_#{f}", :"#{f}="
 
-      define_method "#{f}=" do |val|
-        ref_obj = (@obj_version == DEFAULT_VERSION || @obj_version.nil?) ? self : in_version(@obj_version)
-        field_hash = ref_obj.send(:"#{f}_hash") || {}
-        ref_obj.send(:"#{f}_hash=", field_hash.merge(@locale => val))
+      if LOCALIZED_FIELDS.include?(f)
+        define_method "#{f}=" do |val|
+          ref_obj = (@obj_version == DEFAULT_VERSION || @obj_version.nil?) ? self : in_version(@obj_version)
+          current_val = ref_obj.send(:"get_#{f}") || {}
+          ref_obj.send(:"set_#{f}", current_val.merge(@locale => val))
+        end
+      else
+        define_method "#{f}=" do |val|
+          ref_obj = (@obj_version == DEFAULT_VERSION || @obj_version.nil?) ? self : in_version(@obj_version)
+          ref_obj.send(:"set_#{f}", val)
+        end
       end
 
       define_method f do
-        field_hash = self.send(:"#{f}_hash") || {}
+        default_value = LOCALIZED_FIELDS.include?(f) ? {} : nil
+        field_val = self.send(:"get_#{f}") || default_value
         unless @obj_version == DEFAULT_VERSION
           versioned_obj = in_version(@obj_version)
           if versioned_obj
-            versioned_hash = versioned_obj.send(:"#{f}_hash") || {}
+            versioned_value = versioned_obj.send(:"get_#{f}") || default_value
             if versioned_obj.versioned_fields.include?(f.to_s)
-              field_hash = versioned_hash
-            else
-              field_hash.deep_merge!(versioned_hash)
+              field_val = versioned_value
+            elsif field_val.respond_to?('deep_merge!')
+              field_val.deep_merge!(versioned_value)
             end
           end
         end
-        field_hash[@locale] || field_hash[DEFAULT_LOCALE]
+        LOCALIZED_FIELDS.include?(f) ? (field_val[@locale] || field_val[DEFAULT_LOCALE]) : field_val
       end
     end
 
