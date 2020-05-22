@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_12_150904) do
+ActiveRecord::Schema.define(version: 2020_05_22_124205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2020_03_12_150904) do
     t.integer "apidae_id"
     t.string "apidae_type"
     t.string "apidae_subtype"
-    t.jsonb "contact"
+    t.jsonb "contact_data"
     t.jsonb "type_data"
     t.jsonb "openings_data"
     t.datetime "created_at", null: false

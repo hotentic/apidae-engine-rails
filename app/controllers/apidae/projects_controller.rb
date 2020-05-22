@@ -5,7 +5,11 @@ module Apidae
     before_action :set_project, only: [:edit, :update, :destroy]
 
     def index
-      @projects = Project.all
+      if user_is_admin?
+        @projects = Project.all
+      else
+        @projects = Project.where(apidae_id: apidae_user.apidae_projects_ids)
+      end
     end
 
     def new

@@ -5,7 +5,12 @@ module Apidae
     before_action :set_selection, only: [:show, :edit, :update, :destroy, :refresh]
 
     def index
-      @selections = Selection.all
+      if user_is_admin?
+        @selections = Selection.all
+      else
+        projects_ids = Project.where(apidae_id: apidae_user.apidae_projects_ids).map {|p| p.id}
+        @selections = Selection.where(apidae_project_id: projects_ids)
+      end
     end
 
     def show

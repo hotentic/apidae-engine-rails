@@ -20,5 +20,5 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 5.2"
   s.add_dependency "pg", "~> 1.1"
   s.add_dependency "rubyzip", "~> 1.0"
-  s.add_dependency "jbuilder"
+  s.add_dependency 'jbuilder', "~> 0"
 end

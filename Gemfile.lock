@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apidae (0.11.0)
+    apidae (1.0.0)
       jbuilder
       pg (~> 1.1)
       rails (~> 5.2)

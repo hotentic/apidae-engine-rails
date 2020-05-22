@@ -10,8 +10,13 @@ module Apidae
       if params[:selection_id]
         @selection = Selection.find(params[:selection_id])
         @objects = @selection.objects.select(:id, :apidae_id, :title_data, :apidae_type, :updated_at)
-      else
+      elsif user_is_admin?
         @objects = Obj.all.select(:id, :apidae_id, :title_data, :apidae_type, :updated_at)
+      else
+        projects_ids = Project.where(apidae_id: apidae_user.apidae_projects_ids).map {|p| p.id}
+        @objects = Obj.joins(:selections).where("apidae_selections.apidae_project_id IN (?)", projects_ids)
+                     .select("apidae_objs.id, apidae_objs.apidae_id, apidae_objs.title_data, apidae_objs.apidae_type, apidae_objs.updated_at")
+                     .distinct("apidae_objs.apidae_id").to_a
       end
     end
 
