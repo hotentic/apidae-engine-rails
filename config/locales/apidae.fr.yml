@@ -40,3 +40,20 @@ fr:
       TOURISME_AFFAIRES: Affaires
       GROUPES: Groupes
       PRESTATAIRE_ACTIVITES: Prestataire d'activités
+    types:
+      ACTIVITE: Activités
+      COMMERCE_ET_SERVICE: Commerces et services
+      DEGUSTATION: Producteurs
+      DOMAINE_SKIABLE: Domaines skiables
+      EQUIPEMENT: Équipements
+      FETE_ET_MANIFESTATION: Fêtes et manifestations
+      HEBERGEMENT_COLLECTIF: Hébergements collectifs
+      HEBERGEMENT_LOCATIF: Hébergements locatifs
+      HOTELLERIE: Hôtellerie
+      HOTELLERIE_PLEIN_AIR: Hôtellerie de plein air
+      PATRIMOINE_CULTUREL: Patrimoine culturel
+      PATRIMOINE_NATUREL: Patrimoine naturel
+      RESTAURATION: Restauration
+      SEJOUR_PACKAGE: Séjour et produits packagés
+      STRUCTURE: Entité juridique
+      TERRITOIRE: Territoire

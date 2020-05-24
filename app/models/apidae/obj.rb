@@ -14,9 +14,9 @@ module Apidae
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
-                   :products, :audience, :animals, :extra, :duration, :certifications, :business
+                   :products, :audience, :animals, :animals_desc, :extra, :duration, :certifications, :business
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
-    store_accessor :contact_data, :telephone, :email, :website, :contacts
+    store_accessor :contact_data, :telephone, :email, :website, :google, :facebook, :twitter, :yelp, :trip_advisor, :contacts
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
     store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods
     store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes
@@ -120,6 +120,18 @@ module Apidae
     def in_locale(l)
       @locale = l
       self
+    end
+
+    def dig(*keys)
+      root_key, *nested_keys = keys
+      root_val = self.send(root_key)
+      if root_val.blank?
+        nested_keys.blank? ? root_val : nil
+      elsif root_val.respond_to?(:dig)
+        root_val.dig(*nested_keys)
+      else
+        raise ArgumentError.new('Cannot call dig with these args')
+      end
     end
 
     def self.default_scope

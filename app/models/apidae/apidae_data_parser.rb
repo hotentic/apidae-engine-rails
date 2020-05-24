@@ -1,8 +1,14 @@
 module Apidae
   class ApidaeDataParser
     PHONE = 201
+    ALT_PHONE = 206
     EMAIL = 204
     WEBSITE = 205
+    GOOGLE = 3789
+    FACEBOOK = 207
+    TWITTER = 3755
+    YELP = 4007
+    TRIP_ADVISOR = 4000
 
     MODE_AUTO = 'auto'
     MODE_MANUAL = 'manual'
@@ -142,7 +148,7 @@ module Apidae
         contact_entries = information_hash[:moyensCommunication] || []
         contact_entries.each do |c|
           case c[:type][:id]
-          when PHONE
+          when PHONE, ALT_PHONE
             contact_details[:telephone] ||= []
             contact_details[:telephone] << c[:coordonnees][:fr]
           when EMAIL
@@ -151,6 +157,21 @@ module Apidae
           when WEBSITE
             contact_details[:website] ||= []
             contact_details[:website] << c[:coordonnees][:fr]
+          when GOOGLE
+            contact_details[:google] ||= []
+            contact_details[:google] << c[:coordonnees][:fr]
+          when FACEBOOK
+            contact_details[:facebook] ||= []
+            contact_details[:facebook] << c[:coordonnees][:fr]
+          when TWITTER
+            contact_details[:twitter] ||= []
+            contact_details[:twitter] << c[:coordonnees][:fr]
+          when YELP
+            contact_details[:yelp] ||= []
+            contact_details[:yelp] << c[:coordonnees][:fr]
+          when TRIP_ADVISOR
+            contact_details[:trip_advisor] ||= []
+            contact_details[:trip_advisor] << c[:coordonnees][:fr]
           else
           end
         end
@@ -229,7 +250,8 @@ module Apidae
           track: apidae_obj.apidae_type == Obj::EQU ? data_hash[:itineraire] : nil,
           products: lists_ids(data_hash[:typesProduit], data_hash[:aopAocIgps], data_hash[:specialites]),
           audience: lists_ids(prestations_hash[:typesClientele]),
-          animals: prestations_hash[:animauxAcceptes] == 'ACCEPTES',
+          animals: {allowed: prestations_hash[:animauxAcceptes] == 'ACCEPTES', desc: node_value(prestations_hash, :descriptifAnimauxAcceptes, *locales),
+                    fee: prestations_hash[:animauxAcceptesSupplement] ==	'AVEC_SUPPLEMENT'},
           extra: apidae_obj.apidae_type == Obj::SPA ? node_value(data_hash, :formuleHebergement, *locales) : node_value(prestations_hash, :complementAccueil, *locales),
           duration: apidae_obj.apidae_type == Obj::SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance],
           certifications: data_hash[:agrements].blank? ? [] : data_hash[:agrements].map {|a| {id: a[:type][:id], identifier: a[:numero]}},
