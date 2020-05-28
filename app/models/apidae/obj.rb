@@ -18,7 +18,7 @@ module Apidae
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
     store_accessor :contact_data, :telephone, :email, :website, :google, :facebook, :twitter, :yelp, :trip_advisor, :contacts
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
-    store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods
+    store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra
     store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :booking_data, :booking_desc, :booking_entities

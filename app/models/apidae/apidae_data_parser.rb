@@ -210,7 +210,8 @@ module Apidae
             openings_desc: node_value(openings_hash, :periodeEnClair, *locales),
             openings_desc_mode: openings_hash[:periodeEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             openings: build_openings(openings_hash, *locales),
-            time_periods: lists_ids(openings_hash[:indicationsPeriode])
+            time_periods: lists_ids(openings_hash[:indicationsPeriode]),
+            openings_extra: lists_ids(openings_hash[:ouverturesComplementaires])
         }
       end
     end

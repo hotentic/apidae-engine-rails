@@ -5,6 +5,10 @@ module Apidae
 
     store_accessor :meta_data, :category, :parent
 
+    def self.default_scope
+      where(is_active: true)
+    end
+
     def self.import(refs_json)
     locales = Rails.application.config.respond_to?(:apidae_locales) ? Rails.application.config.apidae_locales : [DEFAULT_LOCALE]
       locales_map = Hash[locales.map {|loc| ["libelle#{loc.camelize.gsub('-', '')}".to_sym, loc]}]
@@ -15,6 +19,7 @@ module Apidae
           ref.label_data = ref_data.slice(*locales_map.keys).transform_keys {|k| locales_map[k]}
           ref.parent = ref_data[:parent][:id] if ref_data[:parent]
           ref.category = ref_data[:familleCritere] ? ref_data[:familleCritere][:id] : (ref_data[:typeLabel] ? ref_data[:typeLabel][:id] : nil)
+          ref.is_active = ref_data[:actif]
           ref.save!
         end
       end
