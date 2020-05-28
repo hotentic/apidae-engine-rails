@@ -6,6 +6,7 @@ module Apidae
   class ImportController < ApplicationController
     skip_before_action :verify_authenticity_token
     skip_before_action Rails.application.config.apidae_auth
+    skip_before_action :check_user_data!
 
     # Callback endpoint for Apidae exports
     #
