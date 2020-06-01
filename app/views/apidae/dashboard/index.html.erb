@@ -3,13 +3,20 @@
       <%= link_to pluralize(@projects, 'projet', 'projets'), apidae.projects_path, class: styles[:projects] %>
       <%= link_to pluralize(@selections, 'sélection', 'sélections'), apidae.selections_path, class: styles[:selections] %>
       <%= link_to pluralize(@objects, 'objet touristique', 'objets touristiques'), apidae.objects_path, class: styles[:objects] %>
-      <%= link_to (pluralize(@references, 'élément', 'éléments') + ' de référence'), apidae.references_path, class: styles[:references] %>
       <%= link_to 'Retour', :back, class: styles[:back] %>
       <h1 class="<%= styles[:h1] %>">Apidae</h1>
     </div>
     <div id="apidae_dashboard" class="<%= styles[:wrapper] %>">
       <div id="apidae_imports_panel" class="<%= styles[:body] %>">
+        <%= link_to 'Importer un fichier', apidae.import_new_path, class: styles[:projects] %>
         <h2 class="<%= styles[:h2] %>">Derniers imports</h2>
+        <p>
+          Les imports provenant de vos projets Apidae apparaîtront ci-dessous. Pour que les données soient importées correctement,
+          vos projets doivent être configurés pour exporter les données au format <strong>JSON V2</strong>, en
+          <strong>groupant les objets exportés</strong>.<br/>
+          Si vous souhaitez que chaque export soit récupéré automatiquement, veillez à renseigner le paramètre
+          <strong>Url de notification</strong> avec la valeur <strong><%= apidae.import_callback_url %></strong>.
+        </p>
         <table id="apidae_imports" class="<%= styles[:table] %>">
           <thead class="<%= styles[:table_head] %>">
           <tr>

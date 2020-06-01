@@ -1,0 +1,29 @@
+<%= form_for(@export, url: apidae.import_create_path, method: :post, html: {class: styles[:form]}) do |f| %>
+  <% if @export.errors.any? %>
+    <div id="apidae_form_errors">
+      <ul>
+        <% @export.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <p>
+    Pour que les données soient importées correctement,
+    vos projets doivent être configurés pour exporter les données au format <strong>JSON V2</strong>, en
+    <strong>groupant les objets exportés</strong>.
+  </p>
+
+  <div class="<%= styles[:form_field] %>">
+    <div><%= f.label :project_id %></div>
+    <div><%= f.text_field :project_id, placeholder: "Ex: 1234" %></div>
+  </div>
+  <div class="<%= styles[:form_field] %>">
+    <div><%= f.label :file_url %></div>
+    <div><%= f.text_field :file_url, placeholder: "Ex: http://export.apidae-tourisme.com/exports/1234_20200101-5678_ABCdef.zip" %></div>
+  </div>
+  <%= f.hidden_field :status %>
+  <div class="<%= styles[:form_actions] %>">
+    <%= f.submit 'Valider' %> | <%= link_to 'Retour', :back, class: styles[:back] %>
+  </div>
+<% end %>

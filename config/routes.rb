@@ -15,6 +15,8 @@ Apidae::Engine.routes.draw do
 
   match 'import/callback', via: :post, to: 'import#callback'
   match 'import/run', via: :post, to: 'import#run'
+  match 'import/new', via: :get, to: 'import#new'
+  match 'import/create', via: :post, to: 'import#create'
 
   root to: 'dashboard#index'
 end

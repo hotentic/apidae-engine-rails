@@ -16,7 +16,6 @@ module Apidae
         @objects = SelectionObject.where(apidae_selection_id: selections.map {|s| s.id}.uniq).map {|so| so.apidae_object_id}.uniq.count
         @last_imports = FileImport.where(apidae_id: apidae_user.apidae_projects_ids).order(id: :desc).take(100)
       end
-      @references = Reference.count
     end
   end
 end

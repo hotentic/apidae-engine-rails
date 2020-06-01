@@ -13,3 +13,12 @@
  *= require_tree .
  *= require_self
  */
+
+#apidae_imports_panel > a:first-child {
+    float: right;
+}
+
+#apidae_form label {
+    font-size: 18px;
+    margin-right: 1rem;
+}

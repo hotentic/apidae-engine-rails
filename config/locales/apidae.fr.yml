@@ -10,12 +10,21 @@ fr:
       apidae/obj:
         apidae_id: Identifiant Apidae
         selection_apidae_id: Sélection Apidae
+      apidae/export:
+        project_id: Identifiant du projet
+        file_url: URL du fichier d'export
     errors:
       models:
         apidae/project:
           attributes:
             apidae_id:
               taken: Un projet avec cet identifiant Apidae existe déjà.
+        apidae/export:
+          attributes:
+            file_url:
+              blank: est requise
+            project_id:
+              blank: est requis
   apidae:
     file_import:
       status:

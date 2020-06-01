@@ -1,0 +1,11 @@
+<%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
+  <div id="apidae_header" class="<%= styles[:header] %>">
+    <%= link_to 'Retour', :back, class: styles[:back] %>
+    <h1 class="<%= styles[:h1] %>">Apidae - Importer un fichier de données</h1>
+  </div>
+  <div id="apidae_import" class="<%= styles[:wrapper] %>">
+    <div id="apidae_form" class="<%= styles[:body] %>">
+      <%= render 'form', styles: styles %>
+    </div>
+  </div>
+<% end %>
