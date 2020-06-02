@@ -10,6 +10,17 @@ module Apidae
     YELP = 4007
     TRIP_ADVISOR = 4000
 
+    CONTACTS_MAP = {
+        'telephone' => PHONE,
+        'email' => EMAIL,
+        'website' => WEBSITE,
+        'facebook' => FACEBOOK,
+        'google' => GOOGLE,
+        'trip_advisor' => TRIP_ADVISOR,
+        'twitter' => TWITTER,
+        'yelp' => YELP
+    }
+
     MODE_AUTO = 'auto'
     MODE_MANUAL = 'manual'
 
@@ -114,7 +125,7 @@ module Apidae
                 url: pic[:traductionFichiers][0][:url].gsub('http:', 'https:'),
                 description: localized_value(pic, :legende, locale),
                 credits: localized_value(pic, :copyright, locale),
-                expiration_date: pic[:dateLimiteDePublication]
+                expiration_date: pic[:dateLimiteDePublication] || ''
             }
           end
         end
@@ -149,29 +160,29 @@ module Apidae
         contact_entries.each do |c|
           case c[:type][:id]
           when PHONE, ALT_PHONE
-            contact_details[:telephone] ||= []
-            contact_details[:telephone] << c[:coordonnees][:fr]
+            contact_details[:telephone] ||= {}
+            contact_details[:telephone][c[:identifiant]] = c[:coordonnees][:fr]
           when EMAIL
-            contact_details[:email] ||= []
-            contact_details[:email] << c[:coordonnees][:fr]
+            contact_details[:email] ||= {}
+            contact_details[:email][c[:identifiant]] = c[:coordonnees][:fr]
           when WEBSITE
-            contact_details[:website] ||= []
-            contact_details[:website] << c[:coordonnees][:fr]
+            contact_details[:website] ||= {}
+            contact_details[:website][c[:identifiant]] = c[:coordonnees][:fr]
           when GOOGLE
-            contact_details[:google] ||= []
-            contact_details[:google] << c[:coordonnees][:fr]
+            contact_details[:google] ||= {}
+            contact_details[:google][c[:identifiant]] = c[:coordonnees][:fr]
           when FACEBOOK
-            contact_details[:facebook] ||= []
-            contact_details[:facebook] << c[:coordonnees][:fr]
+            contact_details[:facebook] ||= {}
+            contact_details[:facebook][c[:identifiant]] = c[:coordonnees][:fr]
           when TWITTER
-            contact_details[:twitter] ||= []
-            contact_details[:twitter] << c[:coordonnees][:fr]
+            contact_details[:twitter] ||= {}
+            contact_details[:twitter][c[:identifiant]] = c[:coordonnees][:fr]
           when YELP
-            contact_details[:yelp] ||= []
-            contact_details[:yelp] << c[:coordonnees][:fr]
+            contact_details[:yelp] ||= {}
+            contact_details[:yelp][c[:identifiant]] = c[:coordonnees][:fr]
           when TRIP_ADVISOR
-            contact_details[:trip_advisor] ||= []
-            contact_details[:trip_advisor] << c[:coordonnees][:fr]
+            contact_details[:trip_advisor] ||= {}
+            contact_details[:trip_advisor][c[:identifiant]] = c[:coordonnees][:fr]
           else
           end
         end
@@ -339,6 +350,7 @@ module Apidae
               external_id: o[:identifiantTechnique],
               start_date: o[:dateDebut],
               end_date: o[:dateFin],
+              each_year: o[:tousLesAns],
               closing_days: closing_days.blank? ? [] : closing_days.map {|d| d[:dateSpeciale]},
               details: node_value(o, :complementHoraire, *locales),
               time_periods: [
