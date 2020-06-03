@@ -3,6 +3,7 @@ require_dependency "apidae/application_controller"
 module Apidae
   class ProjectsController < ApplicationController
     before_action :set_project, only: [:edit, :update, :destroy]
+    skip_before_action :check_user_data!, only: [:create]
 
     def index
       if user_is_admin?
