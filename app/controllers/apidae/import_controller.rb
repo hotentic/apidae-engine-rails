@@ -91,6 +91,11 @@ module Apidae
         logger.error("Error is : #{err}")
         success = false
         e.update(status: Export::CANCELLED)
+      rescue Exception => e
+        logger.error "Failed to import file : #{e.file_url}"
+        logger.error("Error is : #{err}")
+        success = false
+        e.update(status: Export::CANCELLED)
       end
       success
     end

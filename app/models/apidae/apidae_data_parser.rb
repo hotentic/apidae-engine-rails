@@ -9,6 +9,9 @@ module Apidae
     TWITTER = 3755
     YELP = 4007
     TRIP_ADVISOR = 4000
+    FAX = 202
+    MOBILE_WEBSITE = 3769
+    SHORTY_URL = 4923
 
     CONTACTS_MAP = {
         'telephone' => PHONE,
@@ -18,7 +21,10 @@ module Apidae
         'google' => GOOGLE,
         'trip_advisor' => TRIP_ADVISOR,
         'twitter' => TWITTER,
-        'yelp' => YELP
+        'yelp' => YELP,
+        'fax' => FAX,
+        'mobile_website' => MOBILE_WEBSITE,
+        'shorty_url' => SHORTY_URL
     }
 
     MODE_AUTO = 'auto'
@@ -183,6 +189,15 @@ module Apidae
           when TRIP_ADVISOR
             contact_details[:trip_advisor] ||= {}
             contact_details[:trip_advisor][c[:identifiant]] = c[:coordonnees][:fr]
+          when FAX
+            contact_details[:fax] ||= {}
+            contact_details[:fax][c[:identifiant]] = c[:coordonnees][:fr]
+          when MOBILE_WEBSITE
+            contact_details[:mobile_website] ||= {}
+            contact_details[:mobile_website][c[:identifiant]] = c[:coordonnees][:fr]
+          when SHORTY_URL
+            contact_details[:shorty_url] ||= {}
+            contact_details[:shorty_url][c[:identifiant]] = c[:coordonnees][:fr]
           else
           end
         end
