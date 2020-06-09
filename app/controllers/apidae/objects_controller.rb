@@ -62,9 +62,19 @@ module Apidae
 
     def refresh
       referrer = (session.delete(:referrer) || objects_url)
-      if @obj && @obj.selections.first.add_or_refresh_obj(@obj.apidae_id)
-        redirect_to referrer, notice: "L'objet touristique a bien été mis à jour."
-      else
+      begin
+        if @obj && @obj.selections.first.add_or_refresh_obj(@obj.apidae_id)
+          redirect_to referrer, notice: "L'objet touristique a bien été mis à jour."
+        else
+          redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de l'objet."
+        end
+      rescue OpenURI::HTTPError => err
+        logger.error("Failed to refresh obj : #{@obj.apidae_id}")
+        logger.error("Error is : #{err}")
+        redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de l'objet. Veuillez vérifier que le projet Apidae comporte une clé API valide."
+      rescue Exception => ex
+        logger.error("Failed to refresh obj : #{@obj.apidae_id}")
+        logger.error("Error is : #{err}")
         redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de l'objet."
       end
     end
