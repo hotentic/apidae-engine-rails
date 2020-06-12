@@ -116,8 +116,9 @@ module Apidae
         obj = Obj.update_object(obj, obj_data, apidae_project.locales, apidae_project.versions)
       else
         obj = Obj.add_object(obj_data, apidae_project.locales, apidae_project.versions)
-        SelectionObject.create(apidae_selection_id: id, apidae_object_id: added_obj.id)
       end
+      SelectionObject.create(apidae_selection_id: id, apidae_object_id: obj.id) unless objects.include?(obj)
+
       if Rails.application.config.respond_to?(:apidae_obj_refresh_callback)
         Rails.application.config.apidae_obj_refresh_callback.call(obj.apidae_id)
       end
