@@ -18,7 +18,7 @@ module Apidae
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
-    store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods
+    store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra
     store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :booking_data, :booking_desc, :booking_entities
@@ -345,7 +345,8 @@ module Apidae
             openings_desc: node_value(openings_hash, :periodeEnClair, *locales),
             openings_desc_mode: openings_hash[:periodeEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             openings: openings_hash[:periodesOuvertures],
-            time_periods: lists_ids(openings_hash[:indicationsPeriode])
+            time_periods: lists_ids(openings_hash[:indicationsPeriode]),
+            openings_extra: lists_ids(openings_hash[:ouverturesComplementaires])
         }
       end
     end
