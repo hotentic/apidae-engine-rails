@@ -83,8 +83,8 @@ module Apidae
       res
     end
 
-    def api_object(apidae_obj_id)
-      query_args = build_args(OBJECTS_ENDPOINT, {obj_ids: [apidae_obj_id], fields: ["@all"]})
+    def api_object(apidae_obj_id, fields = ["@all"])
+      query_args = build_args(OBJECTS_ENDPOINT, {obj_ids: [apidae_obj_id], fields: fields})
       query_api(query_args, true, false)
     end
 
