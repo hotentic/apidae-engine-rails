@@ -50,6 +50,10 @@ module Apidae
       objects.where(where_clause).count
     end
 
+    def valid_api?
+      apidae_project && !apidae_project.api_key.blank? && !apidae_project.apidae_id.blank?
+    end
+
     def api_results(opts = {})
       key = cache_key(:results)
       res = $apidae_cache.read(key)
@@ -89,7 +93,7 @@ module Apidae
     end
 
     def add_or_refresh_obj(apidae_obj_id)
-      if apidae_project
+      if valid_api?
         res = api_object(apidae_obj_id)
         if res[:results] && res[:results].length == 1
           obj_data = res[:results].first.deep_symbolize_keys
@@ -99,7 +103,7 @@ module Apidae
     end
 
     def add_or_refresh_objs(fields = ["@all"])
-      if apidae_project
+      if valid_api?
         res = api_objects({fields: fields})
         if res[:results] && res[:results].length > 0
           res[:results].each do |result|

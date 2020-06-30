@@ -34,17 +34,15 @@ module Apidae
     def create
       @obj = Obj.new(object_params)
       if Obj.find_by_apidae_id(@obj.apidae_id)
-        redirect_to objects_url, alert: "Cet objet est déjà importé."
-      else
-        selection = params[:selection_apidae_id].blank? ? Selection.last : Selection.find_by_apidae_id(params[:selection_apidae_id])
-        if @obj.save && selection.add_or_refresh_obj(@obj.apidae_id)
-          redirect_to objects_url, notice: "L'objet a bien été importé"
-        else
-          flash[:alert] = "Une erreur s'est produite lors de l'import de l'objet."
-          render :new
+        redirect_to objects_url, alert: "Cet objet est déjà importé." and return
+      elsif !params[:selection_apidae_id].blank?
+        selection = Selection.find_by_apidae_id(params[:selection_apidae_id])
+        if selection && selection.valid_api? && @obj.save && selection.add_or_refresh_obj(@obj.apidae_id)
+          redirect_to objects_url, notice: "L'objet a bien été importé" and return
         end
       end
-
+      flash[:alert] = "Une erreur s'est produite lors de l'import de l'objet."
+      render :new
     end
 
     def update
@@ -63,7 +61,8 @@ module Apidae
     def refresh
       referrer = (session.delete(:referrer) || objects_url)
       begin
-        if @obj && @obj.selections.first.add_or_refresh_obj(@obj.apidae_id)
+        sel = @obj.selections.find {|s| s.valid_api?}
+        if sel && sel.add_or_refresh_obj(@obj.apidae_id)
           redirect_to referrer, notice: "L'objet touristique a bien été mis à jour."
         else
           redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de l'objet."

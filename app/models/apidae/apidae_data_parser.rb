@@ -245,7 +245,7 @@ module Apidae
     def self.parse_rates(rates_hash, *locales)
       if rates_hash
         desc = rates_hash[:gratuit] ? {DEFAULT_LOCALE => 'gratuit'} : node_value(rates_hash, :tarifsEnClair, *locales)
-        values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p)}
+        values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p, *locales)}
         methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
         {
             rates_desc: desc, rates: values, payment_methods: methods,
@@ -346,10 +346,10 @@ module Apidae
 
     private
 
-    def self.build_rate(rate_period)
+    def self.build_rate(rate_period, *locales)
       {
           id: rate_period[:identifiant], start_date: rate_period[:dateDebut], end_date: rate_period[:dateFin],
-          values: rate_period[:tarifs].blank? ? [] : rate_period[:tarifs].map {|t| {min: t[:minimum], max: t[:maximum], type: t[:type][:id], details: node_value(t, :precisionTarif)}}
+          values: rate_period[:tarifs].blank? ? [] : rate_period[:tarifs].map {|t| {min: t[:minimum], max: t[:maximum], type: t[:type][:id], details: node_value(t, :precisionTarif, *locales)}}
       }
     end
 
