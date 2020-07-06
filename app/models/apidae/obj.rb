@@ -20,7 +20,7 @@ module Apidae
                    :mobile_website, :shorty_url, :contacts
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
     store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra
-    store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes
+    store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes, :rates_extra
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :booking_data, :booking_desc, :booking_entities
     store_accessor :tags_data, :promo, :internal, :linked

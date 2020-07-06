@@ -251,7 +251,8 @@ module Apidae
             rates_desc: desc, rates: values, payment_methods: methods,
             rates_desc_mode: rates_hash[:tarifsEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             includes: node_value(rates_hash, :leTarifComprend, *locales),
-            excludes: node_value(rates_hash, :leTarifNeComprendPas, *locales)
+            excludes: node_value(rates_hash, :leTarifNeComprendPas, *locales),
+            rates_extra: node_value(rates_hash, :complement, *locales)
         }
       end
     end
