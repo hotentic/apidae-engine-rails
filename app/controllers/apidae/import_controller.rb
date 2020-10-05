@@ -37,7 +37,7 @@ module Apidae
     def run
       success = true
       Export.pending.each do |e|
-        success &&= import_data(e)
+        success &&= e.import_data
       end
       success ? head(:ok) : head(:internal_server_error)
     end
@@ -48,7 +48,7 @@ module Apidae
 
     def create
       @export = Export.new(export_params)
-      if @export.save && import_data(@export)
+      if @export.save && @export.import_data
         redirect_to apidae.root_url, notice: 'Le fichier a bien été importé.'
       else
         flash.now[:alert] = "Une erreur s'est produite lors de l'import du fichier."
@@ -60,44 +60,6 @@ module Apidae
 
     def export_params
       params.require(:export).permit(:project_id, :file_url, :status)
-    end
-
-    def import_data(e)
-      success = true
-      begin
-        open(e.file_url) do |f|
-          begin
-            FileImport.import(f, e.project_id)
-            unless e.confirm_url.blank?
-              uri = URI(e.confirm_url)
-              req = Net::HTTP::Post.new(uri)
-              Net::HTTP.start(uri.hostname, uri.port) do |http|
-                http.request(req)
-              end
-            end
-            e.update(status: Export::COMPLETE)
-            if Rails.application.config.respond_to?(:apidae_import_callback)
-              Rails.application.config.apidae_import_callback.call(e)
-            end
-          rescue Exception => ex
-            logger.error("Failed to import export file : #{e.file_url}")
-            logger.error("Error is : #{ex} \n#{ex.backtrace.join("\n") unless ex.backtrace.blank?}")
-            success = false
-            e.update(status: Export::CANCELLED)
-          end
-        end
-      rescue OpenURI::HTTPError => err
-        logger.error("Failed to download export file : #{e.file_url}")
-        logger.error("Error is : #{err}")
-        success = false
-        e.update(status: Export::CANCELLED)
-      rescue Exception => e
-        logger.error "Failed to import file : #{e.file_url}"
-        logger.error("Error is : #{err}")
-        success = false
-        e.update(status: Export::CANCELLED)
-      end
-      success
     end
   end
 end
