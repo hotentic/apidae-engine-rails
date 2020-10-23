@@ -236,6 +236,7 @@ module Apidae
             openings_desc: node_value(openings_hash, :periodeEnClair, *locales),
             openings_desc_mode: openings_hash[:periodeEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             openings: build_openings(openings_hash, *locales),
+            all_year_long: openings_hash[:ouvertTouteLAnnee] == 'OUVERT_TOUTE_L_ANNEE' ? 'true' : 'false',
             time_periods: lists_ids(openings_hash[:indicationsPeriode]),
             openings_extra: lists_ids(openings_hash[:ouverturesComplementaires])
         }

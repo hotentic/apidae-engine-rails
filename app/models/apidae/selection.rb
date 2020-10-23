@@ -92,9 +92,9 @@ module Apidae
       query_api(query_args, true, false)
     end
 
-    def add_or_refresh_obj(apidae_obj_id)
+    def add_or_refresh_obj(apidae_obj_id, fields = ["@all"])
       if valid_api?
-        res = api_object(apidae_obj_id)
+        res = api_object(apidae_obj_id, fields)
         if res[:results] && res[:results].length == 1
           obj_data = res[:results].first.deep_symbolize_keys
           add_or_refresh(obj_data)

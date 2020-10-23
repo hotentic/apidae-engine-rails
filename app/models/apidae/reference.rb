@@ -10,7 +10,7 @@ module Apidae
     end
 
     def self.import(refs_json)
-    locales = Rails.application.config.respond_to?(:apidae_locales) ? Rails.application.config.apidae_locales : [DEFAULT_LOCALE]
+      locales = Rails.application.config.respond_to?(:apidae_locales) ? Rails.application.config.apidae_locales : [DEFAULT_LOCALE]
       locales_map = Hash[locales.map {|loc| ["libelle#{loc.camelize.gsub('-', '')}".to_sym, loc]}]
       refs_hashes = JSON.parse(refs_json, symbolize_names: true)
       if refs_hashes.length != where("apidae_type != ?", INTERNAL).count
