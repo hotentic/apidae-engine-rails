@@ -164,6 +164,7 @@ module Apidae
       apidae_obj
     end
 
+    # Note : overrides existing fields (not a merge)
     def self.populate_fields(apidae_obj, object_data, locales)
       type_fields = TYPES_DATA[object_data[:type]]
       apidae_obj.last_update = DateTime.parse(object_data[:gestion][:dateModification]) unless object_data[:gestion].blank?
