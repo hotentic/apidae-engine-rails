@@ -92,6 +92,7 @@ module Apidae
       query_api(query_args, true, false)
     end
 
+    # Note : WARNING - updated obj will only contain the provided fields
     def add_or_refresh_obj(apidae_obj_id, fields = ["@all"])
       if valid_api?
         res = api_object(apidae_obj_id, fields)
@@ -102,6 +103,7 @@ module Apidae
       end
     end
 
+    # Note : WARNING - updated objs will only contain the provided fields
     def add_or_refresh_objs(fields = ["@all"])
       if valid_api?
         res = api_objects({fields: fields})
