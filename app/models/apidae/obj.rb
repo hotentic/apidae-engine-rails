@@ -7,6 +7,7 @@ module Apidae
 
     attr_accessor :locale
     attr_accessor :obj_version
+    attr_accessor :obj_versions
 
     store_accessor :title_data, :title
     store_accessor :owner_data, :owner_name, :owner_id
@@ -100,6 +101,7 @@ module Apidae
     after_initialize do
       @locale = DEFAULT_LOCALE
       @obj_version = DEFAULT_VERSION
+      @obj_versions = {}
     end
 
     def root_obj
@@ -111,11 +113,15 @@ module Apidae
     end
 
     def in_version(v)
-      @cached_versions ||= {}
-      if @cached_versions[v].nil?
-        @cached_versions[v] = versions.where(version: v).first
+      if v == DEFAULT_VERSION && root_obj_id.nil?
+        @obj_version = DEFAULT_VERSION
+        self
+      else
+        if @obj_versions[v].nil?
+          @obj_versions[v] = versions.where(version: v).first
+        end
+        @obj_versions[v]
       end
-      @cached_versions[v]
     end
 
     def in_locale(l)
