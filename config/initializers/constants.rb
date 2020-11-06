@@ -24,7 +24,7 @@ module Apidae
   ALL_VERSIONS = [STANDARD_VERSION, WINTER_VERSION, SUMMER_VERSION, CHALLENGED_VERSION, BUSINESS_VERSION,
                   GROUPS_VERSION, ACTIVITIES_VERSION]
 
-  LOCALIZED_FIELDS = [:title, :short_desc, :long_desc, :theme_desc, :pictures, :attachments,
+  LOCALIZED_FIELDS = [:title, :short_desc, :long_desc, :pictures, :attachments,
                       :openings_desc, :rates_desc, :includes, :excludes, :extra, :booking_desc]
   ALL_FIELDS = LOCALIZED_FIELDS + [:theme_desc, :private_desc, :capacity, :telephone, :email, :website,
                                    :google, :facebook, :twitter, :yelp, :trip_advisor, :fax, :mobile_website, :shorty_url,
