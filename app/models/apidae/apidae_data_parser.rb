@@ -336,10 +336,15 @@ module Apidae
       end
     end
 
-    def self.parse_entity_fields(information_hash, type_data_hash)
+    def self.parse_entity_fields(information_hash, type_data_hash, sp_hash)
+      entity_hash = {}
       if information_hash && information_hash[:structureGestion]
-        {entity_id: information_hash[:structureGestion][:id], service_provider_id: node_id(type_data_hash, :prestataireActivites)}
+        entity_hash.merge!({entity_id: information_hash[:structureGestion][:id], service_provider_id: node_id(type_data_hash, :prestataireActivites)})
       end
+      if sp_hash && sp_hash[:prestataireActivites]
+        entity_hash[:is_service_provider] = true
+      end
+      entity_hash
     end
 
     def self.node_id(node, key)
