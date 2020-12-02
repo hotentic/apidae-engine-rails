@@ -15,7 +15,7 @@ module Apidae
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
                    :products, :audience, :animals, :animals_desc, :extra, :duration, :certifications, :business
-    store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
+    store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id, :is_service_provider
     store_accessor :contact_data, :telephone, :email, :website, :google, :facebook, :twitter, :yelp, :trip_advisor, :fax,
                    :mobile_website, :shorty_url, :contacts
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
@@ -183,7 +183,7 @@ module Apidae
                                              object_data[:tourismeAffaires], *locales)
       apidae_obj.pictures_data = ApidaeDataParser.parse_pictures_data(object_data[:illustrations], *locales)
       apidae_obj.attachments_data = ApidaeDataParser.parse_attachments_data(object_data[:multimedias], *locales)
-      apidae_obj.entity_data = ApidaeDataParser.parse_entity_fields(object_data[:informations], object_data[type_fields[:node]])
+      apidae_obj.entity_data = ApidaeDataParser.parse_entity_fields(object_data[:informations], object_data[type_fields[:node]], object_data[:informationsPrestataireActivites])
       apidae_obj.service_data = ApidaeDataParser.parse_service_data(object_data[:prestations], object_data[type_fields[:node]])
       apidae_obj.tags_data = ApidaeDataParser.parse_tags_data(object_data[:presentation], object_data[:criteresInternes], object_data[:liens])
       apidae_obj.meta_data = object_data[:metadonnees]
