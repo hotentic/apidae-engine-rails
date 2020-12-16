@@ -84,7 +84,7 @@ module Apidae
         COS => {node: :informationsCommerceEtService, subtype: :commerceEtServiceType},
         DEG => {node: :informationsDegustation, subtype: :degustationType},
         DOS => {node: :informationsDomaineSkiable, subtype: :domaineSkiableType},
-        EQU => {node: :informationsEquipement, subtype: :equipementType},
+        EQU => {node: :informationsEquipement, subtype: :rubrique},
         FEM => {node: :informationsFeteEtManifestation, subtype: :feteEtManifestationType},
         HCO => {node: :informationsHebergementCollectif, subtype: :hebergementCollectifType},
         HLO => {node: :informationsHebergementLocatif, subtype: :hebergementLocatifType},

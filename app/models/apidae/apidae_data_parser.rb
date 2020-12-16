@@ -151,6 +151,7 @@ module Apidae
                 name: localized_value(att, :nom, locale),
                 url: att[:traductionFichiers][0][:url].gsub('http:', 'https:'),
                 type: att[:type],
+                link: att[:link],
                 description: localized_value(att, :legende, locale)
             }
           end
