@@ -29,7 +29,7 @@ module Apidae
                       :openings_desc, :rates_desc, :includes, :excludes, :extra, :booking_desc]
   ALL_FIELDS = LOCALIZED_FIELDS + [:theme_desc, :private_desc, :capacity, :telephone, :email, :website,
                                    :google, :facebook, :twitter, :yelp, :trip_advisor, :fax, :mobile_website, :shorty_url,
-                                   :openings, :rates, :services, :payment_methods, :categories, :themes, :labels, :chains,
-                                   :classification, :challenged, :environments, :languages, :products, :animals,
-                                   :equipments, :comfort, :activities, :promo, :internal, :linked]
+                                   :openings, :openings_extra, :rates, :services, :payment_methods, :categories, :themes,
+                                   :labels, :chains, :classification, :challenged, :environments, :languages, :products,
+                                   :animals, :equipments, :comfort, :activities, :promo, :internal, :linked]
 end
