@@ -44,7 +44,7 @@ module Apidae
         'LUNDI' => MONDAY,
         'MARDI' => TUESDAY,
         'MERCREDI' => WEDNESDAY,
-        'JEUD' => THURSDAY,
+        'JEUDI' => THURSDAY,
         'VENDREDI' => FRIDAY,
         'SAMEDI' => SATURDAY,
         'DIMANCHE' => SUNDAY
