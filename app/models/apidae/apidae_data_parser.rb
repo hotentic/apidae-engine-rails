@@ -220,6 +220,7 @@ module Apidae
         loc_data.merge!({place: type_data_hash[:nomLieu]}) if type_data_hash
         geoloc_details = location_hash[:geolocalisation]
         if geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]
+          loc_data[:altitude] = geoloc_details[:altitude]
           loc_data[:latitude] = geoloc_details[:geoJson][:coordinates][1]
           loc_data[:longitude] = geoloc_details[:geoJson][:coordinates][0]
         end
@@ -319,13 +320,17 @@ module Apidae
       tags
     end
 
-    def self.parse_booking(reservation_hash, *locales)
+    def self.parse_booking(reservation_hash, visits_hash, *locales)
+      booking_hash = {}
       if reservation_hash
-        {
-            booking_desc: node_value(reservation_hash, :complement, *locales),
-            booking_entities: reservation_hash[:organismes]
-        }
+        booking_hash[:booking_desc] = node_value(reservation_hash, :complement, *locales),
+        booking_hash[:booking_entities] = reservation_hash[:organismes]
       end
+      if visits_hash
+        booking_hash[:visits_allowed] = visits_hash[:visitable] == true
+        booking_hash[:visits_desc] = node_value(visits_hash, :complementVisite, *locales)
+      end
+      booking_hash
     end
 
     def self.parse_town(location_hash)
