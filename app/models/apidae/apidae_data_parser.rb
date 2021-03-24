@@ -220,10 +220,10 @@ module Apidae
         loc_data.merge!({place: type_data_hash[:nomLieu]}) if type_data_hash
         geoloc_details = location_hash[:geolocalisation]
         if geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]
-          loc_data[:altitude] = geoloc_details[:altitude]
           loc_data[:latitude] = geoloc_details[:geoJson][:coordinates][1]
           loc_data[:longitude] = geoloc_details[:geoJson][:coordinates][0]
         end
+        loc_data[:altitude] = geoloc_details[:altitude] if geoloc_details
         loc_data[:access] = node_value(geoloc_details, :complement) if geoloc_details
         loc_data[:environments] = location_hash[:environnements].map {|e| e[:id]} if location_hash[:environnements]
       end
