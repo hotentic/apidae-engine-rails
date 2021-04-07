@@ -279,7 +279,7 @@ module Apidae
           chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
           area: apidae_obj.apidae_type == Obj::DOS ? data_hash.except(:classification) : node_value(data_hash, :lieuDePratique),
           track: apidae_obj.apidae_type == Obj::EQU ? (data_hash[:itineraire] || {}).except(:passagesDelicats) : nil,
-          tricky_sections: apidae_obj.apidae_type == Obj::EQU ? data_hash.dig(:itineraire, :passagesDelicats) : nil,
+          tricky_sections: apidae_obj.apidae_type == Obj::EQU ? node_value(data_hash[:itineraire], :passagesDelicats, *locales) : nil,
           products: lists_ids(data_hash[:typesProduit], data_hash[:aopAocIgps], data_hash[:specialites]),
           audience: lists_ids(prestations_hash[:typesClientele]),
           animals: {allowed: prestations_hash[:animauxAcceptes] == 'ACCEPTES', desc: node_value(prestations_hash, :descriptifAnimauxAcceptes, *locales),
