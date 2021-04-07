@@ -15,7 +15,7 @@ module Apidae
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
-                   :products, :audience, :animals, :animals_desc, :extra, :duration, :certifications, :business
+                   :tricky_sections, :products, :audience, :animals, :animals_desc, :extra, :duration, :certifications, :business
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id, :is_service_provider
     store_accessor :contact_data, :telephone, :email, :website, :google, :facebook, :twitter, :yelp, :trip_advisor, :fax,
                    :mobile_website, :shorty_url, :contacts
