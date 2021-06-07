@@ -69,7 +69,7 @@ module Apidae
       key = cache_key(:agenda, from, to)
       res = $apidae_cache.read(key)
       unless res
-        query_args = build_args(AGENDA_ENDPOINT, {selection_ids: [apidae_id], from: from, to: to})
+        query_args = build_args(AGENDA_ENDPOINT, {selection_ids: [apidae_id], from: from, to: to, count: 200})
         res = query_api(query_args, true)
         $apidae_cache.write(key, res)
       end
@@ -142,14 +142,15 @@ module Apidae
 
       if all_results
         loops = 0
+        max_loops = only_ids ? 50 : MAX_LOOPS
         query_args[:first] = 0
-        query_args[:count] = MAX_COUNT
+        query_args[:count] ||= MAX_COUNT
         query_args[:locales] ||= apidae_project && !apidae_project.locales.blank? ? apidae_project.locales : [DEFAULT_LOCALE]
         response = JSON.parse get_response(query_args), symbolize_names: false
         total = response['numFound']
         query_result[:results] = (only_ids ? response['objetTouristiqueIds'] : response['objetsTouristiques']) || {}
 
-        while total > results_count(query_result) && loops < MAX_LOOPS
+        while total > results_count(query_result) && loops < max_loops
           loops += 1
           query_args[:first] += MAX_COUNT
           response = JSON.parse get_response(query_args), symbolize_names: false
