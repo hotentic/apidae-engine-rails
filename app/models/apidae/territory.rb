@@ -5,7 +5,7 @@ module Apidae
       territories_hashes.each do |t_data|
         t = Territory.find_or_initialize_by(apidae_id: t_data[:id])
         t.name = t_data.dig(:nom, :libelleFr)
-
+        t.apidae_type = t_data.dig(:territoireType, :id)
         t.save!
       end
     end
