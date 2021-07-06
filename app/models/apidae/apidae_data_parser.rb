@@ -151,6 +151,7 @@ module Apidae
                 name: localized_value(att, :nom, locale),
                 url: att[:traductionFichiers][0][:url].gsub('http:', 'https:'),
                 type: att[:type],
+                link: att[:link],
                 description: localized_value(att, :legende, locale)
             }
           end
@@ -222,6 +223,8 @@ module Apidae
           loc_data[:latitude] = geoloc_details[:geoJson][:coordinates][1]
           loc_data[:longitude] = geoloc_details[:geoJson][:coordinates][0]
         end
+        loc_data[:map_reference] = geoloc_details[:reperePlan]
+        loc_data[:altitude] = geoloc_details[:altitude] if geoloc_details
         loc_data[:access] = node_value(geoloc_details, :complement) if geoloc_details
         loc_data[:environments] = location_hash[:environnements].map {|e| e[:id]} if location_hash[:environnements]
       end
@@ -236,6 +239,7 @@ module Apidae
             openings_desc: node_value(openings_hash, :periodeEnClair, *locales),
             openings_desc_mode: openings_hash[:periodeEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             openings: build_openings(openings_hash, *locales),
+            all_year_long: openings_hash[:ouvertTouteLAnnee] == 'OUVERT_TOUTE_L_ANNEE' ? 'true' : 'false',
             time_periods: lists_ids(openings_hash[:indicationsPeriode]),
             openings_extra: lists_ids(openings_hash[:ouverturesComplementaires])
         }
@@ -264,7 +268,7 @@ module Apidae
       apidae_obj.apidae_subtype = node_id(data_hash, :rubrique) if apidae_obj.apidae_type == Obj::EQU
       apidae_obj.apidae_subtype = lists_ids(data_hash[:typesHebergement]).first if apidae_obj.apidae_type == Obj::SPA
       {
-          categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles], data_hash[:activiteCategories]),
+          categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles], data_hash[:activiteCategories], data_hash[:typesHabitation]),
           themes: lists_ids(data_hash[:themes]),
           capacity: (data_hash[:capacite] || {})
                         .merge(presta_hash ? {group_min: presta_hash[:tailleGroupeMin], group_max: presta_hash[:tailleGroupeMax],
@@ -275,7 +279,8 @@ module Apidae
               (node_id(data_hash, :typeLabel) ? [node_id(data_hash, :typeLabel)] : []),
           chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
           area: apidae_obj.apidae_type == Obj::DOS ? data_hash.except(:classification) : node_value(data_hash, :lieuDePratique),
-          track: apidae_obj.apidae_type == Obj::EQU ? data_hash[:itineraire] : nil,
+          track: apidae_obj.apidae_type == Obj::EQU ? (data_hash[:itineraire] || {}).except(:passagesDelicats) : nil,
+          tricky_sections: apidae_obj.apidae_type == Obj::EQU ? node_value(data_hash[:itineraire], :passagesDelicats, *locales) : nil,
           products: lists_ids(data_hash[:typesProduit], data_hash[:aopAocIgps], data_hash[:specialites]),
           audience: lists_ids(prestations_hash[:typesClientele]),
           animals: {allowed: prestations_hash[:animauxAcceptes] == 'ACCEPTES', desc: node_value(prestations_hash, :descriptifAnimauxAcceptes, *locales),
@@ -317,13 +322,17 @@ module Apidae
       tags
     end
 
-    def self.parse_booking(reservation_hash, *locales)
+    def self.parse_booking(reservation_hash, visits_hash, *locales)
+      booking_hash = {}
       if reservation_hash
-        {
-            booking_desc: node_value(reservation_hash, :complement, *locales),
-            booking_entities: reservation_hash[:organismes]
-        }
+        booking_hash[:booking_desc] = node_value(reservation_hash, :complement, *locales),
+        booking_hash[:booking_entities] = reservation_hash[:organismes]
       end
+      if visits_hash
+        booking_hash[:visits_allowed] = visits_hash[:visitable] == true
+        booking_hash[:visits_desc] = node_value(visits_hash, :complementVisite, *locales)
+      end
+      booking_hash
     end
 
     def self.parse_town(location_hash)

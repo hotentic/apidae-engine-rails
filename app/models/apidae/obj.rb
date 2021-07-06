@@ -7,6 +7,7 @@ module Apidae
 
     attr_accessor :locale
     attr_accessor :obj_version
+    attr_accessor :obj_versions
 
     store_accessor :title_data, :title
     store_accessor :owner_data, :owner_name, :owner_id
@@ -14,15 +15,15 @@ module Apidae
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
-                   :products, :audience, :animals, :animals_desc, :extra, :duration, :certifications, :business
+                   :tricky_sections, :products, :audience, :animals, :animals_desc, :extra, :duration, :certifications, :business
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id, :is_service_provider
     store_accessor :contact_data, :telephone, :email, :website, :google, :facebook, :twitter, :yelp, :trip_advisor, :fax,
                    :mobile_website, :shorty_url, :contacts
-    store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
+    store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments, :altitude, :map_reference
     store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra
     store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes, :rates_extra
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
-    store_accessor :booking_data, :booking_desc, :booking_entities
+    store_accessor :booking_data, :booking_desc, :booking_entities, :visits_allowed, :visits_desc
     store_accessor :tags_data, :promo, :internal, :linked
     store_accessor :version_data, :versioned_fields
 
@@ -83,7 +84,7 @@ module Apidae
         COS => {node: :informationsCommerceEtService, subtype: :commerceEtServiceType},
         DEG => {node: :informationsDegustation, subtype: :degustationType},
         DOS => {node: :informationsDomaineSkiable, subtype: :domaineSkiableType},
-        EQU => {node: :informationsEquipement, subtype: :equipementType},
+        EQU => {node: :informationsEquipement, subtype: :rubrique},
         FEM => {node: :informationsFeteEtManifestation, subtype: :feteEtManifestationType},
         HCO => {node: :informationsHebergementCollectif, subtype: :hebergementCollectifType},
         HLO => {node: :informationsHebergementLocatif, subtype: :hebergementLocatifType},
@@ -100,6 +101,7 @@ module Apidae
     after_initialize do
       @locale = DEFAULT_LOCALE
       @obj_version = DEFAULT_VERSION
+      @obj_versions = {}
     end
 
     def root_obj
@@ -111,11 +113,15 @@ module Apidae
     end
 
     def in_version(v)
-      @cached_versions ||= {}
-      if @cached_versions[v].nil?
-        @cached_versions[v] = versions.where(version: v).first
+      if v == DEFAULT_VERSION && root_obj_id.nil?
+        @obj_version = DEFAULT_VERSION
+        self
+      else
+        if @obj_versions[v].nil?
+          @obj_versions[v] = versions.where(version: v).first
       end
-      @cached_versions[v]
+        @obj_versions[v]
+      end
     end
 
     def in_locale(l)
@@ -164,6 +170,7 @@ module Apidae
       apidae_obj
     end
 
+    # Note : overrides existing fields (not a merge)
     def self.populate_fields(apidae_obj, object_data, locales)
       type_fields = TYPES_DATA[object_data[:type]]
       apidae_obj.last_update = DateTime.parse(object_data[:gestion][:dateModification]) unless object_data[:gestion].blank?
@@ -178,7 +185,7 @@ module Apidae
       apidae_obj.town = ApidaeDataParser.parse_town(object_data[:localisation])
       apidae_obj.openings_data = ApidaeDataParser.parse_openings(object_data[:ouverture], *locales)
       apidae_obj.rates_data = ApidaeDataParser.parse_rates(object_data[:descriptionTarif], *locales)
-      apidae_obj.booking_data = ApidaeDataParser.parse_booking(object_data[:reservation], *locales)
+      apidae_obj.booking_data = ApidaeDataParser.parse_booking(object_data[:reservation], object_data[:visites], *locales)
       apidae_obj.type_data = ApidaeDataParser.parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations],
                                              object_data[:tourismeAffaires], *locales)
       apidae_obj.pictures_data = ApidaeDataParser.parse_pictures_data(object_data[:illustrations], *locales)
