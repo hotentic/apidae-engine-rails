@@ -268,7 +268,7 @@ module Apidae
       apidae_obj.apidae_subtype = node_id(data_hash, :rubrique) if apidae_obj.apidae_type == Obj::EQU
       apidae_obj.apidae_subtype = lists_ids(data_hash[:typesHebergement]).first if apidae_obj.apidae_type == Obj::SPA
       {
-          categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles], data_hash[:activiteCategories]),
+          categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles], data_hash[:activiteCategories], data_hash[:typesHabitation]),
           themes: lists_ids(data_hash[:themes]),
           capacity: (data_hash[:capacite] || {})
                         .merge(presta_hash ? {group_min: presta_hash[:tailleGroupeMin], group_max: presta_hash[:tailleGroupeMax],
