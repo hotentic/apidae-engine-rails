@@ -30,15 +30,18 @@ module Apidae
           Town.import(zfile.read(TOWNS_FILE))
           logger.info "Completed #{Town.count} towns update"
         end
-        zfile.each do |file|
+        ordered_files(zfile).each do |file|
+          puts "processing #{file.name}"
           if file.file? && file.name.end_with?('.json')
             logger.info "Processing file : #{file.name}"
             if file.name.include?(MODIFIED_DIR)
               add_or_update_objects(zfile.read(file.name), result, project.locales, project.versions)
-            elsif file.name.include?(DELETED_FILE)
-              delete_objects(zfile.read(file.name), result)
-            elsif file.name.include?(SELECTIONS_FILE)
+            end
+            if file.name.include?(SELECTIONS_FILE)
               add_or_update_selections(project, zfile.read(file.name), result)
+            end
+            if file.name.include?(DELETED_FILE)
+              delete_objects(zfile.read(file.name), result)
             end
           end
         end
@@ -104,12 +107,16 @@ module Apidae
       end
     end
 
+    def self.ordered_files(zfile)
+      zfile.sort_by {|f| f.name.include?(MODIFIED_DIR) ? 0 : (f.name.include?(SELECTIONS_FILE) ? 1 : 2)}
+    end
+
     def self.delete_objects(deleted_json, result)
       deleted_ids = JSON.parse(deleted_json)
       deleted_ids.each do |id|
         obj = Obj.find_by_apidae_id(id)
         if obj
-          obj.destroy!
+          obj.destroy! if obj.selections.empty?
           result[:deleted] += 1
         else
           logger.info "skipping object deletion : #{id}"

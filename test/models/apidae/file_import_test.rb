@@ -153,6 +153,29 @@ module Apidae
       assert_equal 0, Selection.count
     end
 
+    test "object deletion cancelled if used by another project" do
+      proj = Project.create(apidae_id: 123)
+      other_proj = Project.create(apidae_id: 456)
+      sel = Selection.create(apidae_id: 49063, apidae_project_id: proj.id, label: 'Sélection 2', reference: 'selection-2')
+      other_sel = Selection.create(apidae_id: 49999, apidae_project_id: other_proj.id, label: 'Sélection 99', reference: 'selection-99')
+      sel.objects << Obj.create(apidae_id: 503, title: 'Société des violoncellistes aixois')
+      sel.objects << Obj.create(apidae_id: 504, title: 'Société des contrebassistes aixois')
+      other_sel.objects << Obj.find_by_apidae_id(504)
+
+      assert_equal 2, sel.objects.count
+      assert_equal 1, other_sel.objects.count
+
+      selections_json = File.read('test/data/shared_selections.json')
+      FileImport.add_or_update_selections(proj, selections_json, @result)
+      deletion_json = File.read('test/data/deletion.json')
+      FileImport.delete_objects(deletion_json, @result)
+
+      assert_equal 2, Obj.count
+      assert_equal({created: 0, updated: 0, deleted: 1, selections:
+        [{:apidae_id=>49063, :reference=>"selection-2", :objects=>1}]}, @result)
+      assert_equal 1, other_sel.objects.count
+    end
+
     test "full import process" do
       Obj.create(apidae_id: 123, title: 'Objet à supprimer')
       Obj.create(apidae_id: 4826186, title: 'Objet à mettre à jour')
