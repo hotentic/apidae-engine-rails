@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_22_124205) do
+ActiveRecord::Schema.define(version: 2020_05_28_101957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,8 +92,10 @@ ActiveRecord::Schema.define(version: 2020_05_22_124205) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "meta_data"
+    t.boolean "is_active"
     t.index ["apidae_id"], name: "index_apidae_references_on_apidae_id"
     t.index ["apidae_type"], name: "index_apidae_references_on_apidae_type"
+    t.index ["is_active"], name: "index_apidae_references_on_is_active"
   end
 
   create_table "apidae_selection_objects", force: :cascade do |t|
