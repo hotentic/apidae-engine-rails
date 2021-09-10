@@ -44,6 +44,7 @@ module Apidae
             end
           end
         end
+        project.cleanup_selections
         create(result.except(:selections)
                    .merge({remote_file: (zip_file.is_a?(File) ? zip_file.path : zip_file), status: STATUS_COMPLETE, apidae_id: project_id}))
         logger.info "Import results : #{result}"
@@ -169,7 +170,9 @@ module Apidae
     def self.add_or_update_selections(project, selections_json, result)
       selections_hashes = JSON.parse(selections_json, symbolize_names: true)
       deleted_ids = Selection.where(apidae_project_id: project.id).collect {|sel| sel.apidae_id}.uniq - selections_hashes.collect {|sel| sel[:id]}
-      Selection.where(apidae_id: deleted_ids).delete_all
+      apidae_selection_ids = Selection.where(apidae_id: deleted_ids).map {|s| s.id}
+      SelectionObject.where(apidae_selection_id: apidae_selection_ids).delete_all
+      Selection.where(id: apidae_selection_ids).delete_all
       selections_hashes.each do |selection_data|
         logger.info "Updating selection #{selection_data[:id]}"
         Selection.add_or_update(selection_data, project.id)

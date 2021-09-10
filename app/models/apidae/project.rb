@@ -20,5 +20,11 @@ module Apidae
     def versions=(values)
       self.versions_data = values.blank? ? nil : values.join('|')
     end
+
+    def cleanup_selections
+      apidae_selections.reload.each do |s|
+        s.cleanup
+      end
+    end
   end
 end
