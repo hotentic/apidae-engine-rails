@@ -42,6 +42,20 @@ module Apidae
       SelectionObject.where(apidae_selection_id: apidae_sel.id, apidae_object_id: removed_ids).delete_all
     end
 
+    def cleanup
+      obsolete_count = apidae_selection_objects
+        .joins("LEFT JOIN apidae_objs ON apidae_objs.id = apidae_selection_objects.apidae_object_id")
+        .where("apidae_objs.id IS NULL")
+        .delete_all
+      logger.info "Cleaned up #{obsolete_count} obsolete selection-objects associations for selection #{apidae_id}"
+
+      dups = apidae_selection_objects.reload.group(:apidae_object_id)
+                                     .select("COUNT(id), apidae_object_id, ARRAY_AGG(id) AS so_ids")
+                                     .having("COUNT(id) > ?", 1).map {|so| so.so_ids}
+      dups_count = apidae_selection_objects.where(id: dups.map {|d| d.sort[1..-1]}.flatten).delete_all
+      logger.info "Cleaned up #{dups_count} duplicate selection-objects associations for selection #{apidae_id}"
+    end
+
     def results(where_clause, offset, size)
       objects.includes(:town).limit(size).offset(offset).where(where_clause)
     end
