@@ -331,6 +331,7 @@ module Apidae
       if visits_hash
         booking_hash[:visits_allowed] = visits_hash[:visitable] == true
         booking_hash[:visits_desc] = node_value(visits_hash, :complementVisite, *locales)
+        booking_hash[:visits_duration] = visits_hash[:dureeMoyenneVisiteIndividuelle]
       end
       booking_hash
     end
