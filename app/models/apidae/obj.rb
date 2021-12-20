@@ -119,7 +119,7 @@ module Apidae
       else
         if @obj_versions[v].nil?
           @obj_versions[v] = versions.where(version: v).first
-        end
+      end
         @obj_versions[v]
       end
     end
