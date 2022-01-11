@@ -251,8 +251,10 @@ module Apidae
         desc = rates_hash[:gratuit] ? {DEFAULT_LOCALE => 'gratuit'} : node_value(rates_hash, :tarifsEnClair, *locales)
         values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p, *locales)}
         methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
+
         {
             rates_desc: desc, rates: values, payment_methods: methods,
+            tax_included: rates_hash[:taxeDeSejourIncluse].blank? ? nil : (rates_hash[:taxeDeSejourIncluse] == 'OUI'),
             rates_desc_mode: rates_hash[:tarifsEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             includes: node_value(rates_hash, :leTarifComprend, *locales),
             excludes: node_value(rates_hash, :leTarifNeComprendPas, *locales),
@@ -275,6 +277,8 @@ module Apidae
                                               age_min: presta_hash[:ageMin], age_max: presta_hash[:ageMax]} : {}),
           classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
               lists_ids(data_hash[:classementsGuides]) + lists_ids(data_hash[:classements]),
+          classification_date: data_hash[:dateClassement],
+          classification_ref: data_hash[:numeroClassement],
           labels: lists_ids(data_hash[:labels], data_hash[:labelsChartesQualite], prestations_hash[:labelsTourismeHandicap]) +
               (node_id(data_hash, :typeLabel) ? [node_id(data_hash, :typeLabel)] : []),
           chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
@@ -288,7 +292,10 @@ module Apidae
           extra: apidae_obj.apidae_type == Obj::SPA ? node_value(data_hash, :formuleHebergement, *locales) : node_value(prestations_hash, :complementAccueil, *locales),
           duration: apidae_obj.apidae_type == Obj::SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance],
           certifications: data_hash[:agrements].blank? ? [] : data_hash[:agrements].map {|a| {id: a[:type][:id], identifier: a[:numero]}},
-          business: business_hash
+          business: (business_hash || {}).except(:sallesEquipeesPour, :sallesEquipement, :sallesRestauration, :sallesReunion, :sallesHebergement),
+          business_equipments: lists_ids((business_hash || {})[:sallesEquipeesPour], (business_hash || {})[:sallesEquipement],
+                                         (business_hash || {})[:sallesRestauration], (business_hash || {})[:sallesHebergement]),
+          business_rooms: (business_hash || {})[:sallesReunion]
       }
     end
 
@@ -332,6 +339,7 @@ module Apidae
         booking_hash[:visits_allowed] = visits_hash[:visitable] == true
         booking_hash[:visits_desc] = node_value(visits_hash, :complementVisite, *locales)
         booking_hash[:visits_duration] = visits_hash[:dureeMoyenneVisiteIndividuelle]
+        booking_hash[:visits_services] = lists_ids(visits_hash[:prestationsVisitesGroupees]) + lists_ids(visits_hash[:prestationsVisitesIndividuelles])
       end
       booking_hash
     end
