@@ -332,7 +332,7 @@ module Apidae
     def self.parse_booking(reservation_hash, visits_hash, *locales)
       booking_hash = {}
       if reservation_hash
-        booking_hash[:booking_desc] = node_value(reservation_hash, :complement, *locales),
+        booking_hash[:booking_desc] = node_value(reservation_hash, :complement, *locales)
         booking_hash[:booking_entities] = reservation_hash[:organismes]
       end
       if visits_hash
