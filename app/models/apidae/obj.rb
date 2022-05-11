@@ -83,7 +83,7 @@ module Apidae
     TYPES_DATA = {
         ACT => {node: :informationsActivite, subtype: :activiteType},
         COS => {node: :informationsCommerceEtService, subtype: :commerceEtServiceType},
-        DEG => {node: :informationsDegustation, subtype: :degustationType},
+        DEG => {node: :informationsDegustation, subtype: :statutsExploitant},
         DOS => {node: :informationsDomaineSkiable, subtype: :domaineSkiableType},
         EQU => {node: :informationsEquipement, subtype: :rubrique},
         FEM => {node: :informationsFeteEtManifestation, subtype: :feteEtManifestationType},
