@@ -370,7 +370,11 @@ module Apidae
     end
 
     def self.node_id(node, key)
-      node[key][:id] if node && node[key]
+      if node && node[key]
+        node[key].is_a?(Array) ? node[key][0][:id] : node[key][:id]
+      else
+        nil
+      end
     end
 
     private
