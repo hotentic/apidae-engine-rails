@@ -37,6 +37,7 @@ module Apidae
     def run
       success = true
       Export.pending.each do |e|
+        e.update(status: Export::IN_PROGRESS)
         success &&= e.import_data
       end
       success ? head(:ok) : head(:internal_server_error)

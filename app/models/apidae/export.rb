@@ -5,6 +5,7 @@ module Apidae
   class Export < ActiveRecord::Base
 
     PENDING = 'pending'
+    IN_PROGRESS = 'in_progress'
     COMPLETE = 'complete'
     CANCELLED = 'cancelled'
 
@@ -22,6 +23,10 @@ module Apidae
     # Note : handle reset case
     def self.pending
       where(remote_status: 'SUCCESS', status: PENDING).order(:id)
+    end
+
+    def self.in_progress
+      where(remote_status: 'SUCCESS', status: IN_PROGRESS)
     end
 
     def import_data
