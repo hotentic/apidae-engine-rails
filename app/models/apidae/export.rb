@@ -34,6 +34,7 @@ module Apidae
       begin
         open(file_url) do |f|
           begin
+            logger.info "Starting file import for export #{id} - project #{project_id}"
             FileImport.import(f, project_id)
             unless confirm_url.blank?
               uri = URI(confirm_url)
@@ -41,11 +42,13 @@ module Apidae
               Net::HTTP.start(uri.hostname, uri.port) do |http|
                 http.request(req)
               end
+              logger.info "Posted file import callback for export #{id} - project #{project_id}"
             end
             update(status: Export::COMPLETE)
             if Rails.application.config.respond_to?(:apidae_import_callback)
               Rails.application.config.apidae_import_callback.call(self)
             end
+            logger.info "Completed file import for export #{id} - project #{project_id}"
           rescue Exception => ex
             logger.error("Failed to import export file : #{file_url}")
             logger.error("Error is : #{ex} \n#{ex.backtrace.join("\n") unless ex.backtrace.blank?}")

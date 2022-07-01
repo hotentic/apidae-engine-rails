@@ -37,8 +37,10 @@ module Apidae
     def run
       success = true
       Export.pending.each do |e|
+        logger.info "Running import for Apidae export #{e.id} - Project #{e.project.id}"
         e.update(status: Export::IN_PROGRESS)
         success &&= e.import_data
+        logger.info "Apidae export #{e.id} import run complete - Project #{e.project.id}"
       end
       success ? head(:ok) : head(:internal_server_error)
     end
