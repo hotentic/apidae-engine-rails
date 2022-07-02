@@ -174,7 +174,7 @@ module Apidae
       SelectionObject.where(apidae_selection_id: apidae_selection_ids).delete_all
       Selection.where(id: apidae_selection_ids).delete_all
       selections_hashes.each do |selection_data|
-        logger.info "Updating selection #{selection_data[:id]}"
+        logger.debug "Updating selection #{selection_data[:id]}"
         Selection.add_or_update(selection_data, project.id)
       end
       result[:selections] = Selection.where(apidae_project_id: project.id)

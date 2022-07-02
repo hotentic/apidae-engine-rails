@@ -53,7 +53,7 @@ module Apidae
                                      .select("COUNT(id), apidae_object_id, ARRAY_AGG(id) AS so_ids")
                                      .having("COUNT(id) > ?", 1).map {|so| so.so_ids}
       dups_count = apidae_selection_objects.where(id: dups.map {|d| d.sort[1..-1]}.flatten).delete_all
-      logger.info "Cleaned up #{dups_count} duplicate selection-objects associations for selection #{apidae_id}"
+      logger.debug "Cleaned up #{dups_count} duplicate selection-objects associations for selection #{apidae_id}"
     end
 
     def results(where_clause, offset, size)
