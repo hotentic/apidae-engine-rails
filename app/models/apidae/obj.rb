@@ -293,12 +293,18 @@ module Apidae
           when PHONE
             contact_details[:telephone] ||= []
             contact_details[:telephone] << c[:coordonnees][:fr]
+            contact_details[:telephone_details] ||= []
+            contact_details[:telephone_details] << {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
           when EMAIL
             contact_details[:email] ||= []
             contact_details[:email] << c[:coordonnees][:fr]
+            contact_details[:email_details] ||= []
+            contact_details[:email_details] << {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
           when WEBSITE
             contact_details[:website] ||= []
             contact_details[:website] << c[:coordonnees][:fr]
+            contact_details[:website_details] ||= []
+            contact_details[:website_details] << {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
           else
           end
         end
@@ -419,7 +425,7 @@ module Apidae
       end
       unless linked_data_hash.blank? || linked_data_hash[:liensObjetsTouristiquesTypes].blank?
         tags[:linked] = linked_data_hash[:liensObjetsTouristiquesTypes]
-                            .map {|l| {apidae_id: l[:objetTouristique][:id], apidae_type: l[:objetTouristique][:type], category: l[:type]}}
+                            .map {|l| {apidae_id: l[:objetTouristique][:id], apidae_type: l[:objetTouristique][:type], category: l[:type], name: l[:objetTouristique][:nom]}}
       end
       tags
     end
