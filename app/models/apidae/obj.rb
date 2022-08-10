@@ -14,7 +14,7 @@ module Apidae
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
-                   :products, :audience, :animals, :extra, :duration, :certifications, :business
+                   :products, :audience, :animals, :extra, :duration, :certifications, :business, :complement
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
@@ -396,7 +396,8 @@ module Apidae
           extra: apidae_obj.apidae_type == SPA ? node_value(data_hash, :formuleHebergement, *locales) : node_value(prestations_hash, :complementAccueil, *locales),
           duration: apidae_obj.apidae_type == SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance],
           certifications: data_hash[:agrements].blank? ? [] : data_hash[:agrements].map {|a| {id: a[:type][:id], identifier: a[:numero]}},
-          business: business_hash
+          business: business_hash,
+          complement: apidae_obj.apidae_type == SPA ? node_value(prestations_hash, :complementAccueil, *locales) : {},
       }
     end
 
