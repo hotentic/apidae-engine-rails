@@ -19,7 +19,7 @@ module Apidae
     store_accessor :contact, :telephone, :email, :website
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
     store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra
-    store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes
+    store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes, :rates_complement
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :booking_data, :booking_desc, :booking_entities
     store_accessor :tags_data, :promo, :internal, :linked
@@ -366,7 +366,8 @@ module Apidae
             rates_desc: desc, rates: values, payment_methods: methods,
             rates_desc_mode: rates_hash[:tarifsEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             includes: node_value(rates_hash, :leTarifComprend, *locales),
-            excludes: node_value(rates_hash, :leTarifNeComprendPas, *locales)
+            excludes: node_value(rates_hash, :leTarifNeComprendPas, *locales),
+            rates_complement: node_value(rates_hash, :complement, *locales)
         }
       end
     end
