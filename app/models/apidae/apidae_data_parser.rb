@@ -233,7 +233,7 @@ module Apidae
     end
 
     # Note : use internal format for openings storage (ideally Apihours one, to merge data from both sources)
-    def self.parse_openings(openings_hash, *locales)
+    def self.parse_openings(openings_hash, opening_days, *locales)
       if openings_hash && openings_hash[:periodeEnClair]
         {
             openings_desc: node_value(openings_hash, :periodeEnClair, *locales),
@@ -241,7 +241,8 @@ module Apidae
             openings: build_openings(openings_hash, *locales),
             all_year_long: openings_hash[:ouvertTouteLAnnee] == 'OUVERT_TOUTE_L_ANNEE' ? 'true' : 'false',
             time_periods: lists_ids(openings_hash[:indicationsPeriode]),
-            openings_extra: lists_ids(openings_hash[:ouverturesComplementaires])
+            openings_extra: lists_ids(openings_hash[:ouverturesComplementaires]),
+            opening_days: opening_days
         }
       end
     end

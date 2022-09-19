@@ -21,7 +21,7 @@ module Apidae
     store_accessor :contact_data, :telephone, :email, :website, :google, :facebook, :twitter, :yelp, :trip_advisor, :fax,
                    :mobile_website, :shorty_url, :contacts
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments, :altitude, :map_reference
-    store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra
+    store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra, :opening_days
     store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes, :rates_extra, :tax_included
     store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
     store_accessor :booking_data, :booking_desc, :booking_entities, :visits_allowed, :visits_desc, :visits_duration, :visits_services
@@ -184,7 +184,7 @@ module Apidae
       apidae_obj.location_data = ApidaeDataParser.parse_location_data(object_data[:localisation], object_data[type_fields[:node]],
                                                      object_data[:territoires])
       apidae_obj.town = ApidaeDataParser.parse_town(object_data[:localisation])
-      apidae_obj.openings_data = ApidaeDataParser.parse_openings(object_data[:ouverture], *locales)
+      apidae_obj.openings_data = ApidaeDataParser.parse_openings(object_data[:ouverture], object_data[:datesOuverture], *locales)
       apidae_obj.rates_data = ApidaeDataParser.parse_rates(object_data[:descriptionTarif], *locales)
       apidae_obj.booking_data = ApidaeDataParser.parse_booking(object_data[:reservation], object_data[:visites], *locales)
       apidae_obj.type_data = ApidaeDataParser.parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations],
