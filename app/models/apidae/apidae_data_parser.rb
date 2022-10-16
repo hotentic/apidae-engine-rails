@@ -101,10 +101,15 @@ module Apidae
       {title: node_value(data_hash, :nom, *locales)}
     end
 
-    def self.parse_owner_data(data_hash)
+    def self.parse_owner_data(data_hash, polls_data)
+      owner_data = {}
       unless data_hash.blank?
-        {owner_name: data_hash[:nom], owner_id: data_hash[:id]}
+        owner_data.merge!({owner_name: data_hash[:nom], owner_id: data_hash[:id]})
       end
+      unless polls_data.blank?
+        owner_data.merge!({polls: polls_data[:enquetes] || []})
+      end
+      owner_data
     end
 
     def self.parse_desc_data(data_hash, private_data, *locales)
