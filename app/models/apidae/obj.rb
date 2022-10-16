@@ -10,7 +10,7 @@ module Apidae
     attr_accessor :obj_versions
 
     store_accessor :title_data, :title
-    store_accessor :owner_data, :owner_name, :owner_id
+    store_accessor :owner_data, :owner_name, :owner_id, :polls
     store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
