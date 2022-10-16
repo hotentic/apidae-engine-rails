@@ -220,7 +220,7 @@ module Apidae
     def get_response(args)
       response = ''
       query = JSON.generate args.except(:url)
-      logger.info "Apidae API query : #{args[:url]}?query=#{query}"
+      logger.debug "Apidae API query : #{args[:url]}?query=#{query}"
       open("#{args[:url]}?query=#{CGI.escape query}") { |f|
         f.each_line {|line| response += line if line}
       }
