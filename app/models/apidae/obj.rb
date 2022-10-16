@@ -175,7 +175,7 @@ module Apidae
     def self.populate_fields(apidae_obj, object_data, locales)
       type_fields = TYPES_DATA[object_data[:type]]
       apidae_obj.last_update = DateTime.parse(object_data[:gestion][:dateModification]) unless object_data[:gestion].blank?
-      apidae_obj.owner_data = ApidaeDataParser.parse_owner_data(object_data[:gestion][:membreProprietaire], object_data[:enquete]) unless (object_data[:gestion].blank? && object_data[:gestion].blank?)
+      apidae_obj.owner_data = ApidaeDataParser.parse_owner_data(object_data[:gestion][:membreProprietaire], object_data[:enquete]) unless (object_data[:gestion].blank? && object_data[:enquete].blank?)
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = ApidaeDataParser.node_id(object_data[type_fields[:node]], type_fields[:subtype])
       apidae_obj.title_data = ApidaeDataParser.parse_title(object_data, *locales)
