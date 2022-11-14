@@ -222,7 +222,7 @@ module Apidae
           computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
         end
         loc_data.merge!({address: computed_address})
-        loc_data.merge!({place: type_data_hash[:nomLieu]}) if type_data_hash
+        loc_data.merge!({place: (type_data_hash ? type_data_hash[:nomLieu] : nil) || address_hash[:nomDuLieu]})
         geoloc_details = location_hash[:geolocalisation]
         if geoloc_details && geoloc_details[:valide] && geoloc_details[:geoJson]
           loc_data[:latitude] = geoloc_details[:geoJson][:coordinates][1]
