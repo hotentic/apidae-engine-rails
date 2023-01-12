@@ -217,9 +217,9 @@ module Apidae
         address_hash = location_hash[:adresse]
         computed_address = []
         unless address_hash.blank?
-          computed_address << address_hash[:adresse1] unless address_hash[:adresse1].blank?
-          computed_address << address_hash[:adresse2] unless address_hash[:adresse2].blank?
-          computed_address << address_hash[:adresse3] unless address_hash[:adresse3].blank?
+          computed_address << address_hash[:adresse1]
+          computed_address << address_hash[:adresse2]
+          computed_address << address_hash[:adresse3]
         end
         loc_data.merge!({address: computed_address})
         loc_data.merge!({place: (type_data_hash ? type_data_hash[:nomLieu] : nil) || address_hash[:nomDuLieu]})
