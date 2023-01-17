@@ -214,7 +214,7 @@ module Apidae
     def self.parse_location_data(location_hash, type_data_hash, territories)
       loc_data = {}
       unless location_hash.blank?
-        address_hash = location_hash[:adresse]
+        address_hash = location_hash[:adresse] || {}
         computed_address = []
         unless address_hash.blank?
           computed_address << address_hash[:adresse1]
