@@ -28,6 +28,8 @@ module Apidae
     store_accessor :tags_data, :promo, :internal, :linked
     store_accessor :version_data, :versioned_fields
 
+    before_update :archive_updated_fields
+
     ALL_FIELDS.each do |f|
       alias_method :"get_#{f}", :"#{f}"
       alias_method :"set_#{f}", :"#{f}="
@@ -105,6 +107,10 @@ module Apidae
       @obj_versions = {}
     end
 
+    def self.default_scope
+      where(root_obj_id: nil)
+    end
+
     def root_obj
       Obj.unscoped.where(id: root_obj_id).first
     end
@@ -138,12 +144,61 @@ module Apidae
       elsif root_val.respond_to?(:dig)
         root_val.dig(*nested_keys)
       else
-        raise ArgumentError.new('Cannot call dig with these args')
+        raise ArgumentError.new('Cannot call dig with these args: ' + keys.to_s)
       end
     end
 
-    def self.default_scope
-      where(root_obj_id: nil)
+    def archive_updated_fields
+      self.prev_data ||= {}
+      ignored_root_attributes = ['prev_data', 'updated_at']
+      changed_attributes.each_pair do |attr, prev_value|
+        unless ignored_root_attributes.include?(attr)
+          if prev_value.is_a?(Hash)
+            archive_hash_value(prev_value)
+          else
+            self.prev_data[attr] = {'prev' => prev_value, 'ts' => Time.current.to_i}
+          end
+        end
+      end
+    end
+
+    def archive_hash_value(prev_value, parent = nil)
+      ts = Time.current.to_i
+      ignored_sub_attributes = ['opening_days']
+      prev_value.each_pair do |sub_attr, prev_sub_val|
+        if Apidae::ALL_LOCALES.include?(sub_attr) && parent
+          new_val = in_locale(sub_attr).send(parent)
+        elsif /^\d+$/.match?(sub_attr) && parent
+          # Note : email / website / telephone etc... case - To be improved using changes method and a proper Hash/Array diff
+          new_val = in_locale(Apidae::DEFAULT_LOCALE)[parent]
+        else
+          new_val = parent ? in_locale(Apidae::DEFAULT_LOCALE).dig(parent, sub_attr) : (respond_to?(sub_attr) ? in_locale(Apidae::DEFAULT_LOCALE).send(sub_attr) : in_locale(Apidae::DEFAULT_LOCALE)[sub_attr])
+        end
+        unless ignored_sub_attributes.include?(sub_attr) || new_val == prev_sub_val
+          if parent
+            self.prev_data[parent][sub_attr] ||= {}
+          else
+            self.prev_data[sub_attr] ||= {}
+          end
+          if prev_sub_val.is_a?(Hash) && parent.nil?
+            archive_hash_value(prev_sub_val, sub_attr)
+          elsif prev_sub_val.is_a?(Array) && prev_sub_val.all? {|v| v.is_a?(Hash) && (v['id'] || v['identifiant'])}
+            archived_val = {'prev' => prev_sub_val.map {|v| v['id'] || v['identifiant']}, 'ts' => ts}
+            if parent
+              self.prev_data[parent][sub_attr] = archived_val
+            else
+              self.prev_data[sub_attr] = archived_val
+            end
+          else
+            archived_val = {'prev' => prev_sub_val, 'ts' => ts}
+            if parent
+              self.prev_data[parent][sub_attr] = archived_val
+            else
+              self.prev_data[sub_attr] = archived_val
+            end
+          end
+        end
+      end
     end
 
     def self.add_object(object_data, locales, versions)

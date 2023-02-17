@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_07_214647) do
+ActiveRecord::Schema.define(version: 2023_02_06_113335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2021_06_07_214647) do
     t.datetime "last_update"
     t.jsonb "owner_data"
     t.jsonb "version_data"
+    t.jsonb "prev_data"
     t.index ["apidae_id"], name: "apidae_objs_apidae_id"
     t.index ["root_obj_id", "version"], name: "index_apidae_objs_on_root_obj_id_and_version", unique: true
     t.index ["root_obj_id"], name: "apidae_objs_root_obj_id"

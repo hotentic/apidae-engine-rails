@@ -229,6 +229,7 @@ module Apidae
           loc_data[:longitude] = geoloc_details[:geoJson][:coordinates][0]
         end
         loc_data[:map_reference] = geoloc_details[:reperePlan]
+        loc_data[:valid] = geoloc_details[:valide] == true
         loc_data[:altitude] = geoloc_details[:altitude] if geoloc_details
         loc_data[:access] = node_value(geoloc_details, :complement) if geoloc_details
         loc_data[:environments] = location_hash[:environnements].map {|e| e[:id]} if location_hash[:environnements]
