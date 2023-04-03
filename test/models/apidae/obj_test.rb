@@ -66,6 +66,20 @@ module Apidae
       assert_equal({'prev' => 44.715026, 'ts' => Time.current.to_i}, obj.prev_data['latitude'])
     end
 
+    test 'archive previously blank geolocation value' do
+      obj = setup_obj('test/data/hot_fr_en.json', [Apidae::LOCALE_FR])
+      obj.skip_archiving = true
+      obj.update(latitude: nil, longitude: nil)
+      obj.skip_archiving = false
+
+      obj.latitude = 1.2345
+      obj.longitude = 2.3456
+      obj.save
+
+      assert_equal({'prev' => nil, 'ts' => Time.current.to_i}, obj.prev_data['latitude'])
+      assert_equal({'prev' => nil, 'ts' => Time.current.to_i}, obj.prev_data['longitude'])
+    end
+
     test 'archive references list update' do
       obj = setup_obj('test/data/hot_fr_en.json', [Apidae::LOCALE_FR])
 
