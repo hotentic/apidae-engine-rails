@@ -8,6 +8,7 @@ module Apidae
     attr_accessor :locale
     attr_accessor :obj_version
     attr_accessor :obj_versions
+    attr_accessor :skip_archiving
 
     store_accessor :title_data, :title
     store_accessor :owner_data, :owner_name, :owner_id, :polls
@@ -152,7 +153,7 @@ module Apidae
       self.prev_data ||= {}
       ignored_root_attributes = ['prev_data', 'updated_at']
       changed_attributes.each_pair do |attr, prev_value|
-        unless ignored_root_attributes.include?(attr)
+        unless ignored_root_attributes.include?(attr) || skip_archiving
           if prev_value.is_a?(Hash)
             archive_hash_value(prev_value)
           else
