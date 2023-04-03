@@ -130,13 +130,15 @@ module Apidae
         l.each do |locale|
           pics_data[locale] = []
           pictures_array.select { |p| p.is_a?(Hash) && !p[:traductionFichiers].blank? }.each do |pic|
+            pic_file = pic[:traductionFichiers][0]
             pics_data[locale] << {
                 id: pic[:identifiant],
                 name: localized_value(pic, :nom, locale),
-                url: pic[:traductionFichiers][0][:url].gsub('http:', 'https:'),
+                url: pic_file[:url].gsub('http:', 'https:'),
                 description: localized_value(pic, :legende, locale),
                 credits: localized_value(pic, :copyright, locale),
-                expiration_date: pic[:dateLimiteDePublication] || ''
+                expiration_date: pic[:dateLimiteDePublication] || '',
+                properties: {size: pic_file[:taille], width: pic_file[:largeur], height: pic_file[:height]}
             }
           end
         end
