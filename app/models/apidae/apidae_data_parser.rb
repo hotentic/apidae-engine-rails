@@ -362,7 +362,10 @@ module Apidae
       entity_hash = {}
       if information_hash
         if information_hash[:structureGestion]
-          entity_hash.merge!({entity_id: information_hash[:structureGestion][:id], service_provider_id: node_id(type_data_hash, :prestataireActivites)})
+          entity_hash.merge!({entity_id: information_hash[:structureGestion][:id], entity_name: information_hash[:structureGestion][:nom][:libelleFr],
+                              info_entity_id: (information_hash[:structureInformation] || information_hash[:structureGestion])[:id],
+                              info_entity_name: (information_hash[:structureInformation] || information_hash[:structureGestion])[:nom][:libelleFr],
+                              service_provider_id: node_id(type_data_hash, :prestataireActivites)})
         end
 
         if information_hash[:informationsLegales]
