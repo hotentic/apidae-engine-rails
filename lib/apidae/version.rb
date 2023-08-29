@@ -1,3 +1,3 @@
 module Apidae
-  VERSION = "1.2.33"
+  VERSION = "1.2.34"
 end
