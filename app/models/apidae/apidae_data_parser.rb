@@ -112,13 +112,14 @@ module Apidae
       owner_data
     end
 
-    def self.parse_desc_data(data_hash, private_data, *locales)
+    def self.parse_desc_data(data_hash, private_data, presta_data, *locales)
       unless data_hash.blank?
         {
             short_desc: node_value(data_hash, :descriptifCourt, *locales),
             long_desc: node_value(data_hash, :descriptifDetaille, *locales),
             theme_desc: data_hash[:descriptifsThematises].blank? ? {} : Hash[data_hash[:descriptifsThematises].map {|th| [node_id(th, :theme), node_value(th, :description, *locales)]}],
-            private_desc: private_data.blank? ? {} : Hash[private_data.map {|d| [d[:nomTechnique], (node_value(d, :descriptif, *locales).blank? ? {LOCALE_FR => d[:libelleFr]} : node_value(d, :descriptif, *locales))]}]
+            private_desc: private_data.blank? ? {} : Hash[private_data.map {|d| [d[:nomTechnique], (node_value(d, :descriptif, *locales).blank? ? {LOCALE_FR => d[:libelleFr]} : node_value(d, :descriptif, *locales))]}],
+            accessibility_desc: presta_data.blank? ? {} : Hash[presta_data.select {|k, v| k.to_s.start_with?('descriptifHandicap')}.map {|k, v| [k, node_value(presta_data, k, *locales)]}]
         }
       end
     end
@@ -279,7 +280,8 @@ module Apidae
           themes: lists_ids(data_hash[:themes]),
           capacity: (data_hash[:capacite] || {})
                         .merge(presta_hash ? {group_min: presta_hash[:tailleGroupeMin], group_max: presta_hash[:tailleGroupeMax],
-                                              age_min: presta_hash[:ageMin], age_max: presta_hash[:ageMax]} : {}),
+                                              age_min: presta_hash[:ageMin], age_max: presta_hash[:ageMax],
+                                              wheelchair_max: presta_hash[:nombrePersonnesEnFauteuilRoulantAccueilliesSimultanement]} : {}),
           classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
               lists_ids(data_hash[:classementsGuides]) + lists_ids(data_hash[:classements]),
           classification_date: data_hash[:dateClassement],
@@ -314,7 +316,8 @@ module Apidae
                                   type_data_hash ? type_data_hash[:activitesSportives] : [],
                                   type_data_hash ? type_data_hash[:activitesCulturelles] : []),
             challenged: lists_ids(data_hash[:tourismesAdaptes]),
-            languages: lists_ids(data_hash[:languesParlees])
+            languages: lists_ids(data_hash[:languesParlees]),
+            documentation_languages: lists_ids(data_hash[:languesDocumentation])
         }
       end
     end
