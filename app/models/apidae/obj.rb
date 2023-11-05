@@ -12,7 +12,7 @@ module Apidae
 
     store_accessor :title_data, :title
     store_accessor :owner_data, :owner_name, :owner_id, :polls
-    store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc
+    store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc, :accessibility_desc
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :classification_date,
@@ -24,7 +24,7 @@ module Apidae
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments, :altitude, :map_reference
     store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra, :opening_days
     store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes, :rates_extra, :tax_included
-    store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages
+    store_accessor :service_data, :services, :equipments, :comfort, :activities, :challenged, :languages, :documentation_languages
     store_accessor :booking_data, :booking_desc, :booking_entities, :visits_allowed, :visits_desc, :visits_duration, :visits_services
     store_accessor :tags_data, :promo, :internal, :linked
     store_accessor :version_data, :versioned_fields
@@ -235,7 +235,7 @@ module Apidae
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = ApidaeDataParser.node_id(object_data[type_fields[:node]], type_fields[:subtype])
       apidae_obj.title_data = ApidaeDataParser.parse_title(object_data, *locales)
-      apidae_obj.description_data = ApidaeDataParser.parse_desc_data(object_data[:presentation], object_data[:donneesPrivees], *locales)
+      apidae_obj.description_data = ApidaeDataParser.parse_desc_data(object_data[:presentation], object_data[:donneesPrivees], object_data[:prestations], *locales)
       apidae_obj.contact_data = ApidaeDataParser.parse_contact_data(object_data[:informations], object_data[:contacts])
       apidae_obj.location_data = ApidaeDataParser.parse_location_data(object_data[:localisation], object_data[type_fields[:node]],
                                                      object_data[:territoires])
