@@ -262,7 +262,7 @@ module Apidae
         values = rates_hash[:periodes].blank? ? [] : rates_hash[:periodes].map {|p| build_rate(p, *locales)}
         methods = rates_hash[:modesPaiement].blank? ? [] : rates_hash[:modesPaiement].map {|p| p[:id]}
         {
-            rates_desc: desc, rates: values, payment_methods: methods,
+            rates_desc: desc, rates: values, rates_category: rates_hash[:indicationTarif], payment_methods: methods,
             tax_included: rates_hash[:taxeDeSejourIncluse].blank? ? nil : (rates_hash[:taxeDeSejourIncluse] == 'OUI'),
             rates_desc_mode: rates_hash[:tarifsEnClairGenerationMode] == 'AUTOMATIQUE' ? MODE_AUTO : MODE_MANUAL,
             includes: node_value(rates_hash, :leTarifComprend, *locales),
