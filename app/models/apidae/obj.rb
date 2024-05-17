@@ -382,7 +382,7 @@ module Apidae
           categories: lists_ids(data_hash[:categories], data_hash[:typesDetailles], data_hash[:activiteCategories]),
           themes: lists_ids(data_hash[:themes]),
           capacity: (data_hash[:capacite] || {})
-                        .merge(presta_hash ? {group_min: presta_hash[:tailleGroupeMin], group_max: presta_hash[:tailleGroupeMax],
+                        .merge(presta_hash ? {group_min: (presta_hash[:nombrePersonnesMinimum] || presta_hash[:tailleGroupeMin]), group_max: presta_hash[:tailleGroupeMax],
                                               age_min: presta_hash[:ageMin], age_max: presta_hash[:ageMax]} : {}),
           classification: nodes_ids(data_hash[:classement], data_hash[:classementPrefectoral], data_hash[:classification]) +
                                     lists_ids(data_hash[:classementsGuides]) + lists_ids(data_hash[:classements]),
