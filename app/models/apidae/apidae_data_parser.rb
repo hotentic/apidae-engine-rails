@@ -12,6 +12,7 @@ module Apidae
     FAX = 202
     MOBILE_WEBSITE = 3769
     SHORTY_URL = 4923
+    INSTAGRAM = 7221
 
     CONTACTS_MAP = {
         'telephone' => PHONE,
@@ -24,7 +25,8 @@ module Apidae
         'yelp' => YELP,
         'fax' => FAX,
         'mobile_website' => MOBILE_WEBSITE,
-        'shorty_url' => SHORTY_URL
+        'shorty_url' => SHORTY_URL,
+        'instagram' => INSTAGRAM
     }
 
     MODE_AUTO = 'auto'
@@ -177,37 +179,13 @@ module Apidae
           when PHONE, ALT_PHONE
             contact_details[:telephone] ||= {}
             contact_details[:telephone][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when EMAIL
-            contact_details[:email] ||= {}
-            contact_details[:email][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when WEBSITE
-            contact_details[:website] ||= {}
-            contact_details[:website][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when GOOGLE
-            contact_details[:google] ||= {}
-            contact_details[:google][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when FACEBOOK
-            contact_details[:facebook] ||= {}
-            contact_details[:facebook][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when TWITTER
-            contact_details[:twitter] ||= {}
-            contact_details[:twitter][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when YELP
-            contact_details[:yelp] ||= {}
-            contact_details[:yelp][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when TRIP_ADVISOR
-            contact_details[:trip_advisor] ||= {}
-            contact_details[:trip_advisor][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when FAX
-            contact_details[:fax] ||= {}
-            contact_details[:fax][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when MOBILE_WEBSITE
-            contact_details[:mobile_website] ||= {}
-            contact_details[:mobile_website][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
-          when SHORTY_URL
-            contact_details[:shorty_url] ||= {}
-            contact_details[:shorty_url][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
           else
+            contacts_refs_by_code = CONTACTS_MAP.invert
+            if contacts_refs_by_code.keys.include?(c[:type][:id])
+              contact_ref = contacts_refs_by_code[c[:type][:id]].to_sym
+              contact_details[contact_ref] ||= {}
+              contact_details[contact_ref][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
+            end
           end
         end
       end
