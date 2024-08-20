@@ -20,7 +20,7 @@ module Apidae
                    :animals_desc, :extra, :duration, :certifications, :business, :business_equipments, :business_rooms
     store_accessor :entity_data, :entity_id, :entity_name, :info_entity_id, :info_entity_name, :service_provider_id, :is_service_provider, :legal
     store_accessor :contact_data, :telephone, :email, :website, :google, :facebook, :twitter, :yelp, :trip_advisor, :fax,
-                   :mobile_website, :shorty_url, :contacts
+                   :mobile_website, :shorty_url, :instagram, :contacts
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments, :altitude, :map_reference
     store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra, :opening_days
     store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :rates_category, :payment_methods, :includes, :excludes,
