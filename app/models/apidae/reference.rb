@@ -16,7 +16,7 @@ module Apidae
         refs_hashes = JSON.parse(refs_json, symbolize_names: true)
         if refs_hashes.length != where("apidae_type != ?", INTERNAL).count
           refs_hashes.each do |ref_data|
-            ref = Reference.find_or_initialize_by(apidae_id: ref_data[:id], apidae_type: ref_data[:elementReferenceType])
+            ref = Reference.unscoped.find_or_initialize_by(apidae_id: ref_data[:id], apidae_type: ref_data[:elementReferenceType])
             ref.label_data = ref_data.slice(*locales_map.keys).transform_keys {|k| locales_map[k]}
             ref.parent = ref_data[:parent][:id] if ref_data[:parent]
             ref.category = ref_data[:familleCritere] ? ref_data[:familleCritere][:id] : (ref_data[:typeLabel] ? ref_data[:typeLabel][:id] : nil)
