@@ -12,9 +12,9 @@ module Apidae
     def self.import(refs_json)
     locales = Rails.application.config.respond_to?(:apidae_locales) ? Rails.application.config.apidae_locales : [DEFAULT_LOCALE]
       locales_map = Hash[locales.map {|loc| ["libelle#{loc.camelize.gsub('-', '')}".to_sym, loc]}]
-      if count == 0 || Time.current > (maximum(:updated_at) + 1.day)
+      if count == 0 || Time.current > (unscoped.maximum(:updated_at) + 1.day)
         refs_hashes = JSON.parse(refs_json, symbolize_names: true)
-        if refs_hashes.length != where("apidae_type != ?", INTERNAL).count
+        if refs_hashes.length != unscoped.where("apidae_type != ?", INTERNAL).count
           refs_hashes.each do |ref_data|
             ref = Reference.unscoped.find_or_initialize_by(apidae_id: ref_data[:id], apidae_type: ref_data[:elementReferenceType])
             ref.label_data = ref_data.slice(*locales_map.keys).transform_keys {|k| locales_map[k]}
