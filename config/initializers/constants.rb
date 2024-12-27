@@ -32,5 +32,5 @@ module Apidae
                                    :google, :facebook, :twitter, :yelp, :trip_advisor, :fax, :mobile_website, :shorty_url, :instagram,
                                    :openings, :openings_extra, :rates, :services, :payment_methods, :categories, :themes,
                                    :labels, :chains, :classification, :challenged, :environments, :languages, :products,
-                                   :animals, :equipments, :comfort, :activities, :promo, :internal, :linked]
+                                   :animals, :equipments, :comfort, :activities, :promo, :internal, :linked, :service_provider_certifications]
 end
