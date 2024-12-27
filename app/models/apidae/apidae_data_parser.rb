@@ -358,7 +358,7 @@ module Apidae
       end
       if sp_hash && sp_hash[:prestataireActivites]
         entity_hash[:is_service_provider] = true
-        entity_hash[:service_provider_certifications] = lists_ids(entity_hash[:habilitationsPrestataires])
+        entity_hash[:service_provider_certifications] = lists_ids(sp_hash[:habilitationsPrestataires])
       end
       entity_hash
     end
