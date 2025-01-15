@@ -376,7 +376,7 @@ module Apidae
     def self.build_rate(rate_period, *locales)
       {
           id: rate_period[:identifiant], start_date: rate_period[:dateDebut], end_date: rate_period[:dateFin],
-          values: rate_period[:tarifs].blank? ? [] : rate_period[:tarifs].map {|t| {min: t[:minimum], max: t[:maximum], type: t[:type][:id], details: node_value(t, :precisionTarif, *locales)}}
+          values: rate_period[:tarifs].blank? ? [] : rate_period[:tarifs].map {|t| {min: t[:minimum], max: t[:maximum], unit: t[:devise], type: t[:type][:id], details: node_value(t, :precisionTarif, *locales)}}
       }
     end
 
