@@ -2,6 +2,7 @@ Apidae::Engine.routes.draw do
 
   resources :objects, only: [:index, :show, :new, :create], path: 'objets' do
     post 'refresh', on: :member
+    get 'search', on: :collection
   end
 
   resources :selections, only: [:index] do

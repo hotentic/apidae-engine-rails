@@ -1,5 +1,10 @@
+require 'pg_search'
+
 module Apidae
   class Obj < ActiveRecord::Base
+    include PgSearch::Model
+    multisearchable against: [:title, :short_desc, :town_search, :criteria_search],
+                    additional_attributes: -> (o) { { searchable_fields: o.searchable_fields } }
 
     belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code, optional: true
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
@@ -137,6 +142,27 @@ module Apidae
     def in_locale(l)
       @locale = l
       self
+    end
+
+    def town_search
+      town&.label
+    end
+
+    def criteria_search
+      ([SUBTYPES.dig(apidae_subtype&.to_i, :label)] + ref_search(payment_methods, PAYMENT) +
+        ref_search(categories, CATEGORIES) + ref_search(themes, THEMES) + ref_search(labels, LABELS) +
+        ref_search(chains, CHAINS) + ref_search(classification, CLASSIFICATION) + ref_search(services, SERVICES) +
+        ref_search(equipments, EQUIPMENTS) + ref_search(comfort, COMFORT) + ref_search(activities, ACTIVITIES) +
+        ref_search(challenged, CHALLENGED) + ref_search(audience, AUDIENCE) + ref_search(promo, PROMO) +
+        ref_search(environments, ENVIRONMENTS) + ref_search(products, PRODUCTS) + ref_search(internal, INTERNALS)).compact.uniq
+    end
+
+    def ref_search(ref_values, ref_list, label_key = :label)
+      (ref_values || []).map {|r| ref_list.dig(r, label_key)}
+    end
+
+    def searchable_fields
+      {s_title: title, s_desc: short_desc, s_external_id: apidae_id, s_type: apidae_type, s_picture: main_picture}
     end
 
     def dig(*keys)

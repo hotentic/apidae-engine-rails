@@ -78,6 +78,13 @@ module Apidae
       end
     end
 
+    def search
+      user_selections = Project.where(apidae_id: apidae_user.apidae_projects_ids).map {|p| p.apidae_selection_ids}.flatten.uniq
+      @results = PgSearch::Document.tsv_search(params[:query])
+                        .joins("INNER JOIN apidae_selection_objects AS aso ON (aso.apidae_object_id = pg_search_documents.searchable_id) AND pg_search_documents.searchable_type = 'Apidae::Obj'")
+                        .where("aso.apidae_selection_id IN (?)", user_selections)
+    end
+
     private
       def set_object
         @obj = Obj.find(params[:id])

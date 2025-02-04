@@ -1,0 +1,49 @@
+<%= render layout: "/layouts/#{Rails.application.config.apidae_layout}" do |styles| %>
+  <div id="apidae_header" class="<%= styles[:header] %>">
+    <%= link_to 'Importer un objet', apidae.new_object_path(selection_apidae_id: nil), class: styles[:objects] %>
+    <%= link_to 'Retour', root_path, class: styles[:back] %>
+    <h1 class="<%= styles[:h1] %>">Apidae - Rechercher des objets</h1>
+  </div>
+  <div id="apidae_dashboard" class="<%= styles[:wrapper] %>">
+    <div id="apidae_search_form" class="<%= styles[:body] %>">
+      <%= form_tag(apidae.search_objects_path, method: :get) do %>
+        <%= text_field_tag 'query', @query, placeholder: 'Recherche par mots-clés' %>
+        <%= submit_tag 'Rechercher' %>
+      <% end %>
+      <br/>
+    </div>
+    <div id="apidae_imports_panel" class="<%= styles[:body] %>">
+      <table id="apidae_objects" class="<%= styles[:table] %>">
+        <thead class="<%= styles[:table_head] %>">
+        <tr>
+          <th>Titre</th>
+          <th>Identifiant</th>
+          <th>Type</th>
+          <th>Mise à jour</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody class="<%= styles[:table_body] %>">
+        <% @results.each do |object| %>
+          <tr>
+            <td><%= object.searchable_title %></td>
+            <td><%= object.searchable_id %></td>
+            <td><%= object.searchable_category %></td>
+            <td><%= object.updated_at.strftime('Le %d/%m/%Y à %H:%M') if object.updated_at %></td>
+            <td><%= link_to 'Rafraîchir', apidae.refresh_object_path(object), method: :post,
+                            data: {confirm: 'Voulez-vous vraiment rafraîchir cet objet ? Les données existantes seront écrasées.'} %></td>
+          </tr>
+        <% end %>
+        <% if @results.empty? %>
+          <tr>
+            <td colspan="5">Aucun objet importé pour le moment.</td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+<script>
+
+</script>
