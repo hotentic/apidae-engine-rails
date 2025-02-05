@@ -162,7 +162,8 @@ module Apidae
     end
 
     def searchable_fields
-      {s_title: title, s_desc: short_desc, s_external_id: apidae_id, s_type: apidae_type, s_picture: main_picture}
+      {s_title: title, s_desc: short_desc, s_external_id: apidae_id, s_type: apidae_type, s_picture: main_picture,
+       s_selections: selection_ids}
     end
 
     def dig(*keys)

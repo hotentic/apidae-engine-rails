@@ -26,11 +26,11 @@
         <tbody class="<%= styles[:table_body] %>">
         <% @results.each do |object| %>
           <tr>
-            <td><%= object.searchable_title %></td>
-            <td><%= object.searchable_id %></td>
-            <td><%= object.searchable_category %></td>
+            <td><%= object.s_title %></td>
+            <td><%= object.s_external_id %></td>
+            <td><%= object.s_type %></td>
             <td><%= object.updated_at.strftime('Le %d/%m/%Y à %H:%M') if object.updated_at %></td>
-            <td><%= link_to 'Rafraîchir', apidae.refresh_object_path(object), method: :post,
+            <td><%= link_to 'Rafraîchir', apidae.refresh_object_path(object.searchable_id), method: :post,
                             data: {confirm: 'Voulez-vous vraiment rafraîchir cet objet ? Les données existantes seront écrasées.'} %></td>
           </tr>
         <% end %>
