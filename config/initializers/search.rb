@@ -1,4 +1,4 @@
-Rails.application.config.after_initialize do
+Rails.configuration.to_prepare do
   require 'pg_search'
 
   PgSearch.multisearch_options = {
