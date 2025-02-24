@@ -11,7 +11,10 @@ Apidae::Engine.routes.draw do
     end
   end
   resources :references, only: [:index]
-  resources :projects, only: [:index, :new, :create, :edit, :update, :destroy], path: 'projets'
+  resources :projects, only: [:index, :new, :create, :edit, :update, :destroy], path: 'projets' do
+    post 'realtime', on: :collection
+  end
+
 
   match 'import/callback', via: :post, to: 'import#callback'
   match 'import/run', via: :post, to: 'import#run'

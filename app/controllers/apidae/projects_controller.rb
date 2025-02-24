@@ -3,7 +3,9 @@ require_dependency "apidae/application_controller"
 module Apidae
   class ProjectsController < ApplicationController
     before_action :set_project, only: [:edit, :update, :destroy]
-    skip_before_action :check_user_data!, only: [:create]
+    skip_before_action :check_user_data!, only: [:create, :realtime]
+    skip_before_action :verify_authenticity_token, only: [:realtime]
+    skip_before_action Rails.application.config.apidae_auth, only: [:realtime]
 
     def index
       if user_is_admin?
@@ -45,6 +47,10 @@ module Apidae
     def destroy
       @project.destroy
       redirect_to request.referrer, notice: 'Le projet a bien été supprimé.'
+    end
+
+    def realtime
+      Rails.logger.info "realtime webhook : #{params.to_unsafe_h}"
     end
 
     private
