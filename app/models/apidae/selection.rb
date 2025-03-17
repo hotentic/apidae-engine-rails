@@ -40,7 +40,7 @@ module Apidae
 
       removed_ids = Obj.where(apidae_id: removed).map {|o| o.id}
       SelectionObject.where(apidae_selection_id: apidae_sel.id, apidae_object_id: removed_ids).delete_all
-      if added.any? || removed.any? || (apidae_sel.objects.maximum(:updated_at) > apidae_sel.updated_at)
+      if added.any? || removed.any? || (apidae_sel.objects.any? && apidae_sel.objects.maximum(:updated_at) > apidae_sel.updated_at)
         apidae_sel.touch
       end
     end
