@@ -15,6 +15,7 @@ Rails.configuration.to_prepare do
         tsearch: {
           dictionary: 'fr',
           prefix: true,
+          normalization: 4,
           tsvector_column: ["tsv_content"]
         }
       }
