@@ -279,7 +279,7 @@ module Apidae
                     desc: node_value(prestations_hash, :descriptifAnimauxAcceptes, *locales), fee: prestations_hash[:animauxAcceptesSupplement] ==	'AVEC_SUPPLEMENT'},
           extra: apidae_obj.apidae_type == Obj::SPA ? node_value(data_hash, :formuleHebergement, *locales) : node_value(prestations_hash, :complementAccueil, *locales),
           duration: apidae_obj.apidae_type == Obj::SPA ? {days: data_hash[:nombreJours], nights: data_hash[:nombreNuits]} : data_hash[:dureeSeance],
-          certifications: data_hash[:agrements].blank? ? [] : data_hash[:agrements].map {|a| {id: a[:type][:id], identifier: a[:numero]}},
+          certifications: data_hash[:agrements].blank? ? {} : Hash[data_hash[:agrements].map {|a| [a[:type][:id].to_s, a[:numero]]}],
           business: (business_hash || {}).except(:sallesEquipeesPour, :sallesEquipement, :sallesRestauration, :sallesReunion, :sallesHebergement),
           business_equipments: lists_ids((business_hash || {})[:sallesEquipeesPour], (business_hash || {})[:sallesEquipement],
                                          (business_hash || {})[:sallesRestauration], (business_hash || {})[:sallesHebergement]),
