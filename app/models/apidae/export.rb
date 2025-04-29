@@ -32,7 +32,7 @@ module Apidae
     def import_data
       success = true
       begin
-        open(file_url) do |f|
+        URI.open(file_url) do |f|
           begin
             logger.info "Starting file import for export #{id} - project #{project_id}"
             FileImport.import(f, project_id)

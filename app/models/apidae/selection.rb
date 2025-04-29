@@ -224,7 +224,7 @@ module Apidae
       response = ''
       query = JSON.generate args.except(:url)
       logger.debug "Apidae API query : #{args[:url]}?query=#{query}"
-      open("#{args[:url]}?query=#{CGI.escape query}") { |f|
+      URI.open("#{args[:url]}?query=#{CGI.escape query}") { |f|
         f.each_line {|line| response += line if line}
       }
       response
