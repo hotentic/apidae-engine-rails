@@ -3,7 +3,7 @@ require 'pg_search'
 module Apidae
   class Obj < ActiveRecord::Base
     include PgSearch::Model
-    multisearchable against: [:w_title, :w_town, :w_short_desc, :w_criteria],
+    multisearchable against: [:w_title, :w_town, :w_short_desc, :w_criteria, :selection_ids],
                     additional_attributes: -> (o) { { searchable_fields: o.searchable_fields } }
 
     belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code, optional: true
