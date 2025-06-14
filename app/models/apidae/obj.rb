@@ -15,7 +15,7 @@ module Apidae
     store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc, :accessibility_desc
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
-    store_accessor :type_data, :categories, :themes, :capacity, :classification, :classification_date,
+    store_accessor :type_data, :categories, :themes, :capacity, :classification, :classification_date, :ratings,
                    :classification_ref, :labels, :chains, :area, :track, :tricky_sections, :products, :audience, :animals,
                    :animals_desc, :extra, :duration, :certifications, :business, :business_equipments, :business_rooms
     store_accessor :entity_data, :entity_id, :entity_name, :info_entity_id, :info_entity_name, :service_provider_id,
