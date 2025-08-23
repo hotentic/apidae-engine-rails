@@ -5,7 +5,11 @@ module Apidae
     before_action :check_user_data!
 
     def apidae_user
-      send(Rails.application.config.apidae_user) if Rails.application.config.respond_to?(:apidae_user)
+      if Rails.application.config.respond_to?(:apidae_user)
+        Rails.application.config.apidae_user.respond_to?(:call) ? Rails.application.config.apidae_user.call : send(Rails.application.config.apidae_user)
+      else
+        nil
+      end
     end
 
     def user_is_admin?
