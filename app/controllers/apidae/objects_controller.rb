@@ -3,7 +3,7 @@ require_dependency "apidae/application_controller"
 module Apidae
   class ObjectsController < ApplicationController
     before_action :set_object, only: [:show, :edit, :update, :destroy, :refresh]
-    skip_before_action Rails.application.config.apidae_auth, only: [:index, :show], :if => Proc.new {|c| c.request.format.json?}
+    skip_before_action Rails.application.config.apidae_auth, only: [:index, :show, :search], :if => Proc.new {|c| c.request.format.json?}
 
     def index
       session[:referrer] = request.referrer
@@ -84,15 +84,20 @@ module Apidae
       @results = PgSearch::Document.tsv_search(params[:query])
                         .joins("INNER JOIN apidae_selection_objects AS aso ON (aso.apidae_object_id = pg_search_documents.searchable_id) AND pg_search_documents.searchable_type = 'Apidae::Obj'")
                         .where("aso.apidae_selection_id IN (?)", user_selections)
+      respond_to do |format|
+        format.html
+        format.json { render json: @results }
+      end
     end
 
     private
-      def set_object
-        @obj = Obj.find(params[:id])
-      end
 
-      def object_params
-        params.require(:obj).permit!
-      end
+    def set_object
+      @obj = Obj.find(params[:id])
+    end
+
+    def object_params
+      params.require(:obj).permit!
+    end
   end
 end
