@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.1.0'
 
-  s.add_dependency "rails", "~> 7.0"
+  s.add_dependency "rails", ">= 7.0"
   s.add_dependency "pg", "~> 1.5", "< 2.0"
   s.add_dependency "rubyzip", "~> 2.0"
   s.add_dependency "jbuilder", "~> 2.5"

@@ -1,11 +1,11 @@
 PATH
   remote: .
   specs:
-    apidae (2.0.6)
+    apidae (2.1.0)
       jbuilder (~> 2.5)
       pg (~> 1.5, < 2.0)
       pg_search (~> 2.3)
-      rails (~> 7.0)
+      rails (>= 7.0)
       rubyzip (~> 2.0)
 
 GEM
