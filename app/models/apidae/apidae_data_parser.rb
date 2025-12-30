@@ -141,6 +141,7 @@ module Apidae
                 description: localized_value(pic, :legende, locale),
                 credits: localized_value(pic, :copyright, locale),
                 expiration_date: pic[:dateLimiteDePublication] || '',
+                remote_file_name: pic_file[:fileName] || '',
                 properties: {size: pic_file[:taille], width: pic_file[:largeur], height: pic_file[:hauteur]}
             }
           end
