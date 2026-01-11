@@ -251,7 +251,7 @@ module Apidae
       end
     end
 
-    def self.parse_type_data(apidae_obj, type_hash, presta_hash, business_hash, *locales)
+    def self.parse_type_data(apidae_obj, type_hash, presta_hash, business_hash, ratings_list, *locales)
       data_hash = type_hash || {}
       prestations_hash = presta_hash || {}
       apidae_obj.apidae_subtype = lists_ids(data_hash[:typesManifestation]).first if apidae_obj.apidae_type == Obj::FEM
@@ -271,17 +271,7 @@ module Apidae
           labels: lists_ids(data_hash[:labels], data_hash[:labelsChartesQualite], prestations_hash[:labelsTourismeHandicap]) +
               (node_id(data_hash, :typeLabel) ? [node_id(data_hash, :typeLabel)] : []),
           chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
-          ratings: (lists_ids(data_hash[:labels]).map {|label_id| {id: label_id, type: 'labels'}} +
-            lists_ids(data_hash[:labelsChartesQualite]).map {|label_id| {id: label_id, type: 'labelsChartesQualite'}} +
-            lists_ids(prestations_hash[:labelsTourismeHandicap]).map {|label_id| {id: label_id, type: 'labelsTourismeHandicap'}} +
-            nodes_ids(data_hash[:typeLabel]).map {|label_id| {id: label_id, type: 'typeLabel', ref: data_hash[:numeroAgrementLabel], start_date: data_hash[:dateAgrementLabel]}} +
-            lists_ids(data_hash[:chaines]).map {|ch_id| {id: ch_id, type: 'chaines'}} +
-            nodes_ids(data_hash[:chaineEtLabel]).map {|ch_id| {id: ch_id, type: 'chaineEtLabel'}} +
-            nodes_ids(data_hash[:classement]).map {|c_id| {id: c_id, type: 'classement', start_date: data_hash[:dateClassement], ref: data_hash[:numeroClassement]}} +
-            nodes_ids(data_hash[:classementPrefectoral]).map {|c_id| {id: c_id, type: 'classementPrefectoral', start_date: data_hash[:dateClassement], ref: data_hash[:numeroClassement]}} +
-            nodes_ids(data_hash[:classification]).map {|c_id| {id: c_id, type: 'classification'}} +
-            lists_ids(data_hash[:classementsGuides]).map {|c_id| {id: c_id, type: 'classementsGuides'}} +
-            lists_ids(data_hash[:classements]).map {|c_id| {id: c_id, type: 'classements'}}),
+          ratings: (ratings_list || []).map {|r| {id: r[:id], apidae_id: r.dig(:nom, :id), type: r.dig(:nom, :categorie, :id), rating: r.dig(:qualification, :id), ref: r[:numero], start_date: r[:dateDebutValidite], end_date: r[:dateFinValidite], last_visit: r[:dateDerniereVisite]}},
           area: apidae_obj.apidae_type == Obj::DOS ? data_hash.except(:classification) : node_value(data_hash, :lieuDePratique),
           track: apidae_obj.apidae_type == Obj::EQU ? (data_hash[:itineraire] || {}).except(:passagesDelicats) : nil,
           tricky_sections: apidae_obj.apidae_type == Obj::EQU ? node_value(data_hash[:itineraire], :passagesDelicats, *locales) : nil,

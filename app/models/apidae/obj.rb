@@ -246,7 +246,7 @@ module Apidae
       apidae_obj.rates_data = ApidaeDataParser.parse_rates(object_data[:descriptionTarif], *locales)
       apidae_obj.booking_data = ApidaeDataParser.parse_booking(object_data[:reservation], object_data[:visites], *locales)
       apidae_obj.type_data = ApidaeDataParser.parse_type_data(apidae_obj, object_data[type_fields[:node]], object_data[:prestations],
-                                             object_data[:tourismeAffaires], *locales)
+                                             object_data[:tourismeAffaires], object_data[:distinctions], *locales)
       apidae_obj.pictures_data = ApidaeDataParser.parse_pictures_data(object_data[:illustrations], *locales)
       apidae_obj.attachments_data = ApidaeDataParser.parse_attachments_data(object_data[:multimedias], *locales)
       apidae_obj.entity_data = ApidaeDataParser.parse_entity_fields(object_data[:informations], object_data[type_fields[:node]], object_data[:informationsPrestataireActivites])
