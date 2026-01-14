@@ -271,7 +271,7 @@ module Apidae
           labels: lists_ids(data_hash[:labels], data_hash[:labelsChartesQualite], prestations_hash[:labelsTourismeHandicap]) +
               (node_id(data_hash, :typeLabel) ? [node_id(data_hash, :typeLabel)] : []),
           chains: lists_ids(data_hash[:chaines]) + nodes_ids(data_hash[:chaineEtLabel]),
-          ratings: (ratings_list || []).map {|r| {id: r[:id], apidae_id: r.dig(:nom, :id), type: r.dig(:nom, :categorie, :id), rating: r.dig(:qualification, :id), ref: r[:numero], start_date: r[:dateDebutValidite], end_date: r[:dateFinValidite], last_visit: r[:dateDerniereVisite]}},
+          ratings: (ratings_list || []).map {|r| {id: r[:id], type: r.dig(:nom, :id), rating: r.dig(:qualification, :id), ref: r[:numero], start_date: r[:dateDebutValidite], end_date: r[:dateFinValidite], last_visit: r[:dateDerniereVisite]}},
           area: apidae_obj.apidae_type == Obj::DOS ? data_hash.except(:classification) : node_value(data_hash, :lieuDePratique),
           track: apidae_obj.apidae_type == Obj::EQU ? (data_hash[:itineraire] || {}).except(:passagesDelicats) : nil,
           tricky_sections: apidae_obj.apidae_type == Obj::EQU ? node_value(data_hash[:itineraire], :passagesDelicats, *locales) : nil,
