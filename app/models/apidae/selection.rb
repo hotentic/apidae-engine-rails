@@ -123,7 +123,7 @@ module Apidae
     # Note : WARNING - updated objs will only contain the provided fields
     def add_or_refresh_objs(fields = ["@all"])
       if valid_api?
-        res = api_objects({fields: fields, locales: apidae_project&.locales.blank? ? [DEFAULT_LOCALE] : apidae_project.locales})
+        res = api_objects({fields: fields})
         if res[:results] && res[:results].length > 0
           res[:results].each do |result|
             obj_data = result.deep_symbolize_keys
@@ -264,7 +264,7 @@ module Apidae
           first: opts[:first] || 0,
           count: opts[:count] || MAX_COUNT,
           selectionIds: opts[:selection_ids],
-          locales: opts[:locales].blank? ? [DEFAULT_LOCALE] : opts[:locales],
+          locales: opts[:locales] || (apidae_project&.locales.blank? ? [DEFAULT_LOCALE] : apidae_project.locales),
           identifiants: opts[:obj_ids],
           dateDebut: opts[:from],
           dateFin: opts[:to],
