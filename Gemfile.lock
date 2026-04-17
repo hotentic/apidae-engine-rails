@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apidae (0.9.35)
+    apidae (0.9.36)
       jbuilder
       pg (~> 1.1)
       rails (~> 5.2)
@@ -75,6 +75,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.5)
     minitest (5.20.0)
     net-imap (0.4.4)
       date
@@ -86,7 +87,8 @@ GEM
     net-smtp (0.4.0)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.15.4-x86_64-darwin)
+    nokogiri (1.15.4)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     pg (1.5.4)
     racc (1.7.3)

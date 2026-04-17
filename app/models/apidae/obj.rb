@@ -16,7 +16,7 @@ module Apidae
     store_accessor :type_data, :categories, :themes, :capacity, :classification, :labels, :chains, :area, :track,
                    :products, :audience, :animals, :extra, :duration, :certifications, :business, :complement
     store_accessor :entity_data, :entity_id, :entity_name, :service_provider_id
-    store_accessor :contact, :telephone, :email, :website
+    store_accessor :contact, :telephone, :email, :website, :contacts
     store_accessor :location_data, :address, :place, :latitude, :longitude, :access, :territories, :environments
     store_accessor :openings_data, :openings_desc, :openings_desc_mode, :openings, :time_periods, :openings_extra
     store_accessor :rates_data, :rates_desc, :rates_desc_mode, :rates, :payment_methods, :includes, :excludes, :rates_complement
@@ -154,7 +154,7 @@ module Apidae
       apidae_obj.apidae_subtype = node_id(object_data[type_fields[:node]], type_fields[:subtype])
       apidae_obj.title_data = parse_title(object_data, *locales)
       apidae_obj.description_data = parse_desc_data(object_data[:presentation], object_data[:donneesPrivees], *locales)
-      apidae_obj.contact = contact(object_data[:informations])
+      apidae_obj.contact = contact(object_data[:informations], object_data[:contacts])
       apidae_obj.location_data = parse_location_data(object_data[:localisation], object_data[type_fields[:node]],
                                                      object_data[:territoires])
       apidae_obj.town = town(object_data[:localisation])
@@ -284,8 +284,8 @@ module Apidae
       {attachments: atts_data}
     end
 
-    def self.contact(information_hash)
-      contact_details = {}
+    def self.contact(information_hash, contacts)
+      contact_details = {contacts: contacts || []}
       unless information_hash.blank?
         contact_entries = information_hash[:moyensCommunication] || []
         contact_entries.each do |c|
