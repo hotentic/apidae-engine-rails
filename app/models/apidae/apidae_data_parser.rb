@@ -355,7 +355,8 @@ module Apidae
         end
 
         if information_hash[:informationsLegales]
-          entity_hash.merge!({legal: information_hash[:informationsLegales]})
+          entity_hash[:legal] = (entity_hash[:legal] || {}).symbolize_keys
+          entity_hash[:legal].merge!(information_hash[:informationsLegales])
         end
       end
       if sp_hash && sp_hash[:prestataireActivites]
