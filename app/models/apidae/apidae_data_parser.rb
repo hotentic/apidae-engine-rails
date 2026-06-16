@@ -179,13 +179,21 @@ module Apidae
           case c[:type][:id]
           when PHONE, ALT_PHONE
             contact_details[:telephone] ||= {}
-            contact_details[:telephone][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
+            contact_details[:telephone][c[:identifiant]] = {
+              value: c.dig(:coordonnees, :fr),
+              description: c.dig(:observation, :libelleFr),
+              locales: Hash[(c[:coordonnees] || {}).except(:fr).keys.map {|l| [l, {value: c.dig(:coordonnees, l), description: c.dig(:observation, localized_key(l.to_s))}]}]
+            }
           else
             contacts_refs_by_code = CONTACTS_MAP.invert
             if contacts_refs_by_code.keys.include?(c[:type][:id])
               contact_ref = contacts_refs_by_code[c[:type][:id]].to_sym
               contact_details[contact_ref] ||= {}
-              contact_details[contact_ref][c[:identifiant]] = {value: c[:coordonnees][:fr], description: c.dig(:observation, :libelleFr)}
+              contact_details[contact_ref][c[:identifiant]] = {
+                value: c.dig(:coordonnees, :fr),
+                description: c.dig(:observation, :libelleFr),
+                locales: Hash[(c[:coordonnees] || {}).except(:fr).keys.map {|l| [l, {value: c.dig(:coordonnees, l), description: c.dig(:observation, localized_key(l.to_s))}]}]
+              }
             end
           end
         end
