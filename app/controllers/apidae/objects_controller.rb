@@ -70,10 +70,12 @@ module Apidae
       rescue OpenURI::HTTPError => err
         logger.error("Failed to refresh obj : #{@obj.apidae_id}")
         logger.error("Error is : #{err}")
+        logger.debug err.backtrace.join("\n")
         redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de l'objet. Veuillez vérifier que le projet Apidae comporte une clé API valide."
       rescue Exception => ex
         logger.error("Failed to refresh obj : #{@obj.apidae_id}")
-        logger.error("Error is : #{err}")
+        logger.error("Error is : #{ex}")
+        logger.debug ex.backtrace.join("\n")
         redirect_to referrer, alert: "Une erreur s'est produite lors de la mise à jour de l'objet."
       end
     end

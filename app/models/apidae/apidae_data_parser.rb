@@ -406,13 +406,7 @@ module Apidae
               each_year: o[:tousLesAns],
               closing_days: closing_days.blank? ? [] : closing_days.map {|d| d[:dateSpeciale]},
               details: node_value(o, :complementHoraire, *locales),
-              time_periods: [
-                  {
-                      type: 'opening',
-                      weekdays: compute_weekdays(o),
-                      time_frames: (o[:horaireOuverture].blank? && o[:horaireFermeture].blank?) ? [] : [{start_time: o[:horaireOuverture], end_time: o[:horaireFermeture], recurrence: nil}]
-                  }
-              ]
+              time_periods: build_time_periods(o)
           }
         end
       end
@@ -428,6 +422,27 @@ module Apidae
         opening_data[:ouverturesJournalieres].map {|d| WEEKDAYS_MAP[d[:jour]]}
       else
         []
+      end
+    end
+
+    def self.build_time_periods(o)
+      if o[:horaires].blank?
+        [
+          {
+            type: 'opening',
+            weekdays: compute_weekdays(o),
+            time_frames: (o[:horaireOuverture].blank? && o[:horaireFermeture].blank?) ? [] : [{start_time: o[:horaireOuverture], end_time: o[:horaireFermeture], recurrence: nil}]
+          }
+        ]
+      else
+        o[:horaires].map do |h|
+          {
+            type: h.dig(:type, :externalType),
+            weekdays: compute_weekdays(o),
+            time_frames: (h[:timePeriods] || []).map {|tp| (tp[:timeFrames] || [])}.flatten.select {|tf| !tf[:startTime].blank? || !tf[:endTime].blank?}
+                                                .map {|tf| {start_time: tf[:startTime], end_time: tf[:endTime]}}
+          }
+        end
       end
     end
 
