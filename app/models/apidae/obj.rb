@@ -11,7 +11,7 @@ module Apidae
     attr_accessor :skip_archiving
 
     store_accessor :title_data, :title
-    store_accessor :owner_data, :owner_name, :owner_id, :polls
+    store_accessor :owner_data, :owner_name, :owner_id, :state, :polls
     store_accessor :description_data, :short_desc, :long_desc, :theme_desc, :private_desc, :accessibility_desc
     store_accessor :pictures_data, :pictures
     store_accessor :attachments_data, :attachments
@@ -236,6 +236,7 @@ module Apidae
       apidae_obj.owner_data = ApidaeDataParser.parse_owner_data(object_data[:gestion][:membreProprietaire], object_data[:enquete]) unless (object_data[:gestion].blank? && object_data[:enquete].blank?)
       apidae_obj.apidae_type = object_data[:type]
       apidae_obj.apidae_subtype = ApidaeDataParser.node_id(object_data[type_fields[:node]], type_fields[:subtype])
+      apidae_obj.state = object_data[:state]
       apidae_obj.title_data = ApidaeDataParser.parse_title(object_data, *locales)
       apidae_obj.description_data = ApidaeDataParser.parse_desc_data(object_data[:presentation], object_data[:donneesPrivees], object_data[:prestations], *locales)
       apidae_obj.contact_data = ApidaeDataParser.parse_contact_data(object_data[:informations], object_data[:contacts])
