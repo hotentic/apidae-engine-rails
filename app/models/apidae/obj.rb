@@ -2,6 +2,7 @@ module Apidae
   class Obj < ActiveRecord::Base
 
     belongs_to :town, class_name: 'Apidae::Town', foreign_key: :town_insee_code, primary_key: :insee_code, optional: true
+    belongs_to :apidae_town, class_name: 'Apidae::Town', foreign_key: :apidae_town_id, primary_key: :apidae_id, optional: true
     has_many :apidae_selection_objects, class_name: 'Apidae::SelectionObject', foreign_key: :apidae_object_id
     has_many :selections, class_name: 'Apidae::Selection', source: :apidae_selection, through: :apidae_selection_objects
 
@@ -243,6 +244,7 @@ module Apidae
       apidae_obj.location_data = ApidaeDataParser.parse_location_data(object_data[:localisation], object_data[type_fields[:node]],
                                                      object_data[:territoires])
       apidae_obj.town = ApidaeDataParser.parse_town(object_data[:localisation])
+      apidae_obj.apidae_town_id = apidae_obj.town&.apidae_id
       apidae_obj.openings_data = ApidaeDataParser.parse_openings(object_data[:ouverture], object_data[:datesOuverture], *locales)
       apidae_obj.rates_data = ApidaeDataParser.parse_rates(object_data[:descriptionTarif], *locales)
       apidae_obj.booking_data = ApidaeDataParser.parse_booking(object_data[:reservation], object_data[:visites], *locales)
